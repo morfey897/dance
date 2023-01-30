@@ -41,6 +41,7 @@ const acceptLanguages: Array<string> = (parse(
 	.sort((a, b) => b.quality - a.quality)
 	.map(({ code }) => code);
 preferableLangs.set([...new Set(acceptLanguages)]);
+langStore.set(process.env.DEFAULT_LANG || import.meta.env.DEFAULT_LANG);
 // const cookieLang = Astro.cookies.get(COOKIE_LANG);
 // let lang = cookieLang && cookieLang.value;
 // if (!lang || !AVAILABLE_LANGS.includes(lang)) {
