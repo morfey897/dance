@@ -12,7 +12,7 @@ function Header() {
           <img loading="lazy" src='/logo.png' alt='' />
         </a>
         <a href="/">
-          {'DEF_LANG:'}{$lang}
+          {'DEFAULT_LANG:'}{$lang}
         </a>
       </nav>
     </div>
