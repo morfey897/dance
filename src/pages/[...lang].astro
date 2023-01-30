@@ -12,37 +12,35 @@ import Gallery from "../components/blocks/Gallery";
 import Footer from "../components/blocks/Footer";
 import { COOKIE_LANG } from "../utils/constants";
 import { getLang } from "../utils/url";
+import { DEFAULT_LANG, AVAILABLE_LANG } from "../utils/constants";
 
 // export const prerender = true;
-const DEF_LANG = 'uk'; //import.meta.env.DEFAULT_LANG.trim();
-const AVAILABLE_LANGS = 'en,ru,uk'.split(",") //import.meta.env.AVAILABLE_LANG.
-	.map((l) => l.trim())
-	.filter((l) => !!l && l.length);
 
 export function getStaticPaths() {
-	const DEF_LANG = 'uk'.trim();
-	return 'en,ru,uk'.split(",")
-		.map((l) => l.trim())
-		.filter((l) => !!l && l.length)
-		.map((lang) => ({
-			params: { lang: lang === DEF_LANG ? undefined : lang },
-		}));
+	return AVAILABLE_LANG.map((lang) => ({
+		params: { lang: lang === DEFAULT_LANG ? undefined : lang },
+	}));
 }
 
-console.log('Astro.request.headers', Astro.request.headers.get("accept-language"));
+console.log(
+	"Astro.request.headers",
+	Astro.request.headers.get("accept-language")
+);
 const lang = getLang(Astro.url.href);
-console.log('lang', lang);
+console.log("lang", lang);
 // Astro.cookies.set(COOKIE_LANG, lang);
 // langStore.set(lang);
 
-const acceptLanguages: Array<string> = (parse(
-	Astro.request.headers.get("accept-language")
-) as Array<{ code: string; quality: number }>)
+const acceptLanguages: Array<string> = (
+	parse(Astro.request.headers.get("accept-language")) as Array<{
+		code: string;
+		quality: number;
+	}>
+)
 	.sort((a, b) => b.quality - a.quality)
 	.map(({ code }) => code);
 preferableLangs.set([...new Set(acceptLanguages)]);
-// @ts-ignore
-langStore.set(DEFAULT_LANG);
+langStore.set(process.env.DEFAULT_LANG || import.meta.env.DEFAULT_LANG);
 // const cookieLang = Astro.cookies.get(COOKIE_LANG);
 // let lang = cookieLang && cookieLang.value;
 // if (!lang || !AVAILABLE_LANGS.includes(lang)) {
