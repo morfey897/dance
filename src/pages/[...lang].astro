@@ -22,23 +22,28 @@ export function getStaticPaths() {
 	}));
 }
 
-console.log(
-	"Astro.request.headers",
-	Astro.request.headers.get("accept-language")
-);
-const lang = getLang(Astro.url.href);
+const lang = JSON.stringify(process.env);
 Astro.cookies.set(COOKIE_LANG, lang);
+// Astro.cookies.set('TYPE_ENV', typeof ENV );
 langStore.set(lang);
+console.log(lang);
+// const lang = getLang(Astro.url.href);
+// Astro.cookies.set(COOKIE_LANG, lang);
+// langStore.set(lang);
 
-const acceptLanguages: Array<string> = (
-	parse(Astro.request.headers.get("accept-language")) as Array<{
-		code: string;
-		quality: number;
-	}>
-)
-	.sort((a, b) => b.quality - a.quality)
-	.map(({ code }) => code);
-preferableLangs.set([...new Set(acceptLanguages)]);
+
+
+
+
+// const acceptLanguages: Array<string> = (
+// 	parse(Astro.request.headers.get("accept-language")) as Array<{
+// 		code: string;
+// 		quality: number;
+// 	}>
+// )
+// 	.sort((a, b) => b.quality - a.quality)
+// 	.map(({ code }) => code);
+// preferableLangs.set([...new Set(acceptLanguages)]);
 // const cookieLang = Astro.cookies.get(COOKIE_LANG);
 // let lang = cookieLang && cookieLang.value;
 // if (!lang || !AVAILABLE_LANGS.includes(lang)) {
