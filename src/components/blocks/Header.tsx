@@ -11,9 +11,9 @@ function Header() {
         <a href="/">
           <img loading="lazy" src='/logo.png' alt='' />
         </a>
-        {/* <a hreflang="">
-
-      </a> */}
+        <a href="/">
+          {process.env.DEFAULT_LANG}
+        </a>
       </nav>
     </div>
   </header>;
