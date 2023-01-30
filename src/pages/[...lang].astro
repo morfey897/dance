@@ -22,11 +22,11 @@ export function getStaticPaths() {
 	}));
 }
 
-const lang = JSON.stringify(process.env.DEFAULT_LANG);
+const lang = typeof process.env;
 Astro.cookies.set(COOKIE_LANG, lang);
 // Astro.cookies.set('TYPE_ENV', typeof ENV );
 // langStore.set(lang);
-console.log(lang);
+// console.log(lang);
 // const lang = getLang(Astro.url.href);
 // Astro.cookies.set(COOKIE_LANG, lang);
 // langStore.set(lang);
