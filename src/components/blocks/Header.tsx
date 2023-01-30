@@ -12,7 +12,7 @@ function Header() {
           <img loading="lazy" src='/logo.png' alt='' />
         </a>
         <a href="/">
-          {process.env.DEFAULT_LANG}
+          {'DEF_LANG:'}{$lang}
         </a>
       </nav>
     </div>
