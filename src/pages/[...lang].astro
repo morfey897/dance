@@ -14,14 +14,14 @@ import { COOKIE_LANG } from "../utils/constants";
 import { getLang } from "../utils/url";
 
 // export const prerender = true;
-const DEF_LANG = import.meta.env.DEFAULT_LANG.trim();
-const AVAILABLE_LANGS = import.meta.env.AVAILABLE_LANG.split(",")
+const DEF_LANG = 'uk'; //import.meta.env.DEFAULT_LANG.trim();
+const AVAILABLE_LANGS = 'en,ru,uk'.split(",") //import.meta.env.AVAILABLE_LANG.
 	.map((l) => l.trim())
 	.filter((l) => !!l && l.length);
 
 export function getStaticPaths() {
-	const DEF_LANG = import.meta.env.DEFAULT_LANG.trim();
-	return import.meta.env.AVAILABLE_LANG.split(",")
+	const DEF_LANG = 'uk'.trim();
+	return 'en,ru,uk'.split(",")
 		.map((l) => l.trim())
 		.filter((l) => !!l && l.length)
 		.map((lang) => ({
