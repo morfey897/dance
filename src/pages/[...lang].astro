@@ -22,18 +22,14 @@ export function getStaticPaths() {
 	}));
 }
 
-const lang = JSON.stringify(process.env);
+const lang = JSON.stringify(process.env.DEFAULT_LANG);
 Astro.cookies.set(COOKIE_LANG, lang);
 // Astro.cookies.set('TYPE_ENV', typeof ENV );
-langStore.set(lang);
+// langStore.set(lang);
 console.log(lang);
 // const lang = getLang(Astro.url.href);
 // Astro.cookies.set(COOKIE_LANG, lang);
 // langStore.set(lang);
-
-
-
-
 
 // const acceptLanguages: Array<string> = (
 // 	parse(Astro.request.headers.get("accept-language")) as Array<{
