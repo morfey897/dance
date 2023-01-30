@@ -1,0 +1,24 @@
+import { defineConfig } from "astro/config";
+import react from '@astrojs/react';
+import tailwind from "@astrojs/tailwind";
+import prefetch from "@astrojs/prefetch";
+
+// https://astro.build/config
+import sitemap from "@astrojs/sitemap";
+
+// https://astro.build/config
+import partytown from "@astrojs/partytown";
+
+// https://astro.build/config
+import cloudflare from "@astrojs/cloudflare";
+
+// https://astro.build/config
+export default defineConfig({
+  output: 'server',
+  site: 'https://studio-kalipso.com.ua',
+  integrations: [react(), tailwind(),
+  prefetch(), partytown(), sitemap({
+    customPages: ['https://studio-kalipso.com.ua/sitemap.xml'],
+  })],
+  adapter: cloudflare()
+});

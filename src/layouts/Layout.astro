@@ -1,0 +1,39 @@
+---
+import { COOKIE_LANG } from "../utils/constants";
+import { getLang, normalize } from "../utils/url";
+export interface Props {
+	title: string;
+	description: string;
+	og?: {
+		title?: string;
+		image: string;
+		description?: string;
+	};
+}
+const { title, description, og } = Astro.props;
+const lang = (Astro.cookies.get(COOKIE_LANG) || {}).value;
+const url = normalize(Astro.url.href);
+---
+<!DOCTYPE html>
+<html lang={lang}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta content="width=device-width,initial-scale=1" name="viewport" />
+		<meta content={url} property="og:url" />
+		<link rel="canonical" href={url} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta content={description} name="description" />
+		{og?.title && <meta content={og.title} name="og:title" />}
+		{og?.image && <meta content={og.image} name="og:image" />}
+		{og?.description && <meta content={og.description} name="og:description" />}
+	</head>
+	<body>
+		<slot name="header" />
+		<main>
+			<slot />
+		</main>
+		<slot name="footer" />
+	</body>
+</html>
