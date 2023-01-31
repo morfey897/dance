@@ -1,6 +1,5 @@
 ---
 import { parse } from "accept-language-parser";
-import { lang as langStore, preferableLangs } from "../cartStore";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/blocks/Header";
 import About from "../components/blocks/About";
@@ -10,63 +9,15 @@ import Contacts from "../components/blocks/Contacts";
 import Directions from "../components/blocks/Directions";
 import Gallery from "../components/blocks/Gallery";
 import Footer from "../components/blocks/Footer";
-import { COOKIE_LANG } from "../utils/constants";
-import { getLang } from "../utils/url";
 import { DEFAULT_LANG, AVAILABLE_LANG } from "../utils/constants";
 
 // export const prerender = true;
-
 export function getStaticPaths() {
 	return AVAILABLE_LANG.map((lang) => ({
 		params: { lang: lang === DEFAULT_LANG ? undefined : lang },
 	}));
 }
-
-const lang = typeof process.env;
-Astro.cookies.set(COOKIE_LANG, lang);
-// Astro.cookies.set('TYPE_ENV', typeof ENV );
-// langStore.set(lang);
-// console.log(lang);
-// const lang = getLang(Astro.url.href);
-// Astro.cookies.set(COOKIE_LANG, lang);
-// langStore.set(lang);
-
-// const acceptLanguages: Array<string> = (
-// 	parse(Astro.request.headers.get("accept-language")) as Array<{
-// 		code: string;
-// 		quality: number;
-// 	}>
-// )
-// 	.sort((a, b) => b.quality - a.quality)
-// 	.map(({ code }) => code);
-// preferableLangs.set([...new Set(acceptLanguages)]);
-// const cookieLang = Astro.cookies.get(COOKIE_LANG);
-// let lang = cookieLang && cookieLang.value;
-// if (!lang || !AVAILABLE_LANGS.includes(lang)) {
-
-// 	const langs = AVAILABLE_LANGS.filter((lang) =>
-// 		listObj.find(({ code }) => lang === code)
-// 	);
-// 	lang = langs[0] || DEF_LANG;
-// }
-// const curHref = Astro.url.href;
-// const redirectHref = redirect(curHref, lang === DEF_LANG ? "" : lang);
-// console.log({ curHref, redirectHref }, curHref != redirectHref);
-// if (curHref != redirectHref) {
-// 	const redirections = Astro.cookies.get(AMOUNT_REDIRECTION);
-// 	let count = parseInt(redirections && redirections.value);
-// 	if (isNaN(count) || count < 0) {
-// 		count = 0;
-// 	}
-// 	console.log("redirections", count);
-// 	Astro.cookies.set(AMOUNT_REDIRECTION, String(count + 1), {
-// 		expires: new Date(new Date().getTime() + 10 * 1000),
-// 	});
-// 	console.log("REDIRECT_TO", redirectHref);
-// 	// return Astro.redirect(redirectHref, 301);
-// }
 ---
-
 <Layout title="Welcome to Astro." description="Welcome to Astro description.">
 	<Header slot="header" />
 	<About />

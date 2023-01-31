@@ -5,6 +5,7 @@ import { useLang } from "../../hooks/store";
 function Header() {
   const $lang = useLang();
   // {`LANG: ${$lang}`}
+  console.log('HEADER', $lang);
   return <header className="sticky top-0 z-20 w-full bg-white shadow">
     <div className="max-w-screen-xl mx-auto py-2.5">
       <nav className="border">
