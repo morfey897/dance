@@ -17,5 +17,5 @@ export default defineConfig({
   prefetch(),  sitemap({
     customPages: ['https://studio-kalipso.com.ua/sitemap.xml'],
   })],
-  adapter: cloudflare()
+  adapter: cloudflare({ mode: "directory" })
 });

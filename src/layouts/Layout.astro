@@ -11,7 +11,7 @@ export interface Props {
 	};
 }
 const { title, description, og } = Astro.props;
-const lang = (Astro.cookies.get(COOKIE_LANG) || {}).value;
+const lang = getLang(Astro.url.href);
 const url = normalize(Astro.url.href);
 ---
 <!DOCTYPE html>
