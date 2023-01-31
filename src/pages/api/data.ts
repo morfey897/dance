@@ -1,6 +1,7 @@
 export async function get(params) {
   // const id = params.id;
-  const product = {id: 'some_id'};//await getProduct(id);
+
+  const product = params;//await getProduct(id);
 
   if (!product) {
     return new Response(null, {
