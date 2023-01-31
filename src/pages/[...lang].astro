@@ -1,6 +1,5 @@
 ---
 // import { parse } from "accept-language-parser";
-import { getRuntime } from "@astrojs/cloudflare/runtime";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/blocks/Header";
 import About from "../components/blocks/About";
@@ -19,7 +18,6 @@ export function getStaticPaths() {
 	}));
 }
 
-const lang = getRuntime(Astro.request)?.env['DEFAULT_LANG'];
 ---
 <Layout title={`Welcome to Astro. ${lang}`} description="Welcome to Astro description.">
 	<Header slot="header" />
