@@ -11,20 +11,20 @@ import Gallery from "../components/blocks/Gallery";
 import Footer from "../components/blocks/Footer";
 import { DEFAULT_LANG, AVAILABLE_LANG } from "../utils/constants";
 
-// export const prerender = true;
-// export function getStaticPaths() {
-// 	return AVAILABLE_LANG.map((lang) => ({
-// 		params: { lang: lang === DEFAULT_LANG ? undefined : lang },
-// 	}));
-// }
+export const prerender = true;
+export function getStaticPaths() {
+	return AVAILABLE_LANG.map((lang) => ({
+		params: { lang: lang === DEFAULT_LANG ? undefined : lang },
+	}));
+}
 ---
 <Layout title="Welcome to Astro." description="Welcome to Astro description.">
-	<Header slot="header" />
+	<!-- <Header slot="header" />
 	<About />
 	<Schedule />
 	<Price />
 	<Directions />
 	<Gallery />
 	<Contacts />
-	<Footer slot="footer" />
+	<Footer slot="footer" /> -->
 </Layout>
