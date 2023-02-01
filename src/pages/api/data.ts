@@ -5,7 +5,7 @@ export async function get(params) {
   const lang = runtime?.env['DEFAULT_LANG'];
   // 
   // console.log('TEST');
-  const product = { lang: 'lang', rn: typeof runtime, loc: import.meta.env.DEFAULT_LANG };//await getProduct(id);
+  const product = { lang: 'lang', rn: typeof runtime, loc: lang };//await getProduct(id);
 
   if (!product) {
     return new Response(null, {
