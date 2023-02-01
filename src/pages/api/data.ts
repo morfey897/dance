@@ -1,10 +1,11 @@
 import { getRuntime } from "@astrojs/cloudflare/runtime";
 
 export async function get(params) {
-  // const id = params.id;
-
-  const lang = getRuntime(params.request)?.env['DEFAULT_LANG'];
-  const product = {lang};//await getProduct(id);
+  const runtime = getRuntime(params.request);
+  const lang = runtime?.env['DEFAULT_LANG'];
+  // 
+  // console.log('TEST');
+  const product = { lang: 'lang', rn: typeof runtime, loc: import.meta.env.DEFAULT_LANG };//await getProduct(id);
 
   if (!product) {
     return new Response(null, {
