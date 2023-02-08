@@ -20,11 +20,14 @@ export function getStaticPaths() {
 }
 
 const runtime = getRuntime(Astro.request);
-const lang = runtime?.env['DEFAULT_LANG'];
-
+const lang = runtime?.env["DEFAULT_LANG"];
 ---
-<Layout title={`Welcome to Astro: ${typeof runtime}`} description="Welcome to Astro description.">
-	<Header slot="header" />
+
+<Layout
+	title={`Welcome to Astro: ${typeof runtime}`}
+	description="Welcome to Astro description."
+>
+	<Header slot="header" client:only="react" />
 	<About />
 	<Schedule />
 	<Price />

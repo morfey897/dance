@@ -1,6 +1,8 @@
 # build output
 dist/
 .output/
+.wrangler/
+functions/\[\[path\]\].js
 # generated types
 .astro/
 .vscode/
