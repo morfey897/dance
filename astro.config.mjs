@@ -14,8 +14,8 @@ export default defineConfig({
   output: 'server',
   site: 'https://studio-kalipso.com.ua',
   integrations: [react(), tailwind(),
-  prefetch(),  sitemap({
+  prefetch(), sitemap({
     customPages: ['https://studio-kalipso.com.ua/sitemap.xml'],
   })],
-  adapter: cloudflare()
+  adapter: cloudflare({ mode: 'directory' })
 });
