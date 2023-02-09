@@ -1,0 +1,13 @@
+---
+import { env_PROXY_API_ARL } from "../utils/env";
+
+const proxy = env_PROXY_API_ARL(Astro.request);
+
+return new Response(JSON.stringify({ proxy, request: Astro.request }), {
+  status: 200,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+---
