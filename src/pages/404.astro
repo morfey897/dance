@@ -1,0 +1,36 @@
+---
+import { getLang, getPreferableLangs } from "../utils/url";
+import { AVAILABLE_LANGS, DEFAULT_LANG } from "../generated";
+
+let lang: string = getLang(Astro.url);
+if (!AVAILABLE_LANGS.includes(lang)) {
+  lang =
+    getPreferableLangs(Astro.request).find((code) =>
+      AVAILABLE_LANGS.includes(code)
+    ) || DEFAULT_LANG;
+}
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Astro JS 404 Page</title>
+  </head>
+
+  <body>
+    <main class="container">
+      <section class="content">
+        <h1>Page not found!</h1>
+        <p>
+          Path not recognised&hellip; <a
+            aria-label="Return to home page"
+            href="/"
+            >Go&nbsp;home?
+          </a>
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
