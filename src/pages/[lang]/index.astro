@@ -12,7 +12,7 @@ import { AVAILABLE_LANGS } from "../../generated";
 import { env_PROXY_API_ARL } from "../../utils/env";
 import { get as testGet } from "../../api/test";
 
-export const prerender = true;
+// export const prerender = true;
 export function getStaticPaths() {
 	return AVAILABLE_LANGS.map((lang) => ({ params: { lang } }));
 }
