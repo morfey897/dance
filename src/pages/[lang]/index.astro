@@ -16,11 +16,11 @@ import { get as testGet } from "../../api/test";
 export function getStaticPaths() {
 	return AVAILABLE_LANGS.map((lang) => ({ params: { lang } }));
 }
-const proxy = env_PROXY_API_ARL(Astro.request);
+// const proxy = env_PROXY_API_ARL(Astro.request);
 // const data = await fetch(``)
 // fetch('https://google.com')
 
-const data = {data: proxy};
+const data = {data: 'proxy'};
 ---
 
 <Layout title={`Welcome to Astro`} description="Welcome to Astro description.">
