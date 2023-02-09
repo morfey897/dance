@@ -1,7 +1,7 @@
 /// <reference types="astro/client" />
 interface ImportMetaEnv {
   readonly DEFAULT_LANG: string;
-  readonly AVAILABLE_LANG: string;
+  readonly AVAILABLE_LANGS: string;
   // more env variables...
 }
 

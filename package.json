@@ -4,12 +4,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "astro build",
-    "preview": "concurrently \"npm run build\" \"run-p preview:*\"",
+    "build": "concurrently \"npm run prebuild\" \"astro build\"",
+    "prebuild": "node scripts/generate.cjs --DEFAULT_LANG uk --AVAILABLE_LANGS en --AVAILABLE_LANGS ru --AVAILABLE_LANGS uk",
+    "preview": "concurrently \"run-s preview:*\"",
+    "preview:build": "astro build",
     "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788\"",
-    "dev": "concurrently \"cross-env NODE_ENV=development npm run build\" \"cross-env NODE_ENV=development run-p dev:*\"",
-    "dev:astro": "concurrently \"kill-port 3000\" \"astro dev --port 3000\"",
-    "dev:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV\""
+    "dev": "concurrently \"cross-env NODE_ENV=development run-s dev:*\"",
+    "dev:build": "astro build",
+    "dev:server": "concurrently \"kill-port 3000,8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --env PROXY_API_ARL=/  --compatibility-flag streams_enable_constructors\" \"astro dev --port 3000\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.1.1",
@@ -29,9 +31,11 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230115.0",
+    "@types/accept-language-parser": "^1.5.3",
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "kill-port": "^2.0.1",
+    "minimist": "^1.2.7",
     "npm-run-all": "^4.1.5",
     "wrangler": "^2.9.0"
   }

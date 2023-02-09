@@ -1,5 +1,3 @@
-import { Context } from "./api/type";
-
 // Respond to OPTIONS method
 export async function onRequestOptions() {
   return new Response(null, {

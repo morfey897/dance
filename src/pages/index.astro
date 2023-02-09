@@ -1,38 +1,10 @@
 ---
-// import { parse } from "accept-language-parser";
-import { getRuntime } from "@astrojs/cloudflare/runtime";
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/blocks/Header";
-import About from "../components/blocks/About";
-import Schedule from "../components/blocks/Schedule";
-import Price from "../components/blocks/Price";
-import Contacts from "../components/blocks/Contacts";
-import Directions from "../components/blocks/Directions";
-import Gallery from "../components/blocks/Gallery";
-import Footer from "../components/blocks/Footer";
-import { DEFAULT_LANG, AVAILABLE_LANG } from "../utils/constants";
+import { getPreferableLangs } from "../utils/url";
+import { AVAILABLE_LANGS, DEFAULT_LANG } from "../generated";
 
-export const prerender = true;
-export function getStaticPaths() {
-	return AVAILABLE_LANG.map((lang) => ({
-		params: { lang: lang === DEFAULT_LANG ? undefined : lang },
-	}));
-}
+let redirectLang =
+	getPreferableLangs(Astro.request).find((code) => AVAILABLE_LANGS.includes(code)) ||
+	DEFAULT_LANG;
 
-const runtime = getRuntime(Astro.request);
-const lang = runtime?.env["DEFAULT_LANG"];
+return Astro.redirect(`/${redirectLang}`, 301);
 ---
-
-<Layout
-	title={`Welcome to Astro: ${typeof runtime}`}
-	description="Welcome to Astro description."
->
-	<Header slot="header" client:only="react" />
-	<About />
-	<Schedule />
-	<Price />
-	<Directions />
-	<Gallery />
-	<Contacts />
-	<Footer slot="footer" />
-</Layout>

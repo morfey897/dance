@@ -13,7 +13,6 @@ export async function onRequestGet(context: Context) {
 }
 
 export async function onRequestPost(context: Context) {
-  console.log('POST');
   const countStr = await context.env.DANCE_KV.get('count');
   let count = parseInt(countStr);
   if (isNaN(count)) {
