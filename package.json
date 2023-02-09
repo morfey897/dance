@@ -12,7 +12,7 @@
     "dev": "concurrently \"cross-env NODE_ENV=development run-s dev:*\"",
     "dev:build": "astro build",
     "dev:server": "concurrently \"kill-port 3000,8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --env PROXY_API_ARL=/  --compatibility-flag streams_enable_constructors\" \"astro dev --port 3000\"",
-    "test": " concurrently \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --env PROXY_API_ARL --compatibility-flag streams_enable_constructors\""
+    "test": " concurrently \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding PROXY_API_ARL=/ --compatibility-flag streams_enable_constructors\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.1.1",
