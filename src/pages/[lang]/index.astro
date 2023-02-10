@@ -9,14 +9,14 @@ import Directions from "../../components/blocks/Directions";
 import Gallery from "../../components/blocks/Gallery";
 import Footer from "../../components/blocks/Footer";
 // import { AVAILABLE_LANGS } from "../../generated";
-// import { env_PROXY_API_ARL } from "../../utils/env";
+import { env_PROXY_API_ARL } from "../../utils/env";
 // import { get as testGet } from "../../api/test";
 
 // export const prerender = true;
 // export function getStaticPaths() {
 // 	return AVAILABLE_LANGS.map((lang) => ({ params: { lang } }));
 // }
-// const proxy = env_PROXY_API_ARL(Astro.request);
+const proxy = env_PROXY_API_ARL(Astro.request);
 // const data = await fetch(``)
 // fetch('https://google.com')
 
@@ -24,7 +24,7 @@ import Footer from "../../components/blocks/Footer";
 ---
 
 <Layout title={`Welcome to Astro`} description="Welcome to Astro description.">
-	<Header slot="header" title={`Index: ${JSON.stringify({ data: 'proxy' })}`} />
+	<Header slot="header" title={`Index: ${JSON.stringify({ data: proxy })}`} />
 	<About />
 	<Schedule />
 	<Price />
