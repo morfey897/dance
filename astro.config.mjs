@@ -12,6 +12,7 @@ import cloudflare from "@astrojs/cloudflare";
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
+  root: '.',
   site: 'https://studio-kalipso.com.ua',
   integrations: [react(), tailwind(),
   prefetch(), sitemap({
