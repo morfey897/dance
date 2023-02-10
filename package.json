@@ -15,7 +15,7 @@
     "test": " concurrently \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding PROXY_API_ARL=/ --compatibility-flag streams_enable_constructors\""
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.1.1",
+    "@astrojs/cloudflare": "^6.1.2",
     "@astrojs/prefetch": "^0.1.1",
     "@astrojs/react": "^2.0.0",
     "@astrojs/sitemap": "^1.0.0",
@@ -24,7 +24,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "accept-language-parser": "^1.5.0",
-    "astro": "^2.0.2",
+    "astro": "^2.0.10",
     "nanostores": "^0.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
