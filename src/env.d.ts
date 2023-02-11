@@ -1,7 +1,8 @@
 /// <reference types="astro/client" />
 interface ImportMetaEnv {
-  readonly DEFAULT_LANG: string;
-  readonly AVAILABLE_LANG: string;
+  readonly LANGS: string;
+  readonly PROXY_API_ARL: string;
+  // more env variables...
 }
 
 interface ImportMeta {

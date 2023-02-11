@@ -4,27 +4,51 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "concurrently \"run-s preview:*\"",
+    "preview:build": "astro build",
+    "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
+    "dev-build": "concurrently \"cross-env NODE_ENV=development astro build\"",
+    "dev": "concurrently \"kill-port 8788\" \"run-p dev:*\"",
+    "dev:wrangler": "echo 'wrangler pages dev ./dist --local --persist --port 8788 --compatibility-flag streams_enable_constructors --live-reload --kv DANCE_KV --binding' $(cat .env) | $0",
+    "dev:watch": "npm-watch"
+  },
+  "watch": {
+    "dev-build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "astro,ts,tsx,js,jsx,css,scss",
+      "inherit": true,
+      "clearBuffer": false,
+      "delay": 5000,
+      "legacyWatch": false
+    }
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.1.0",
-    "@astrojs/partytown": "^1.0.3",
+    "@astrojs/cloudflare": "^6.1.1",
     "@astrojs/prefetch": "^0.1.1",
     "@astrojs/react": "^2.0.0",
-    "@astrojs/sitemap": "^1.0.0",
     "@astrojs/tailwind": "^3.0.0",
     "@nanostores/react": "^0.4.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "accept-language-parser": "^1.5.0",
-    "astro": "^2.0.2",
+    "astro": "^2.0.10",
     "nanostores": "^0.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.2.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230115.0",
+    "@types/accept-language-parser": "^1.5.3",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "kill-port": "^2.0.1",
+    "minimist": "^1.2.7",
+    "npm-run-all": "^4.1.5",
+    "npm-watch": "^0.11.0",
+    "wrangler": "^2.9.0"
   }
 }

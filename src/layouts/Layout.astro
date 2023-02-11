@@ -1,5 +1,4 @@
 ---
-import { COOKIE_LANG } from "../utils/constants";
 import { getLang, normalize } from "../utils/url";
 export interface Props {
 	title: string;
@@ -11,8 +10,8 @@ export interface Props {
 	};
 }
 const { title, description, og } = Astro.props;
-const lang = (Astro.cookies.get(COOKIE_LANG) || {}).value;
-const url = normalize(Astro.url.href);
+const url = normalize(Astro.url);
+const lang = getLang(Astro.url);
 ---
 <!DOCTYPE html>
 <html lang={lang}>
