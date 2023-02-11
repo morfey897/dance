@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/blocks/Header";
+import About from "../../components/blocks/About";
+import Schedule from "../../components/blocks/Schedule";
+import Price from "../../components/blocks/Price";
+import Contacts from "../../components/blocks/Contacts";
+import Directions from "../../components/blocks/Directions";
+import Gallery from "../../components/blocks/Gallery";
+import Footer from "../../components/blocks/Footer";
+import { getCount } from "../../data/count";
+const data = await getCount(Astro.request);
+---
+
+<Layout title={`Welcome to Astro`} description="Welcome to Astro description.">
+	<Header slot="header" title={`Index: ${JSON.stringify({ data: data, r: 'request' })}`} />
+	<About />
+	<Schedule />
+	<Price />
+	<Directions />
+	<Gallery />
+	<Contacts />
+	<Footer slot="footer" />
+</Layout>

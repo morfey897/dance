@@ -1,9 +1,12 @@
 # build output
 dist/
 .output/
+.wrangler/
+functions/\[\[path\]\].js
 # generated types
 .astro/
 .vscode/
+src/generated.*
 
 # dependencies
 node_modules/

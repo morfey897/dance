@@ -1,18 +1,20 @@
-const LANG_REG = /^(\/[a-z]{2})(?:\/|\?|$)/;
+import { parse } from "accept-language-parser";
+const LANG_REG = /^\/([a-z]{2})(?:\/|\?|$)/;
 
-export function getLang(href: string) {
+export function getLang(href: string | URL) {
   const url = new URL(href);
   const [, urlLang] = url.pathname.match(LANG_REG) || [];
-  if (!urlLang) return 'uk';
-  const lang = urlLang.replace(/^\/|\/$/g, '');;
-  if ('en,uk,ru'.split(",").map(l => l.trim()).filter(l => !!l && l.length).includes(lang)) return lang;
-  return undefined;
+  return urlLang || "";
 }
 
-export function normalize(href: string) {
+export function normalize(href: string | URL) {
   const url = new URL(href);
-  const urlLang = getLang(href);
-  const path = url.href.replace(url.origin, '');
-  const lang = urlLang === 'uk' ? '' : urlLang;
-  return `${url.protocol}//` + [url.host, urlLang ? path.replace(LANG_REG, '/' + lang + '/') : '/' + lang + '/' + path].join('/').replace(/\/{2,}/g, "/");
+  return url.origin + url.pathname.replace(/\/$/g, "");
+}
+
+export function getPreferableLangs(request: Request) {
+  const langList: Array<{ code: string }> = parse(
+    request.headers.get("accept-language")
+  );
+  return [...new Set(langList.map(({ code }) => code))];
 }
