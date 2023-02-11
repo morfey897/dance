@@ -4,15 +4,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "concurrently \"npm run prebuild\" \"astro build\"",
-    "prebuild": "node scripts/generate.cjs --DEFAULT_LANG uk --AVAILABLE_LANGS en --AVAILABLE_LANGS ru --AVAILABLE_LANGS uk",
+    "build": "astro build",
+
     "preview": "concurrently \"run-s preview:*\"",
     "preview:build": "astro build",
-    "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --env PROXY_API_ARL=/\"",
+    "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
+    
     "dev": "concurrently \"cross-env NODE_ENV=development run-s dev:*\"",
     "dev:build": "astro build",
-    "dev:server": "concurrently \"kill-port 3000,8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --env PROXY_API_ARL=/  --compatibility-flag streams_enable_constructors\" \"astro dev --port 3000\"",
-    "test": " concurrently \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding PROXY_API_ARL=/ --compatibility-flag streams_enable_constructors\""
+    "dev:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
+    "dev:astro": "concurrently \"kill-port 3000\" \"astro dev --port 3000\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.1.1",

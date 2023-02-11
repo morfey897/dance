@@ -1,10 +1,11 @@
 ---
 import { getPreferableLangs } from "../utils/url";
-import { AVAILABLE_LANGS, DEFAULT_LANG } from "../generated";
+import { getLangs } from "../data/env";
 
+const LANGS = getLangs(Astro.request)
 let redirectLang =
-	getPreferableLangs(Astro.request).find((code) => AVAILABLE_LANGS.includes(code)) ||
-	DEFAULT_LANG;
+	getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
+	LANGS[0];
 
 return Astro.redirect(`/${redirectLang}`, 301);
 ---
