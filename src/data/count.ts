@@ -1,7 +1,7 @@
 import { getRuntime } from "./runtime";
 
 export async function getCount(request: Request) {
-  const runtime = getRuntime(request);
+  const runtime =  getRuntime(request);
   let count: number | null;
   if (runtime) {
     let result = parseInt(await runtime.env.DANCE_KV.get('count'));
