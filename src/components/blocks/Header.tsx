@@ -12,7 +12,7 @@ function Header({ title }: { title: string }) {
           <img loading="lazy" src='/logo.png' alt='' />
         </a>
         <p>
-          {title}
+          {title}{'HEADER'}
         </p>
       </nav>
     </div>

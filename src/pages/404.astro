@@ -1,13 +1,14 @@
 ---
 import { getLang, getPreferableLangs } from "../utils/url";
-import { AVAILABLE_LANGS, DEFAULT_LANG } from "../generated";
+import { getLangs } from "../data/env";
 
 let lang: string = getLang(Astro.url);
-if (!AVAILABLE_LANGS.includes(lang)) {
+const LANGS = getLangs(Astro.request);
+if (!LANGS.includes(lang)) {
   lang =
     getPreferableLangs(Astro.request).find((code) =>
-      AVAILABLE_LANGS.includes(code)
-    ) || DEFAULT_LANG;
+    LANGS.includes(code)
+    ) || LANGS[0];
 }
 ---
 
