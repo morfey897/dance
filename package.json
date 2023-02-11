@@ -5,15 +5,25 @@
   "private": true,
   "scripts": {
     "build": "astro build",
-
     "preview": "concurrently \"run-s preview:*\"",
     "preview:build": "astro build",
     "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
-    
-    "dev": "concurrently \"cross-env NODE_ENV=development run-s dev:*\"",
-    "dev:build": "astro build",
-    "dev:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
-    "dev:astro": "concurrently \"kill-port 3000\" \"astro dev --port 3000\""
+    "dev-build": "concurrently \"cross-env NODE_ENV=development astro build\"",
+    "dev": "concurrently \"kill-port 8788\" \"run-p dev:*\"",
+    "dev:wrangler": "echo 'wrangler pages dev ./dist --local --persist --port 8788 --compatibility-flag streams_enable_constructors --live-reload --kv DANCE_KV --binding' $(cat .env) | $0",
+    "dev:watch": "npm-watch"
+  },
+  "watch": {
+    "dev-build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "astro,ts,tsx,js,jsx,css,scss",
+      "inherit": true,
+      "clearBuffer": false,
+      "delay": 5000,
+      "legacyWatch": false
+    }
   },
   "dependencies": {
     "@astrojs/cloudflare": "^6.1.1",
@@ -38,6 +48,7 @@
     "kill-port": "^2.0.1",
     "minimist": "^1.2.7",
     "npm-run-all": "^4.1.5",
+    "npm-watch": "^0.11.0",
     "wrangler": "^2.9.0"
   }
 }
