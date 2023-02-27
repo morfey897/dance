@@ -1,5 +1,10 @@
 ---
+import '@fontsource/comfortaa/300.css';
+import '@fontsource/comfortaa/400.css';
+import '@fontsource/comfortaa/500.css';
+
 import { getLang, normalize } from "../utils/url";
+
 export interface Props {
 	title: string;
 	description: string;
@@ -13,6 +18,7 @@ const { title, description, og } = Astro.props;
 const url = normalize(Astro.url);
 const lang = getLang(Astro.url);
 ---
+
 <!DOCTYPE html>
 <html lang={lang}>
 	<head>
@@ -28,7 +34,7 @@ const lang = getLang(Astro.url);
 		{og?.image && <meta content={og.image} name="og:image" />}
 		{og?.description && <meta content={og.description} name="og:description" />}
 	</head>
-	<body>
+	<body class="bg-black text-white">
 		<slot name="header" />
 		<main>
 			<slot />
