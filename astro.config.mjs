@@ -7,10 +7,15 @@ import prefetch from "@astrojs/prefetch";
 import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
+import mdx from "@astrojs/mdx";
+
+// https://astro.build/config
 export default defineConfig({
   output: 'server',
   root: '.',
   site: 'https://studio-kalipso.com.ua',
-  integrations: [react(), tailwind(), prefetch()],
-  adapter: cloudflare({ mode: 'directory' })
+  adapter: cloudflare({
+    mode: 'directory'
+  }),
+  integrations: [react(), tailwind(), prefetch(), mdx(),],
 });
