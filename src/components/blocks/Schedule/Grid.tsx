@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { compareAsc } from "date-fns";
 import type { GridState, EventsType, EventType, DateType } from "./types";
 
-function Grid({ state, events }: { state: GridState; events: EventsType; } & React.HTMLProps<HTMLDivElement>) {
+function Grid({ state, events, loading }: { state: GridState; events: EventsType; loading: boolean } & React.HTMLProps<HTMLDivElement>) {
 
   const gridData = useMemo(() => {
     const lenEvents = events ? events.length : 0;
@@ -31,28 +31,68 @@ function Grid({ state, events }: { state: GridState; events: EventsType; } & Rea
         timesMap.set(time, dataList);
       }
     }
+    if (timesMap.size < 6) {
+      for (let i = timesMap.size, start = 9; i < 6; i++, start += 2) {
+        const key = ('0' + `${start}:00`).slice(-5);
+        if (!timesMap.has(key)) {
+          timesMap.set(key, new Array(state.dates.length).fill(undefined));
+        }
+      }
+    }
     return [...timesMap].sort();
   }, [state, events]);
 
-
-  return <div className="w-full">
+  return <div className={clsx("w-full relative")}>
     {
-      gridData.map(([time, items]) => <GridRow key={time} state={state} time={time} items={items} />)
+      gridData.map(([time, items]) => <GridRow key={time} state={state} time={time} items={items} className={clsx(loading && 'animate-pulse')} />)
+    }
+    {loading && <svg className="absolute left-0 right-0 mx-auto top-5" width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+      <circle cx="15" cy="15" r="15">
+        <animate attributeName="r" from="15" to="15"
+          begin="0s" dur="0.8s"
+          values="15;9;15" calcMode="linear"
+          repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="1" to="1"
+          begin="0s" dur="0.8s"
+          values="1;.5;1" calcMode="linear"
+          repeatCount="indefinite" />
+      </circle>
+      <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+        <animate attributeName="r" from="9" to="9"
+          begin="0s" dur="0.8s"
+          values="9;15;9" calcMode="linear"
+          repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="0.5" to="0.5"
+          begin="0s" dur="0.8s"
+          values=".5;1;.5" calcMode="linear"
+          repeatCount="indefinite" />
+      </circle>
+      <circle cx="105" cy="15" r="15">
+        <animate attributeName="r" from="15" to="15"
+          begin="0s" dur="0.8s"
+          values="15;9;15" calcMode="linear"
+          repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="1" to="1"
+          begin="0s" dur="0.8s"
+          values="1;.5;1" calcMode="linear"
+          repeatCount="indefinite" />
+      </circle>
+    </svg>
     }
   </div>;
 }
 
-function GridRow({ time, items, state }: { state: GridState } & DateType & React.HTMLProps<HTMLDivElement>) {
+function GridRow({ time, items, state, className }: { state: GridState } & DateType & React.HTMLProps<HTMLDivElement>) {
 
   const active = useMemo(() => (
     state.dates.findIndex((date) => compareAsc(state.active, date) === 0)
   ), [state]);
 
-  return <div className={clsx('w-full min-h-[67px] py-3 inline-grid gap-2 border-b border-b-pnk-200 border-opacity-40',
-    `grid-cols-2 lg:grid-cols-${state.dates.length + 1}`)}>
-    <div className="flex ml-5 items-center text-xl font-medium lg:justify-center lg:ml-0">{time}</div>
+  return <div className={clsx('w-full min-h-[67px] py-3 inline-grid gap-0 md:gap-2 border-b border-b-pnk-200 border-opacity-40',
+    `grid-cols-2 md:grid-cols-${state.dates.length + 1}`, className)}>
+    <div className="flex ml-5 items-center text-xl font-medium md:justify-center md:ml-0">{time}</div>
     {
-      items.map((item, i) => <GridCell data-active={i === active} className={`data-[active=false]:hidden lg:data-[active]:block`} item={item} key={`item_${i}`} />)
+      items.map((item, i) => <GridCell data-active={i === active} className={`data-[active=false]:hidden md:data-[active]:block`} item={item} key={`item_${i}`} />)
     }
   </div>
 }
@@ -76,7 +116,7 @@ function GridCell({ item, className, ...props }: { item: EventType | EventType[]
 
 function GridContent({ item, className }: { item: EventType } & React.HTMLProps<HTMLDivElement>) {
   return <div className={clsx('space-y-1 m-auto', !!item.hasInfo ? 'cursor-pointer group' : "cursor-default", className)}>
-    <p className="text-sm font-light">{item.time} {`(${item.gym})`}</p>
+    <p className="text-sm font-light"><span className="text-base font-medium mr-1">{item.time}</span>{`(${item.gym})`}</p>
     <p className="text-base font-light break-words hyphens-auto">{!!item.hasInfo && <span className="mr-2 inline-block">
       <svg className="fill-white group-hover:fill-pnk-100" width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="8" cy="8" r="8" />

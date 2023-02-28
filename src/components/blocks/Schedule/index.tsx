@@ -77,10 +77,16 @@ function Schedule() {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
   const [events, setEvents] = useState<EventsType | undefined>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchEvents(toDate(state.dates[0]), toDate(state.dates[state.dates.length - 1])).then(events => setEvents(events.map(data => ({ ...data, date: new Date(data.date) }))));
-  }, [state]);
+    setLoading(true);
+    fetchEvents(toDate(state.dates[0]), toDate(state.dates[state.dates.length - 1]))
+      .then(events => {
+        setEvents(events.filter(data => !!data).map(data => ({ ...data, date: new Date(data.date) })));
+        setLoading(false);
+      });
+  }, [state.dates]);
 
   return <section className="w-full relative z-20">
     <div className="max-w-screen-xl mx-auto px-4 pt-4 pb-16">
@@ -88,7 +94,7 @@ function Schedule() {
       <p className="text-xs md:text-base mt-7 max-w-screen-md m-auto text-center">{SUBHEADLINE}</p>
       <ChangeDate onNext={() => dispatch({ type: 'inc' })} onPrev={() => dispatch({ type: 'dec' })} onNow={() => dispatch({ type: 'now' })} state={state} />
       <GridHeader onSelectDate={(d) => dispatch({ type: 'active', payload: d })} state={state} />
-      <Grid state={state} events={events} />
+      <Grid state={state} events={events} loading={loading} />
     </div>
   </section>;
 }
