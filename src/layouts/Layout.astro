@@ -1,7 +1,7 @@
 ---
-import '@fontsource/comfortaa/300.css';
-import '@fontsource/comfortaa/400.css';
-import '@fontsource/comfortaa/500.css';
+import "@fontsource/comfortaa/300.css";
+import "@fontsource/comfortaa/400.css";
+import "@fontsource/comfortaa/500.css";
 
 import { getLang, normalize } from "../utils/url";
 
@@ -34,11 +34,11 @@ const lang = getLang(Astro.url);
 		{og?.image && <meta content={og.image} name="og:image" />}
 		{og?.description && <meta content={og.description} name="og:description" />}
 	</head>
-	<body class="bg-black text-white">
+	<body class="bg-black text-white overflow-x-hidden !m-0 !p-0 w-full">
 		<slot name="header" />
-		<main>
+		<!-- <main> -->
 			<slot />
-		</main>
+		<!-- </main> -->
 		<slot name="footer" />
 	</body>
 </html>

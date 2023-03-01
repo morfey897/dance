@@ -7,6 +7,8 @@ import Grid from "./Grid";
 import type { GridState, DateAction, EventsType } from "./types";
 
 import { fetchEvents } from "../../../__mocdata/events";
+import Section from "../../elements/Section";
+import Headline from "../../elements/Headline";
 
 const HEADLINE = 'Розклад';
 const SUBHEADLINE = '';
@@ -88,15 +90,17 @@ function Schedule() {
       });
   }, [state.dates]);
 
-  return <section className="w-full relative z-20">
-    <div className="max-w-screen-xl mx-auto px-4 pt-4 pb-16">
-      <h2 className="uppercase text-2xl md:text-7xl text-center">{HEADLINE}</h2>
-      <p className="text-xs md:text-base mt-7 max-w-screen-md m-auto text-center">{SUBHEADLINE}</p>
-      <ChangeDate onNext={() => dispatch({ type: 'inc' })} onPrev={() => dispatch({ type: 'dec' })} onNow={() => dispatch({ type: 'now' })} state={state} />
-      <GridHeader onSelectDate={(d) => dispatch({ type: 'active', payload: d })} state={state} />
-      <Grid state={state} events={events} loading={loading} />
-    </div>
-  </section>;
+  return <Section>
+    <Headline headline={HEADLINE} subheadline={SUBHEADLINE} />
+    <ChangeDate
+      className="mt-12"
+      state={state}
+      onNext={() => dispatch({ type: 'inc' })}
+      onPrev={() => dispatch({ type: 'dec' })}
+      onNow={() => dispatch({ type: 'now' })} />
+    <GridHeader onSelectDate={(d) => dispatch({ type: 'active', payload: d })} state={state} />
+    <Grid state={state} events={events} loading={loading} />
+  </Section>;
 }
 
 export default Schedule;
