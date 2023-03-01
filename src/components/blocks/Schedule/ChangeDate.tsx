@@ -5,13 +5,13 @@ import type { GridState } from './types';
 
 const BTN_NOW = 'Сьогодні';
 
-function ChangeDate({ onNext, onPrev, onNow, state }: { onNext: React.MouseEventHandler; onPrev: React.MouseEventHandler; onNow: React.MouseEventHandler; state: GridState; } & React.HTMLProps<HTMLDivElement>) {
+function ChangeDate({ onNext, onPrev, onNow, state, className }: { onNext: React.MouseEventHandler; onPrev: React.MouseEventHandler; onNow: React.MouseEventHandler; state: GridState; } & React.HTMLProps<HTMLDivElement>) {
 
   const showToday = useMemo(() => (
     compareAsc(state.now, state.dates[0]) <= 0 || compareAsc(state.dates[state.dates.length - 1], state.now) <= 0
   ), [state]);
 
-  return <div className="flex justify-center">
+  return <div className={clsx("flex justify-center", className)}>
     <div className={clsx("flex items-center space-x-5")}>
       <button className="group" onClick={onPrev}>
         <svg className="stroke-white group-hover:stroke-pnk-200 group-active:stroke-pnk-100" fill="none" width="22" height="44" viewBox="0 0 22 44" xmlns="http://www.w3.org/2000/svg">

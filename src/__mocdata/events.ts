@@ -41,8 +41,8 @@ export async function fetchEvents(start: string, end: string):Promise<Array<{ da
         let d = addDays(startDate, index);
         return EVENTS.find(({ date }) => date === toDate(d));
       }));
-    }, 2000);
-  })
+    }, 500);
+  });
 }
 
 
