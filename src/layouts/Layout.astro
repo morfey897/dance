@@ -18,7 +18,23 @@ const { title, description, og } = Astro.props;
 const url = normalize(Astro.url);
 const lang = getLang(Astro.url);
 ---
-
+<style is:global>
+  body {
+    margin: 0 !important;
+		padding: 0 !important;
+		width: 100%;
+		overflow-x: hidden;
+		color: white;
+		background-color: black;
+  }
+	.hide-scroll {
+		scrollbar-width: none;
+    -ms-overflow-style: none;
+	}
+	.hide-scroll::-webkit-scrollbar {
+		display: none;
+	}
+</style>
 <!DOCTYPE html>
 <html lang={lang}>
 	<head>
@@ -34,7 +50,7 @@ const lang = getLang(Astro.url);
 		{og?.image && <meta content={og.image} name="og:image" />}
 		{og?.description && <meta content={og.description} name="og:description" />}
 	</head>
-	<body class="bg-black text-white overflow-x-hidden !m-0 !p-0 w-full">
+	<body>
 		<slot name="header" />
 		<!-- <main> -->
 			<slot />

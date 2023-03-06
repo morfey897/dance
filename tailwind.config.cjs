@@ -12,6 +12,7 @@ module.exports = {
 				...defaultTheme.transitionProperty,
 				width: "width",
 				height: "height",
+				scale: "scale",
 				'max-height': "max-height",
 			},
 		},
