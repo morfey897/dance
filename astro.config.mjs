@@ -13,7 +13,7 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   output: 'server',
   root: '.',
-  site: 'https://studio-kalipso.com.ua',
+  site: 'https://studio-kalipso.com',
   adapter: cloudflare({
     mode: 'directory'
   }),

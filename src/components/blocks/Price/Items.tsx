@@ -49,7 +49,7 @@ export function Item({ item, className }: { item: PriceType } & React.HTMLProps<
 }
 
 function BaseItem({ className, children }: React.HTMLProps<HTMLDivElement>) {
-  return <div className={clsx("bg-[#161616] rounded-lg py-7 px-3 text-center md:w-[345px] lg:w-[395px] relative", className)}>
+  return <div className={clsx("bg-[#161616] rounded-lg py-7 px-3 text-center w-full md:w-[345px] lg:w-[395px] relative", className)}>
     {children}
   </div>
 }

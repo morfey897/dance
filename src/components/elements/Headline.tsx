@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 function Headline({ headline, subheadline }: { headline: string; subheadline?: string }) {
   return <>
     <h2 className="uppercase text-3xl md:text-7xl text-center">{headline}</h2>
@@ -5,4 +7,4 @@ function Headline({ headline, subheadline }: { headline: string; subheadline?: s
   </>;
 }
 
-export default Headline;
+export default memo(Headline);

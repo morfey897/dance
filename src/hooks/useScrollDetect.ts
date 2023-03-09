@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { throttle } from "throttle-debounce";
 
 const isBrowser = () => typeof window === 'object';
@@ -17,19 +17,18 @@ type ScrollDirectionHookResult = {
 export function useScrollDirection(): ScrollDirectionHookResult {
   const [result, setResult] = useState<ScrollDirectionHookResult>({ direction: 'IDLE', percent: 0 });
 
+  const onScroll = useMemo(() => throttle(400, () => {
+    const scrollTop = getScrollPercent();
+    setResult(({ percent }) => ({ direction: scrollTop > percent ? 'DOWN' : 'UP', percent: scrollTop }))
+  }), []);
+
   useEffect(() => {
     if (isBrowser()) {
       setResult({ direction: 'IDLE', percent: getScrollPercent() });
-
-      const handleScroll = throttle(400, () => {
-        const scrollTop = getScrollPercent();
-        setResult(({ percent }) => ({ direction: scrollTop > percent ? 'DOWN' : 'UP', percent: scrollTop }))
-      });
-
-      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('scroll', onScroll);
       return () => {
-        handleScroll.cancel();
-        window.removeEventListener('scroll', handleScroll);
+        onScroll.cancel();
+        window.removeEventListener('scroll', onScroll);
       };
     }
   }, [])
