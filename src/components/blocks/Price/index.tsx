@@ -6,6 +6,7 @@ import { SubItem, AddItem, Item } from "./Items";
 import Group from "./Group";
 import { PriceType, AdditionalType } from "./types";
 import Indicator from "../../elements/IngIndicator";
+import { ANCHORS } from "../../../utils/constants";
 
 const HEADLINE = 'Ціни';
 const GROUPS = {
@@ -40,7 +41,7 @@ function Price() {
       });
   }, []);
 
-  return <Section effect={{ x: 'right', y: 'bottom' }}>
+  return <Section effect={{ x: 'right', y: 'bottom' }} anchor={ANCHORS.prc}>
     <Headline headline={HEADLINE} subheadline={SUBHEADLINE} />
     {!add && !sub && <Indicator className="m-auto mt-10" />}
     <div className="space-y-14 mt-12">

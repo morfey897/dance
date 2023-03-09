@@ -8,34 +8,48 @@ import { getLang, normalize } from "../utils/url";
 export interface Props {
 	title: string;
 	description: string;
+	image: string;
 	og?: {
 		title?: string;
-		image: string;
 		description?: string;
 	};
+	schema?: Object;
 }
-const { title, description, og } = Astro.props;
+const { title, description, image, og, schema } = Astro.props;
+const hash = Astro.url.hash;
 const url = normalize(Astro.url);
 const lang = getLang(Astro.url);
+
+let structuredData = JSON.stringify({
+	"@context": "https://schema.org/",
+	"@type": "DanceSchool",
+	image: image,
+	url,
+	...schema,
+});
 ---
+
 <style is:global>
-  body {
-    margin: 0 !important;
+	html {
+		scroll-behavior: smooth;
+	}
+	body {
+		margin: 0 !important;
 		padding: 0 !important;
 		width: 100%;
 		overflow-x: hidden;
 		color: white;
 		background-color: black;
-  }
+	}
 	.hide-scroll {
 		scrollbar-width: none;
-    -ms-overflow-style: none;
+		-ms-overflow-style: none;
 	}
 	.hide-scroll::-webkit-scrollbar {
 		display: none;
 	}
 </style>
-<!DOCTYPE html>
+
 <html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
@@ -46,9 +60,10 @@ const lang = getLang(Astro.url);
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta content={description} name="description" />
-		{og?.title && <meta content={og.title} name="og:title" />}
-		{og?.image && <meta content={og.image} name="og:image" />}
-		{og?.description && <meta content={og.description} name="og:description" />}
+		<meta content={og?.title || title} name="og:title" />
+		<meta content={og?.description || description} name="og:description" />
+		{image && <meta content={image} name="og:image" />}
+		<script type="application/ld+json" set:html={structuredData}></script>
 	</head>
 	<body>
 		<slot name="header" />

@@ -9,6 +9,7 @@ import type { GridState, DateAction, EventsType } from "./types";
 import { fetchEvents } from "../../../__mocdata/events";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
+import { ANCHORS } from "../../../utils/constants";
 
 const HEADLINE = 'Розклад';
 const SUBHEADLINE = '';
@@ -90,7 +91,7 @@ function Schedule() {
       });
   }, [state.dates]);
 
-  return <Section>
+  return <Section anchor={ANCHORS.schdl}>
     <Headline headline={HEADLINE} subheadline={SUBHEADLINE} />
     <ChangeDate
       className="mt-12"

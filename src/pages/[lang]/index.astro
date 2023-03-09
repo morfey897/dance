@@ -8,15 +8,125 @@ import Contacts from "../../components/blocks/Contacts";
 import Directions from "../../components/blocks/Directions";
 import Gallery from "../../components/blocks/Galary";
 import Footer from "../../components/blocks/Footer";
+import ClearAnchor from "../../components/elements/ClearAnchor";
+import store from "../../appStore";
+
+store.address.set({
+  place: "Kalipso Pole Dance Studio",
+  country: "Україна",
+  city: "Київ",
+  address: "Попудренко 52б",
+  district: "м.Черниговская",
+  lat: 50.459689,
+  lng: 30.634076,
+});
+
+store.phones.set([
+  "+38 (066) 39-79-488",
+  "+38 (066) 39-79-487",
+  "+38 (066) 39-79-489",
+]);
+
+// store.social
+store.social.set([
+  {
+    type: 'instagram',
+    title: "Instagram",
+    href: "https://instagram.com",
+  },
+  {
+    type: 'telegram',
+    title: "Telegram",
+    href: "tel://instagram1.com",
+  },
+  {
+    type: 'viber',
+    title: "Viber",
+    href: "viber://instagram2.com",
+  },
+  {
+    type: 'tiktok',
+    title: "TikTok",
+    href: "viber://instagram3.com",
+  },
+]);
+
+const schema = {
+  name: "Kalipso Pole Dance Studio",
+  description:
+    "We offer dance classes for children and adults in a variety of styles, including ballet, hip hop, jazz, and tap.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Попудренко 52б",
+    addressLocality: "Kyiv",
+    addressCountry: "Ukraine",
+  },
+  telephone: "+38 (066) 39-79-488",
+  sameAs: [
+    "https://www.facebook.com/yourdanceschoolname/",
+    "https://www.instagram.com/yourdanceschoolname/",
+    "https://www.youtube.com/channel/yourdanceschoolname",
+  ],
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Monday",
+      opens: "09:00",
+      closes: "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Tuesday",
+      opens: "09:00",
+      closes: "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Wednesday",
+      opens: "09:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Thursday",
+      opens: "09:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Friday",
+      opens: "09:00",
+      closes: "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "14:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "09:00",
+      closes: "14:00",
+    },
+  ],
+};
 ---
 
-<Layout title={`Welcome to Astro`} description="Welcome to Astro description.">
-	<Header slot="header" client:load />
-	<About />
-	<Directions client:load />
-	<Schedule client:idle />
-	<Price client:load />
-	<Gallery client:visible />
-	<!-- <Contacts /> -->
-	<!-- <Footer slot="footer" /> -->
+<Layout
+  title={`Welcome to Astro`}
+  description="Welcome to Astro description."
+  image="https://studio-kalipso.com/wp-content/uploads/2019/09/slide.jpg.pagespeed.ce.geUH2AFPD2.jpg"
+  schema={schema}
+>
+  <Header slot="header" client:load />
+  <About />
+  <Directions />
+  <Schedule />
+  <Price client:load />
+  <Gallery />
+  <Contacts />
+  <ClearAnchor client:idle/>
+  <Footer slot="footer" />
 </Layout>
