@@ -6,11 +6,12 @@ import { useInView } from 'react-intersection-observer';
 import clsx from "clsx";
 import { ANCHORS } from "../../../utils/constants";
 import { useAddress, useSocial, usePhones } from "../../../hooks/store";
+import { Wrapper } from "@googlemaps/react-wrapper";
 
 const HEADLINE = 'Контакти';
 const SUBHEADLINE = 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.';
 
-function Contacts() {
+function Contacts({ google_api_key }: { google_api_key: string }) {
 
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -25,7 +26,9 @@ function Contacts() {
     <div className="flex gap-8 flex-col-reverse lg:flex-row ">
       <div className="basis-2/5 w-full">
         <div className={clsx("h-[300px] lg:h-full -mb-16 lg:mb-0 -mx-4 lg:mx-0 lg:w-full bg-white", !inView && 'animate-pulse')} ref={ref}>
-          {inView && <CanvasMap center={{lat: address.lat, lng: address.lng}} zoom={16} className="w-full h-[inherit]" />}
+          {inView && <Wrapper apiKey={google_api_key}>
+            <CanvasMap center={{ lat: address.lat, lng: address.lng }} zoom={16} className="w-full h-[inherit]" />
+          </Wrapper>}
         </div>
       </div>
       <div className="basis-3/5 w-full">

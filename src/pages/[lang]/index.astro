@@ -1,4 +1,6 @@
 ---
+import { getGoogleApiKey } from "../../data/env";
+
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/blocks/Header";
 import About from "../../components/blocks/About";
@@ -30,22 +32,22 @@ store.phones.set([
 // store.social
 store.social.set([
   {
-    type: 'instagram',
+    type: "instagram",
     title: "Instagram",
     href: "https://instagram.com",
   },
   {
-    type: 'telegram',
+    type: "telegram",
     title: "Telegram",
     href: "tel://instagram1.com",
   },
   {
-    type: 'viber',
+    type: "viber",
     title: "Viber",
     href: "viber://instagram2.com",
   },
   {
-    type: 'tiktok',
+    type: "tiktok",
     title: "TikTok",
     href: "viber://instagram3.com",
   },
@@ -126,7 +128,7 @@ const schema = {
   <Schedule />
   <Price client:load />
   <Gallery />
-  <Contacts />
-  <ClearAnchor client:idle/>
+  <Contacts google_api_key={getGoogleApiKey(Astro.request)} client:idle/>
+  <ClearAnchor client:idle />
   <Footer slot="footer" />
 </Layout>

@@ -1,4 +1,4 @@
-import { atom, map, mapTemplate } from 'nanostores';
+import { atom, map } from 'nanostores';
 
 export const address = map<{ country: string; city: string; district: string; address: string; place: string; lat: number; lng: number;}>({
   country: '',

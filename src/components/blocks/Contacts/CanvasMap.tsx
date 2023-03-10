@@ -1,8 +1,7 @@
-import { Wrapper } from "@googlemaps/react-wrapper";
 import { MarkerWithLabel } from "@googlemaps/markerwithlabel";
 import { memo, useEffect, useRef } from "react";
 
-function MapComponent({ center, zoom, className, ...props }: { center: google.maps.LatLngLiteral; zoom: number; } & React.HTMLProps<HTMLDivElement>) {
+function CanvasMap({ center, zoom, className, ...props }: { center: google.maps.LatLngLiteral; zoom: number; } & React.HTMLProps<HTMLDivElement>) {
 
   const ref = useRef();
 
@@ -22,12 +21,6 @@ function MapComponent({ center, zoom, className, ...props }: { center: google.ma
   }, []);
 
   return <div className={className} ref={ref} {...props} />;
-}
-
-function CanvasMap({ center, zoom, ...props }: { center: google.maps.LatLngLiteral; zoom: number; } & React.HTMLProps<HTMLDivElement>) {
-  return <Wrapper apiKey={import.meta.env.GOOGLE_API_KEY}>
-    <MapComponent center={center} zoom={zoom} {...props} />
-  </Wrapper>;
 }
 
 export default memo(CanvasMap);
