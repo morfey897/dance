@@ -3,7 +3,6 @@ import { getLang, getPreferableLangs } from "../utils/url";
 import { LANGS } from "../env";
 
 let lang: string = getLang(Astro.url);
-const LANGS = getLangs(Astro.request);
 if (!LANGS.includes(lang)) {
   lang =
     getPreferableLangs(Astro.request).find((code) =>
