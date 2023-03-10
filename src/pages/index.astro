@@ -1,4 +1,5 @@
 ---
+import env from "../env";
 // import { getPreferableLangs } from "../utils/url";
 // import { getLangs } from "../data/env";
 
@@ -8,11 +9,10 @@
 // 	LANGS[0];
 
 // return Astro.redirect(`/${redirectLang}`, 301);
-
-const ENV = JSON.stringify(process.env);
 ---
+
 <html>
 	<body>
-		<p>ENV_DATA: {ENV}</p>
+		<p>ENV_DATA: {env}</p>
 	</body>
 </html>
