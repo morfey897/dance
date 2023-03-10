@@ -1,57 +1,14 @@
 ---
-import { getGoogleApiKey } from "../../data/env";
-
 import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/blocks/Header";
-import About from "../../components/blocks/About";
+import Header from "../../components/blocks/Header/index.astro";
+import About from "../../components/blocks/About/index.astro";
 import Schedule from "../../components/blocks/Schedule";
 import Price from "../../components/blocks/Price";
-import Contacts from "../../components/blocks/Contacts";
+import Contacts from "../../components/blocks/Contacts/index.astro";
 import Directions from "../../components/blocks/Directions";
 import Gallery from "../../components/blocks/Galary";
-import Footer from "../../components/blocks/Footer";
+import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
-import store from "../../appStore";
-
-store.address.set({
-  place: "Kalipso Pole Dance Studio",
-  country: "Україна",
-  city: "Київ",
-  address: "Попудренко 52б",
-  district: "м.Черниговская",
-  lat: 50.459689,
-  lng: 30.634076,
-});
-
-store.phones.set([
-  "+38 (066) 39-79-488",
-  "+38 (066) 39-79-487",
-  "+38 (066) 39-79-489",
-]);
-
-// store.social
-store.social.set([
-  {
-    type: "instagram",
-    title: "Instagram",
-    href: "https://instagram.com",
-  },
-  {
-    type: "telegram",
-    title: "Telegram",
-    href: "tel://instagram1.com",
-  },
-  {
-    type: "viber",
-    title: "Viber",
-    href: "viber://instagram2.com",
-  },
-  {
-    type: "tiktok",
-    title: "TikTok",
-    href: "viber://instagram3.com",
-  },
-]);
 
 const schema = {
   name: "Kalipso Pole Dance Studio",
@@ -122,13 +79,13 @@ const schema = {
   image="https://studio-kalipso.com/wp-content/uploads/2019/09/slide.jpg.pagespeed.ce.geUH2AFPD2.jpg"
   schema={schema}
 >
-  <Header slot="header" client:load />
+  <Header slot="header" />
   <About />
   <Directions />
   <Schedule />
   <Price client:load />
   <Gallery />
-  <Contacts google_api_key={getGoogleApiKey(Astro.request)} client:idle/>
+  <Contacts />
   <ClearAnchor client:idle />
   <Footer slot="footer" />
 </Layout>

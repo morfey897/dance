@@ -1,0 +1,13 @@
+---
+import About from "./About";
+import type { AboutType } from "./types";
+
+const contacts = await Astro.glob("../../../../content/about/index.mdx");
+
+const { Content } = contacts[0];
+const frontmatter = contacts[0].frontmatter as AboutType;
+---
+
+<About {...frontmatter}>
+  <Content />
+</About>

@@ -1,0 +1,18 @@
+---
+import { getGoogleApiKey } from "../../../data/env";
+import Contacts from "./Contacts";
+import type { ContactsType } from "./types";
+
+const contacts = await Astro.glob("../../../../content/contact.mdx");
+
+const { Content } = contacts[0];
+const frontmatter = contacts[0].frontmatter as ContactsType;
+---
+
+<Contacts
+  {...frontmatter}
+  google_api_key={getGoogleApiKey(Astro.request)}
+  client:load
+>
+  <Content />
+</Contacts>
