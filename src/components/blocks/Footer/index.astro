@@ -1,0 +1,11 @@
+---
+import Footer from "./Footer";
+import type { FooterType } from "./types";
+
+const contacts = await Astro.glob("../../../../content/contact.mdx");
+const navigation = await Astro.glob("../../../../content/navigation.mdx");
+const frontmatter = contacts[0].frontmatter as FooterType;
+const { footer } = navigation[0].frontmatter;
+---
+
+<Footer {...frontmatter} navigation={footer}/>

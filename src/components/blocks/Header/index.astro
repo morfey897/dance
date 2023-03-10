@@ -1,0 +1,9 @@
+---
+import Header from "./Header";
+import type { HeaderType } from "./types";
+
+const navigation = await Astro.glob("../../../../content/navigation.mdx");
+const { header } = navigation[0].frontmatter;
+---
+
+<Header navigation={header}/>
