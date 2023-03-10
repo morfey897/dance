@@ -1,11 +1,18 @@
 ---
-import { getPreferableLangs } from "../utils/url";
-import { getLangs } from "../data/env";
+// import { getPreferableLangs } from "../utils/url";
+// import { getLangs } from "../data/env";
 
-const LANGS = getLangs(Astro.request);
-let redirectLang =
-	getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
-	LANGS[0];
+// const LANGS = getLangs(Astro.request);
+// let redirectLang =
+// 	getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
+// 	LANGS[0];
 
-return Astro.redirect(`/${redirectLang}`, 301);
+// return Astro.redirect(`/${redirectLang}`, 301);
+
+const ENV = JSON.stringify(process.env);
 ---
+<html>
+	<body>
+		<p>ENV_DATA: {ENV}</p>
+	</body>
+</html>
