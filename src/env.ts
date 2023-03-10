@@ -5,7 +5,7 @@ interface ImportMetaEnv {
 
 const _ENV: ImportMetaEnv = JSON.parse(JSON.stringify(process?.env || import.meta.env));
 
-export const LANGS = _ENV.LANGS;
+export const LANGS: Array<string> = (_ENV.LANGS || "").split(",").filter(lang => !!lang);
 export const GOOGLE_API_KEY = _ENV.GOOGLE_API_KEY;
 
 export default {

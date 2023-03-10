@@ -1,6 +1,6 @@
 ---
 import { getLang, getPreferableLangs } from "../utils/url";
-import { getLangs } from "../data/env";
+import { LANGS } from "../env";
 
 let lang: string = getLang(Astro.url);
 const LANGS = getLangs(Astro.request);
