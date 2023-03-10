@@ -9,10 +9,13 @@ import env from "../env";
 // 	LANGS[0];
 
 // return Astro.redirect(`/${redirectLang}`, 301);
+const langs = env.LANGS;
+const key = env.GOOGLE_API_KEY;
 ---
 
 <html>
 	<body>
-		<p>ENV_DATA: {env.LANGS} {env.GOOGLE_API_KEY}</p>
+		<p>ENV_OBJ: {JSON.stringify(env)}</p>
+		<p>ENV_DATA: {langs} {key}</p>
 	</body>
 </html>
