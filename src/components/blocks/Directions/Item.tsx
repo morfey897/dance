@@ -1,7 +1,10 @@
 import clsx from "clsx";
 import type { DirectionType, ActiveType } from "./types";
+import React from "react";
+import RenderHTML from "../../elements/RenderHTML";
 
-function DirectionItem({ item, index, active, ...props }: { item: DirectionType; index: number; active: ActiveType; } & React.HTMLProps<HTMLLIElement>) {
+
+function DirectionItem({ item, index, active, children, ...props }: { item: DirectionType; index: number; active: ActiveType; } & React.HTMLProps<HTMLLIElement>) {
   return (<li role={'button'} className={clsx("border-b border-opacity-40 border-pnk-200 py-4", active.c === item.uid && 'pointer-events-none')} {...props}>
     <div className={clsx("flex justify-between items-start cursor-pointer")}>
       <div className="flex">
@@ -21,10 +24,10 @@ function DirectionItem({ item, index, active, ...props }: { item: DirectionType;
         </span>
       </div>
     </div>
-    <p className={clsx("transition-max-height max-h-0 h-auto overflow-hidden text-sm md:text-lg font-light my-0 lg:mr-10 lg:ml-10", {
+    <RenderHTML className={clsx("transition-max-height max-h-0 h-auto overflow-hidden text-sm md:text-lg font-light my-0 lg:mr-10 lg:ml-9", {
       'max-h-0 duration-300': active.p === item.uid,
       'mt-4 max-h-[500px] duration-500': active.c === item.uid,
-    })}>{item.body}</p>
+    })}>{item.bodyHTML}</RenderHTML>
   </li >);
 }
 

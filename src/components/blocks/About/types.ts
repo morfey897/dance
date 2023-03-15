@@ -1,6 +1,5 @@
-export type AboutType = {
-  headline: string;
-  img?: string | { src: string, alt: string; };
+import type BlockType from "../../types/BlockType";
+export interface AboutType extends BlockType {
   cta?: {
     label: string;
     href: string;

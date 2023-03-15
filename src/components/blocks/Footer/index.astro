@@ -2,10 +2,19 @@
 import Footer from "./Footer";
 import type { FooterType } from "./types";
 
-const contacts = await Astro.glob("../../../../content/contact.mdx");
-const navigation = await Astro.glob("../../../../content/navigation.mdx");
-const frontmatter = contacts[0].frontmatter as FooterType;
-const { footer } = navigation[0].frontmatter;
+let localBusiness = [];
+let navigation = [];
+try {
+  localBusiness = await Astro.glob("../../../../content/local-business.md");
+} catch (e) {}
+
+try {
+  navigation = await Astro.glob("../../../../content/navigation.md");
+} catch (e) {}
+
+const localBusinessProps = (localBusiness || [])[0]?.frontmatter || {};
+const { footer } = (navigation || [])[0]?.frontmatter || {};
+const props: FooterType = { navigation: footer, ...localBusinessProps };
 ---
 
-<Footer {...frontmatter} navigation={footer}/>
+<Footer {...props} />

@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import type { PriceType, AdditionalType } from "./types";
+import type { PriceType, GroupType } from "./types";
+import RenderHTML from "../../elements/RenderHTML";
 
 export function SubItem({ item, className }: { item: PriceType } & React.HTMLProps<HTMLDivElement>) {
   return <BaseItem className={className}>
@@ -11,14 +12,16 @@ export function SubItem({ item, className }: { item: PriceType } & React.HTMLPro
         <span className="absolute top-[-20px] right-[20%] opacity-40 before:block before:border before:absolute before:w-[115%] before:left-[-5%] before:top-[40%]">{item.oldPrice}<span className="ml-1">{item.currency}</span></span>
       }
     </div>
-    <p className="font-light text-sm md:text-lg mt-5">{item.subheadline}</p>
+    <p>{item.subheadline}</p>
+    <RenderHTML className="font-light text-sm md:text-lg mt-5">{item.bodyHTML}</RenderHTML>
   </BaseItem>;
 }
 
-export function AddItem({ item, className }: { item: AdditionalType } & React.HTMLProps<HTMLDivElement>) {
+export function AddItem({ item, className }: { item: GroupType } & React.HTMLProps<HTMLDivElement>) {
   return <BaseItem className={className}>
     <h3 className="font-medium text-xl md:text-4xl">{item.headline}</h3>
-    <p className="font-light text-sm md:text-lg mt-5">{item.subheadline}</p>
+    <RenderHTML className="font-light text-sm md:text-lg mt-5">{item.bodyHTML}</RenderHTML>
+    <p className="">{item.subheadline}</p>
     <ul className="divide-y divide-pnk-100 mt-7 md:mt-8">
       {item.items.map((itm) => (
         <li className={clsx("flex justify-between text-sm md:text-lg font-light py-2", !!itm.oldPrice && 'pt-5')} key={itm.uid}>

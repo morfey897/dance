@@ -1,0 +1,86 @@
+---
+import type { MarkdownInstance } from "astro";
+import Prices from "./Prices";
+import type { PricesType } from "./types";
+
+const sortComparator = (a, b) => {
+  const aOrder = parseInt(a.frontmatter["priority"]);
+  const bOrder = parseInt(b.frontmatter["priority"]);
+  let ao = (isNaN(aOrder) ? 0 : aOrder) - (a.group.length - 1) * 10;
+  let bo = (isNaN(bOrder) ? 0 : bOrder) - (a.group.length - 1) * 10;
+  return bo - ao;
+};
+
+const generateUid = (data: { group: Array<string> }) => data.group.join("/");
+
+const parseData = (data: MarkdownInstance<any> & { group: Array<string> }) => {
+  const frontmatter = data.frontmatter;
+  const bodyHTML = data.compiledContent();
+  return {
+    uid: generateUid(data),
+    bodyHTML: bodyHTML || "",
+    ...frontmatter,
+  };
+};
+
+function prepareGroups(
+  list: Array<MarkdownInstance<any> & { group: Array<string> }>
+) {
+  let result = [];
+  list
+    .filter((itm) => itm.group[itm.group.length - 1] === "index")
+    .forEach((index) => {
+      let start = result;
+      for (let i = 0; i < index.group.length - 1; i++) {
+        let g = index.group[i];
+        let item = start.find(({ group }) => group === g);
+        if (!item) {
+          item = {
+            ...parseData(index),
+            group: g,
+            items: [],
+          };
+          start.push(item);
+        }
+        start = item.items;
+      }
+    });
+
+  list
+    .filter((itm) => itm.group[itm.group.length - 1] !== "index")
+    .forEach((item) => {
+      let start = result;
+      for (let i = 0; i < item.group.length - 1; i++) {
+        let parent = start.find(({ group }) => group === item.group[i]);
+        if (!parent || !Array.isArray(parent.items)) return;
+        start = parent.items;
+      }
+      start.push(parseData(item));
+    });
+  return result;
+}
+
+let prices = [];
+try {
+  prices = await Astro.glob("../../../../content/prices/**/*.md");
+} catch (e) {}
+prices = prices
+  .map((data) => ({
+    ...data,
+    group: data.file
+      .replace(/^.+\/prices\//, "")
+      .replace(/\.md$/, "")
+      .split("/"),
+  }))
+  .sort(sortComparator);
+
+const indexPrice = prices.find(({ group }) => group[0] === "index");
+const items = prepareGroups(prices.filter(({ group }) => group[0] !== "index"));
+
+const { Content } = indexPrice || { Content: () => {} };
+const props = { ...indexPrice?.frontmatter, list: items } as PricesType;
+---
+
+<Prices {...props} client:load>
+  <Content />
+</Prices>

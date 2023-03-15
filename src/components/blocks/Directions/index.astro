@@ -1,0 +1,37 @@
+---
+import Directions from "./Directions";
+import type { DirectionsType } from "./types";
+
+let directions = [];
+try {
+  directions = await Astro.glob("../../../../content/directions/*.md");
+} catch (e) {}
+
+const indexDirection = directions.find((data) =>
+  /\/index\.md?$/.test(data.file)
+);
+const list = directions.filter((data) => !/\/index\.md?$/.test(data.file));
+
+const childrenList = list.map((data) => {
+  const uid = data.file.match(/\/([^\/]+)\.md?$/)[1];
+  const frontmatter = data.frontmatter;
+  return {
+    uid,
+    headline: "",
+    image: "",
+    subheadline: "",
+    bodyHTML: data.compiledContent(),
+    ...frontmatter,
+  };
+});
+
+const { Content } = indexDirection || { Content: () => {} };
+const props = {
+  ...indexDirection?.frontmatter,
+  list: childrenList,
+} as DirectionsType;
+---
+
+<Directions {...props} client:load>
+  <Content />
+</Directions>

@@ -2,12 +2,17 @@
 import About from "./About";
 import type { AboutType } from "./types";
 
-const contacts = await Astro.glob("../../../../content/about/index.mdx");
+let contacts = [];
+try {
+  contacts = await Astro.glob("../../../../content/about/*.md");
+} catch (e) {}
 
-const { Content } = contacts[0];
-const frontmatter = contacts[0].frontmatter as AboutType;
+const indexAbout = contacts.find((data) => /\/index\.md?$/.test(data.file));
+
+const { Content } = indexAbout || { Content: () => {} };
+const props = { ...indexAbout?.frontmatter } as AboutType;
 ---
 
-<About {...frontmatter}>
+<About {...props}>
   <Content />
 </About>

@@ -2,17 +2,27 @@
 import { getGoogleApiKey } from "../../../data/env";
 import Contacts from "./Contacts";
 import type { ContactsType } from "./types";
+import { getIndex } from "../../../utils/md";
 
-const contacts = await Astro.glob("../../../../content/contact.mdx");
+let contacts = [];
+let localBusiness = [];
+try {
+  contacts = await Astro.glob("../../../../content/contacts/*.md");
+} catch (e) {}
+try {
+  localBusiness = await Astro.glob("../../../../content/local-business.md");
+} catch (e) {}
 
-const { Content } = contacts[0];
-const frontmatter = contacts[0].frontmatter as ContactsType;
+const indexContacts = getIndex(contacts);
+
+const { Content } = indexContacts || { Content: () => {} };
+const props = {
+  ...indexContacts?.frontmatter,
+  ...(localBusiness || [])[0]?.frontmatter,
+  google_api_key: getGoogleApiKey(Astro.request),
+};
 ---
 
-<Contacts
-  {...frontmatter}
-  google_api_key={getGoogleApiKey(Astro.request)}
-  client:load
->
+<Contacts {...props} client:load>
   <Content />
 </Contacts>

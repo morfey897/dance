@@ -1,9 +1,13 @@
 ---
 import Header from "./Header";
 import type { HeaderType } from "./types";
+let navigation = [];
+try {
+  navigation = await Astro.glob("../../../../content/navigation.md");
+} catch (e) {}
 
-const navigation = await Astro.glob("../../../../content/navigation.mdx");
-const { header } = navigation[0].frontmatter;
+const { header } = (navigation || [])[0]?.frontmatter || {};
+const props: HeaderType = { navigation: header };
 ---
 
-<Header navigation={header}/>
+<Header {...props} client:load />

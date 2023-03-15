@@ -3,9 +3,9 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/blocks/Header/index.astro";
 import About from "../../components/blocks/About/index.astro";
 import Schedule from "../../components/blocks/Schedule";
-import Price from "../../components/blocks/Price";
+import Prices from "../../components/blocks/Prices/index.astro";
 import Contacts from "../../components/blocks/Contacts/index.astro";
-import Directions from "../../components/blocks/Directions";
+import Directions from "../../components/blocks/Directions/index.astro";
 import Gallery from "../../components/blocks/Galary";
 import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
@@ -82,9 +82,9 @@ const schema = {
   <Header slot="header" />
   <About />
   <Directions />
-  <Schedule />
-  <Price client:load />
-  <Gallery />
+  <!-- <Schedule /> -->
+  <Prices />
+  <!-- <Gallery /> -->
   <Contacts />
   <ClearAnchor client:idle />
   <Footer slot="footer" />

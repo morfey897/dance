@@ -1,6 +1,4 @@
 ---
-headline: 'Контакти'
-anchor: 'contacts'
 address: {
     place: "Kalipso Pole Dance Studio",
     country: "Україна",
@@ -34,4 +32,3 @@ socials: [
     },
   ]
 ---
-This is subheadline

@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import type { ContactsType } from "./types";
 
-function Contacts({ headline, google_api_key, address, phones, socials, anchor, children }: ContactsType & React.HTMLProps<HTMLDivElement>) {
+function Contacts({ headline, subheadline, google_api_key, address, phones, socials, anchor, children }: ContactsType) {
 
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -26,7 +26,10 @@ function Contacts({ headline, google_api_key, address, phones, socials, anchor, 
       <div className="basis-3/5 w-full">
         <h2 className="uppercase text-3xl md:text-7xl text-left">{headline}</h2>
         <a className="block text-base md:text-3xl mt-10 max-w-screen-md m-auto text-left underline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(`${address.place}`)}`} target="_blank" rel="noreferrer">{[address.city, address.district, address.address].filter(a => !!a).join(", ")}</a>
-        <div className="text-xs md:text-base mt-5 max-w-screen-md m-auto text-left">{children}</div>
+        <div className="text-xs md:text-base mt-5 max-w-screen-md m-auto text-left">
+          {subheadline && <p>{subheadline}</p>}
+          {children}
+        </div>
         <div className="flex justify-between mt-10 items-center lg:items-end gap-8 flex-col-reverse lg:flex-row">
           <ul className="space-y-6 md:space-y-10">{phones.map((phone) => <li key={phone} ><Phone phone={phone} /></li>)}</ul>
           <ul className="space-y-6 md:space-y-10">{socials.map((social) => <li key={social.href} ><SocialMedia {...social} /></li>)}</ul>

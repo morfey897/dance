@@ -24,7 +24,7 @@ function Header({ navigation }: HeaderType) {
             </svg>
             <ul className="absolute hidden group-hover:block bg-black bg-opacity-60 p-2.5 right-0 top-0 space-y-4 rounded-sm">
               {
-                navigation.map((link) => (
+                navigation?.map((link) => (
                   <li key={`${link.href}-drop`} className='inline-block'>
                     <Link {...link} className='text-sm text-center py-2 px-4' />
                   </li>
@@ -35,7 +35,7 @@ function Header({ navigation }: HeaderType) {
         </div>
         <ul className="space-x-4 hidden md:block">
           {
-            navigation.map((link) => (
+            navigation?.map((link) => (
               <li key={`${link.href}-menu`} className='inline-block'>
                 <Link {...link} className={clsx('text-base lg:text-lg text-center border-2 rounded-3xl py-2 px-2 lg:px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 border-transparent')} />
               </li>
