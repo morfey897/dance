@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
-import { SubItem, AddItem, Item } from "./Items";
+import { GroupItem, Item } from "./Items";
 import Group from "./Group";
 import { PriceType, PricesType, GroupType } from "./types";
 
@@ -16,8 +16,8 @@ function Price({ anchor, headline, subheadline, children, list }: PricesType) {
         {
           data.items?.map((el) => {
             let child = (el as GroupType).items;
-            return !child || !Array.isArray(child) || child.length === 0 ? <SubItem key={el.uid} item={el as PriceType} /> :
-              <AddItem key={el.uid} item={el as GroupType} />;
+            return !child || !Array.isArray(child) || child.length === 0 ? <Item key={el.uid} item={el as PriceType} /> :
+              <GroupItem key={el.uid} item={el as GroupType} />;
           })
         }
       </Group>)}

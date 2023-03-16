@@ -4,15 +4,12 @@ import { enUS, ru, uk } from 'date-fns/locale'
 import GridHeader from "./GridHeader";
 import ChangeDate from "./ChangeDate";
 import Grid from "./Grid";
-import type { GridState, DateAction, EventsType } from "./types";
+import type { GridState, DateAction, EventsType, ScheduleType } from "./types";
 
 import { fetchEvents } from "../../../__mocdata/events";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
-import { ANCHORS } from "../../../utils/constants";
 
-const HEADLINE = 'Розклад';
-const SUBHEADLINE = '';
 const DAYS = new Array(7).fill(0).map((_, index) => index);
 
 const generateDates = (array: Array<number>, active: Date) => array.map((index) => addDays(active, index));
@@ -76,7 +73,7 @@ function reducer(state: GridState, action: DateAction): GridState {
   return newState;
 }
 
-function Schedule() {
+function Schedule({ headline, subheadline, anchor, timeLabel, children }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
   const [events, setEvents] = useState<EventsType | undefined>();
@@ -91,15 +88,17 @@ function Schedule() {
       });
   }, [state.dates]);
 
-  return <Section anchor={ANCHORS.schdl}>
-    <Headline headline={HEADLINE} subheadline={SUBHEADLINE} />
+  return <Section anchor={anchor}>
+    <Headline headline={headline} subheadline={subheadline}>
+      {children}
+    </Headline>
     <ChangeDate
       className="mt-12"
       state={state}
       onNext={() => dispatch({ type: 'inc' })}
       onPrev={() => dispatch({ type: 'dec' })}
       onNow={() => dispatch({ type: 'now' })} />
-    <GridHeader onSelectDate={(d) => dispatch({ type: 'active', payload: d })} state={state} />
+    <GridHeader timeLabel={timeLabel} onSelectDate={(d) => dispatch({ type: 'active', payload: d })} state={state} />
     <Grid state={state} events={events} loading={loading} />
   </Section>;
 }

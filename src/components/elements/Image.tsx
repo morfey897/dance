@@ -9,7 +9,7 @@ export function Image({ image, block, alt: alternative, src: resource, ...props 
     let alt = '';
     if (isObject) {
       src = image.src;
-      alt = image.alt;
+      alt = image.alt ?? alternative;
     } else if (isString) {
       src = image;
       alt = alternative;

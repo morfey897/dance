@@ -36,7 +36,7 @@ const calculateScale = (root: HTMLElement | null): Array<number> => {
   });
 };
 
-function Swiper<T>({ items, Controls, Item, className, ...props }: { items?: Array<{ uid: number } & T>; Controls?: FC<ControlsType>; Item?: FC<T>; } & React.HTMLProps<HTMLDivElement>) {
+function Swiper<T>({ items, Controls, Item, className, ...props }: { items?: Array<{ uid: string } & T>; Controls?: FC<ControlsType>; Item?: FC<T>; } & React.HTMLProps<HTMLDivElement>) {
 
   const ref = useRef<HTMLUListElement>(null);
   const [scales, setScales] = useState<Array<number>>([]);

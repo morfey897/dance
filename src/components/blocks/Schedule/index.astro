@@ -1,0 +1,21 @@
+---
+import Schedule from "./Schedule";
+import type { ScheduleType } from "./types";
+import { getIndex } from "../../../utils/md";
+
+let schedule = [];
+try {
+  schedule = await Astro.glob("../../../../content/schedule/*.md");
+} catch (e) {}
+
+const indexDirection = getIndex(schedule);
+
+const { Content } = indexDirection || { Content: () => {} };
+const props = {
+  ...indexDirection?.frontmatter,
+} as ScheduleType;
+---
+
+<Schedule {...props} client:visible>
+  <Content />
+</Schedule>

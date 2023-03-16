@@ -1,13 +1,14 @@
 ---
 import About from "./About";
 import type { AboutType } from "./types";
+import { getIndex } from "../../../utils/md";
 
 let contacts = [];
 try {
   contacts = await Astro.glob("../../../../content/about/*.md");
 } catch (e) {}
 
-const indexAbout = contacts.find((data) => /\/index\.md?$/.test(data.file));
+const indexAbout = getIndex(contacts);
 
 const { Content } = indexAbout || { Content: () => {} };
 const props = { ...indexAbout?.frontmatter } as AboutType;

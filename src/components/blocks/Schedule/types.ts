@@ -1,3 +1,4 @@
+import BlockType from "../../types/BlockType";
 
 export type EventType = {
   uid: number;
@@ -28,4 +29,8 @@ export type GridState = {
 export type DateAction = {
   type: 'inc' | 'dec' | 'active' | 'now';
   payload?: Date;
+}
+
+export interface ScheduleType extends BlockType {
+  timeLabel: string;
 }

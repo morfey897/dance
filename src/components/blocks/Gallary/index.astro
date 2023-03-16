@@ -1,11 +1,11 @@
 ---
-import Directions from "./Directions";
-import type { DirectionsType } from "./types";
+import Gallary from "./Gallary";
+import type { GallaryType } from "./types";
 import { getIndex, getList } from "../../../utils/md";
 
 let directions = [];
 try {
-  directions = await Astro.glob("../../../../content/directions/*.md");
+  directions = await Astro.glob("../../../../content/gallary/*.md");
 } catch (e) {}
 
 const indexDirection = getIndex(directions);
@@ -16,9 +16,8 @@ const childrenList = list.map((data) => {
   const frontmatter = data.frontmatter;
   return {
     uid,
-    headline: "",
-    image: "",
-    subheadline: "",
+    headline: '',
+    subheadline: '',
     bodyHTML: data.compiledContent(),
     ...frontmatter,
   };
@@ -28,9 +27,10 @@ const { Content } = indexDirection || { Content: () => {} };
 const props = {
   ...indexDirection?.frontmatter,
   list: childrenList,
-} as DirectionsType;
+} as GallaryType;
+
 ---
 
-<Directions {...props} client:load>
+<Gallary {...props} client:load>
   <Content />
-</Directions>
+</Gallary>

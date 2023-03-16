@@ -4,15 +4,13 @@ import type { GridState } from "./types";
 import { Fragment } from "react";
 import { capitalize } from "../../../utils/str";
 
-const TIME_LABEL = 'Час заняття';
-
-function GridHeader({ state, onSelectDate }: { state: GridState; onSelectDate: (d: Date) => void; } & React.HTMLProps<HTMLDivElement>) {
+function GridHeader({ timeLabel, state, onSelectDate }: { timeLabel: string; state: GridState; onSelectDate: (d: Date) => void; } & React.HTMLProps<HTMLDivElement>) {
 
   return <nav className={clsx("sticky top-0 z-30 bg-black grid gap-2 md:border-b-2 border-b-pnk-200 py-4 md:py-6 items-end", {
     'grid-cols-7 md:grid-cols-8': state.dates.length === 7,
   })}>
     <div className="font-medium text-xl text-center hidden md:block overflow-hidden text-ellipsis">
-      {TIME_LABEL}
+      {timeLabel}
     </div>
     {
       state.dates.map((date) => {
