@@ -7,7 +7,7 @@ export type EventType = {
   direction: string;
   gym: string;
   date: string;
-  info?: boolean;
+  info?: string;
 }
 
 export type EventsType = Array<{

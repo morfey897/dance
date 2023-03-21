@@ -16,7 +16,7 @@ const generateDates = (array: Array<number>, active: Date) => array.map((index) 
 const toDate = (d: Date) => d.toISOString().split('T')[0];
 
 function init() {
-  const now = addDays(new Date(toDate(new Date())), 1);
+  const now = new Date(toDate(new Date()));
   const active = previousMonday(now);
   return {
     now,
