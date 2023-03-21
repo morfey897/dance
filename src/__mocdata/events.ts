@@ -14,7 +14,7 @@ type EventType = {
 
 const DIRECTIONS = ['PoleDance', 'Stretching', 'Exot', 'Hils'];
 const GYM = ['Gym #1', 'Gym #2', 'Gym #3', 'Gym'];
-const TIMES = ['08:00', '09:15', '10:30', '11:30', '13:00', '14:00', '15:20', '16:30', '17:30', '19:00', '20:00', '21:00', ];
+const TIMES = ['08:00', '09:15', '10:30', '11:30', '13:00', '14:00', '15:20', '16:30', '17:30', '19:00', '20:00', '21:00',];
 
 const EVENTS: Array<{ date: string; list: Array<EventType> }> = new Array(21).fill(0).map((_, index) => {
   return {
@@ -31,7 +31,7 @@ const EVENTS: Array<{ date: string; list: Array<EventType> }> = new Array(21).fi
   };
 })
 
-export async function fetchEvents(start: string, end: string):Promise<Array<{ date: string; list: Array<EventType> }>> {
+export async function fetchEvents(start: string, end: string): Promise<Array<{ date: string; list: Array<EventType> }>> {
 
   return new Promise((res) => {
     setTimeout(() => {
@@ -46,3 +46,5 @@ export async function fetchEvents(start: string, end: string):Promise<Array<{ da
 }
 
 
+// fetchEvents(new Date().toISOString(), addDays(new Date(), 5).toISOString())
+//   .then((data) => console.log(data));

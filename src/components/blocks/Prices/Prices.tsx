@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
 import { GroupItem, Item } from "./Items";

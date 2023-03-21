@@ -1,11 +1,13 @@
 import BlockType from "../../types/BlockType";
 
 export type EventType = {
-  uid: number;
+  uid: string;
   time: string;
+  duration: number;
   direction: string;
   gym: string;
-  hasInfo?: boolean;
+  date: string;
+  info?: boolean;
 }
 
 export type EventsType = Array<{

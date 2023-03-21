@@ -22,7 +22,7 @@ function Header({ navigation }: HeaderType) {
               <line y1="5.5" x2="10" y2="5.5" stroke="white" />
               <line y1="10.5" x2="20" y2="10.5" stroke="white" />
             </svg>
-            <ul className="absolute hidden group-hover:block bg-black bg-opacity-60 p-2.5 right-0 top-0 space-y-4 rounded-sm">
+            <ul className="absolute hidden group-hover:block bg-black bg-opacity-60 p-2.5 right-0 top-8 space-y-4 rounded-sm">
               {
                 navigation?.map((link) => (
                   <li key={`${link.href}-drop`} className='inline-block'>

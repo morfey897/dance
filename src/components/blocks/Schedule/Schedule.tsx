@@ -1,12 +1,11 @@
 import { useEffect, useReducer, useState } from "react";
-import { addDays, nextMonday, previousMonday } from "date-fns";
+import { addDays, nextMonday, previousMonday, differenceInDays } from "date-fns";
 import { enUS, ru, uk } from 'date-fns/locale'
 import GridHeader from "./GridHeader";
 import ChangeDate from "./ChangeDate";
 import Grid from "./Grid";
-import type { GridState, DateAction, EventsType, ScheduleType } from "./types";
+import type { GridState, DateAction, EventsType, ScheduleType, EventType } from "./types";
 
-import { fetchEvents } from "../../../__mocdata/events";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
 
@@ -76,17 +75,44 @@ function reducer(state: GridState, action: DateAction): GridState {
 function Schedule({ headline, subheadline, anchor, timeLabel, children }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
-  const [events, setEvents] = useState<EventsType | undefined>();
+  const [events, setEvents] = useState<EventsType>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
     setLoading(true);
-    fetchEvents(toDate(state.dates[0]), toDate(state.dates[state.dates.length - 1]))
-      .then(events => {
-        setEvents(events.filter(data => !!data).map(data => ({ ...data, date: new Date(data.date) })));
+    fetch(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, { signal })
+      .then((response: Response) => response.json())
+      .then(({ success, events, start, end, error }: { events: Array<EventType>; start: string; end: string; success: boolean; error?: string; }) => {
+        if (!success) throw new Error(error);
+        const startDate = new Date(start);
+        let list = new Array(differenceInDays(new Date(end), startDate) + 1).fill(0).map((_, index) => {
+          let d = addDays(startDate, index);
+          return {
+            date: d,
+            list: events.filter(event => event.date === toDate(d))
+          }
+        });
+        return list
+      })
+      .then((list) => {
+        setEvents(list);
+      })
+      .catch((e) => {
+        console.warn(e);
+      })
+      .finally(() => {
         setLoading(false);
       });
+    return () => {
+      controller.abort();
+    }
   }, [state.dates]);
+
+  useEffect(() => {
+    console.log('RENDERING', events, loading);
+  })
 
   return <Section anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>

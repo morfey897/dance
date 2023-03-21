@@ -1,5 +1,5 @@
 
-import { useRef, useMemo, useState, useCallback, useEffect, useReducer, ReactChild, FC } from "react";
+import { useRef, useMemo, useState, useCallback, useEffect, FC } from "react";
 import { throttle } from "throttle-debounce";
 import clsx from "clsx";
 import SwiperItem from "./SwiperItem";

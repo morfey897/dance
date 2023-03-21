@@ -9,11 +9,6 @@ export type DirectionType = {
   groups?: string[]
 };
 
-export type ActiveType = {
-  c: string;
-  p: string;
-}
-
 export interface DirectionsType extends BlockType {
  list: Array<DirectionType>;
 }
