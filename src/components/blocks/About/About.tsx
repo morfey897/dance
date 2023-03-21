@@ -5,7 +5,7 @@ import type { AboutType } from "./types";
 
 function About({ headline, subheadline, anchor, image, cta, children }: AboutType) {
 
-  return <Section className="bg-[url('/background.png')] bg-cover text-center pt-[74px]" anchor={anchor}>
+  return <Section className="bg-[url('/about/background.png')] bg-cover text-center pt-[74px]" anchor={anchor}>
     <Image image={image} alt={headline} block="about" className="m-auto md:p-0 px-10" />
     <h1 className="uppercase text-4xl md:text-9xl mt-14">{headline}</h1>
     <div className={clsx(
