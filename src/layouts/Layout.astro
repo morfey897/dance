@@ -69,10 +69,6 @@ let structuredData = JSON.stringify({
 		<script type="application/ld+json" set:html={structuredData}></script>
 	</head>
 	<body>
-		<slot name="header" />
-		<main>
-			<slot />
-		</main>
-		<slot name="footer" />
+		<slot />
 	</body>
 </html>

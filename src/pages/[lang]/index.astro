@@ -72,20 +72,21 @@ const schema = {
   ],
 };
 ---
-
 <Layout
   title={`Welcome to Astro`}
   description="Welcome to Astro description."
   image="https://studio-kalipso.com/wp-content/uploads/2019/09/slide.jpg.pagespeed.ce.geUH2AFPD2.jpg"
   schema={schema}
 >
-  <Header slot="header" />
-  <About />
-  <Directions />
-  <Schedule />
-  <Prices />
-  <Gallery />
-  <!-- <Contacts /> -->
-  <ClearAnchor client:idle />
-  <Footer slot="footer" />
+  <Header />
+  <main>
+    <About />
+    <Directions />
+    <Schedule />
+    <Prices />
+    <Gallery />
+    <Contacts />
+    <ClearAnchor client:idle />
+  </main>
+  <Footer />
 </Layout>

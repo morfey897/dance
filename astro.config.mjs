@@ -1,7 +1,6 @@
 import { defineConfig } from "astro/config";
 import react from '@astrojs/react';
 import tailwind from "@astrojs/tailwind";
-import prefetch from "@astrojs/prefetch";
 
 // https://astro.build/config
 import cloudflare from "@astrojs/cloudflare";
@@ -17,5 +16,5 @@ export default defineConfig({
   adapter: cloudflare({
     mode: 'directory'
   }),
-  integrations: [react(), tailwind(), prefetch(), mdx(),],
+  integrations: [react(), tailwind(), mdx(),],
 });

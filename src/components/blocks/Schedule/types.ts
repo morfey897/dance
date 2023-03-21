@@ -23,7 +23,6 @@ export type DateType = {
 export type GridState = {
   now: Date;
   active: Date;
-  change: number;
   locale: Locale;
   dates: Array<Date>;
 }
