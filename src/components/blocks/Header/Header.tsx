@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useScrollDirection } from "../../../hooks/useScrollDetect";
 import Link from "./Link";
 import type { HeaderType, NavigationType } from "./types";
-import { changeLang } from "../../../utils/url";
+import { changeLang, concatPaths } from "../../../utils/url";
 
 const UKSvg = (props: React.SVGProps<any>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" {...props}>
@@ -73,7 +73,7 @@ function Header({ navigation, url, lang, langs }: HeaderType) {
   })}>
     <div className="max-w-screen-xl mx-auto py-2.5 px-4">
       <nav className="flex items-center justify-between">
-        <a href={`/${lang}`}>
+        <a href={concatPaths("/", lang)}>
           <img loading="lazy" src='/logo.png' alt='' className={clsx("h-[40px]")} />
         </a>
         <div className="flex items-center gap-x-1 flex-row-reverse md:flex-row">
