@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { concatPaths } from "../../utils/url";
 
 export function Image({ image, block, alt: alternative, src: resource, ...props }: { image?: string | { src: string; alt?: string }; block?: string; } & React.ImgHTMLAttributes<HTMLImageElement>) {
 
@@ -16,7 +17,7 @@ export function Image({ image, block, alt: alternative, src: resource, ...props 
     }
 
     return {
-      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : `/${(block && !(new RegExp(`(?:^|\/)${block}\/`).test(src)) ? block : "") || ""}/${src}`.replace(/\/{2,}/g, "/"),
+      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : concatPaths((block && !(new RegExp(`^\/?${block}\/`).test(src)) ? block : "") || "", src),
       alt: alt || ''
     }
 

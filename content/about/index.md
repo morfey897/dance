@@ -5,9 +5,9 @@ image: {
   alt: 'Cтудия POLE DANCE',
 }
 cta: {
-  href: '#prices',
-  label: 'Прайс'
+  href: '#schedule',
+  label: 'Розклад'
 }
 ---
-<!-- You can write here  -->
-At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
+<!-- You can write the description here  -->
+Ласкаво просимо до студії танців на Пілоні! Наша студія пропонує найсучасніші танцювальні тренування з використанням пілона, що забезпечує повне навантаження на всі м'язові групи тіла. Ми пропонуємо заняття для всіх рівнів підготовки - від початківців до професійних танцюристів. Наші інструктори є досвідченими професіоналами, які з радістю допоможуть вам досягти ваших цілей та навчити вас новим рухам на пілоні.

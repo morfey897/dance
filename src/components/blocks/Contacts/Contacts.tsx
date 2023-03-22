@@ -25,7 +25,7 @@ function Contacts({ headline, subheadline, google_api_key, address, phones, soci
       </div>
       <div className="basis-3/5 w-full">
         <h2 className="uppercase text-3xl md:text-7xl text-left">{headline}</h2>
-        <a className="block text-base md:text-3xl mt-10 max-w-screen-md m-auto text-left underline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(`${address.place}`)}`} target="_blank" rel="noreferrer">{[address.city, address.district, address.address].filter(a => !!a).join(", ")}</a>
+        <a className="block text-base md:text-3xl mt-10 max-w-screen-md m-auto text-left underline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(`${address.place}`)}`} target="_blank" rel="noreferrer">{[address.city, address.district, address.street].filter(a => !!a).join(", ")}</a>
         <div className="text-xs md:text-base mt-5 max-w-screen-md m-auto text-left">
           {subheadline && <p>{subheadline}</p>}
           {children}

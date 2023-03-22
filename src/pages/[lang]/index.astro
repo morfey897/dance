@@ -9,73 +9,41 @@ import Directions from "../../components/blocks/Directions/index.astro";
 import Gallery from "../../components/blocks/Gallary/index.astro";
 import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
+import { isAbsolutePath, concatPaths } from "../../utils/url";
+let localBusiness = [];
+try {
+  localBusiness = await Astro.glob("../../../content/local-business.md");
+} catch (e) {}
 
+const { title, description, image, address, phones, openingHours } =
+  (localBusiness || [])[0]?.frontmatter || {};
 const schema = {
-  name: "Kalipso Pole Dance Studio",
-  description:
-    "We offer dance classes for children and adults in a variety of styles, including ballet, hip hop, jazz, and tap.",
+  name: title,
+  description,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Попудренко 52б",
-    addressLocality: "Kyiv",
-    addressCountry: "Ukraine",
+    streetAddress: address?.street || "",
+    addressLocality: address?.city || "",
+    addressCountry: address?.country || "",
   },
-  telephone: "+38 (066) 39-79-488",
-  sameAs: [
-    "https://www.facebook.com/yourdanceschoolname/",
-    "https://www.instagram.com/yourdanceschoolname/",
-    "https://www.youtube.com/channel/yourdanceschoolname",
-  ],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Monday",
-      opens: "09:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Tuesday",
-      opens: "09:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Wednesday",
-      opens: "09:00",
-      closes: "20:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Thursday",
-      opens: "09:00",
-      closes: "20:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Friday",
-      opens: "09:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "09:00",
-      closes: "14:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Sunday",
-      opens: "09:00",
-      closes: "14:00",
-    },
-  ],
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: address?.lat || "",
+    longitude: address?.lng || "",
+  },
+  telephone: (phones && phones[0]) || "",
+  sameAs: (address?.socials || []).map(({ href }) => href),
+  openingHoursSpecification: openingHours || [],
+  paymentAccepted: ["Готівка", "Кредитна карта"],
 };
+let origin = new URL(Astro.url).origin;
+let imageAbsolute = isAbsolutePath(image) ? image : concatPaths(origin, image);
 ---
+
 <Layout
-  title={`Welcome to Astro`}
-  description="Welcome to Astro description."
-  image="https://studio-kalipso.com/wp-content/uploads/2019/09/slide.jpg.pagespeed.ce.geUH2AFPD2.jpg"
+  title={title}
+  description={description}
+  image={imageAbsolute}
   schema={schema}
 >
   <Header />

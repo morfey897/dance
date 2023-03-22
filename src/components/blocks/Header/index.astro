@@ -1,4 +1,5 @@
 ---
+import { getLang } from "../../../utils/url";
 import Header from "./Header";
 import type { HeaderType } from "./types";
 let navigation = [];
@@ -7,7 +8,7 @@ try {
 } catch (e) {}
 
 const { header } = (navigation || [])[0]?.frontmatter || {};
-const props: HeaderType = { navigation: header };
+const props: HeaderType = { navigation: header, url: Astro.url.href, lang: getLang(Astro.url), langs: ['uk', 'en'] };
 ---
 
 <Header {...props} client:load />

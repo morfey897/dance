@@ -9,8 +9,8 @@ function About({ headline, subheadline, anchor, image, cta, children }: AboutTyp
     <div className="absolute inset-0 z-0">
       <Image image={'/background.png'} alt={''} block="about" className="bg-cover h-full w-full" />
     </div>
-    <div className="relative z-20">
-      <Image image={image} alt={headline} block="about" className="m-auto md:p-0 px-10" />
+    <div className="relative z-10">
+      <Image image={image} alt={headline} block="about" className="m-auto md:p-0 px-10 brightness-75" />
       <h1 className="uppercase text-4xl md:text-9xl mt-14">{headline}</h1>
       <div className={clsx(
         "text-sm md:text-lg mt-7 max-w-screen-lg m-auto",
