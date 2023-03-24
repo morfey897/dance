@@ -6,7 +6,7 @@ import { changeLang, concatPaths } from "../../../utils/url";
 
 const UKSvg = (props: React.SVGProps<any>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" {...props}>
-    <g fill-rule="evenodd" stroke-width="1pt">
+    <g fillRule="evenodd" strokeWidth="1pt">
       <path fill="gold" d="M0 0h640v480H0z" />
       <path fill="#0057b8" d="M0 0h640v240H0z" />
     </g>
@@ -15,8 +15,8 @@ const UKSvg = (props: React.SVGProps<any>) => (
 
 const USASvg = (props: React.SVGProps<any>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" {...props}>
-    <g fill-rule="evenodd">
-      <g stroke-width="1pt">
+    <g fillRule="evenodd">
+      <g strokeWidth="1pt">
         <path fill="#bd3d44" d="M0 0h912v37H0zm0 73.9h912v37H0zm0 73.8h912v37H0zm0 73.8h912v37H0zm0 74h912v36.8H0zm0 73.7h912v37H0zM0 443h912V480H0z" />
         <path fill="#fff" d="M0 37h912v36.9H0zm0 73.8h912v36.9H0zm0 73.8h912v37H0zm0 73.9h912v37H0zm0 73.8h912v37H0zm0 73.8h912v37H0z" />
       </g>

@@ -21,7 +21,7 @@ function Footer({ socials, address, navigation }: FooterType) {
       </div>
       <div className="flex justify-center md:justify-end mt-4">
         <p className="flex items-baseline gap-x-1 border-t pt-2 font-light text-sm">Made in <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" height={16}>
-          <g fill-rule="evenodd" stroke-width="1pt">
+          <g fillRule="evenodd" strokeWidth="1pt">
             <path fill="gold" d="M0 0h640v480H0z" />
             <path fill="#0057b8" d="M0 0h640v240H0z" />
           </g>
