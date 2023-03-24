@@ -10,6 +10,8 @@ import Gallery from "../../components/blocks/Gallary/index.astro";
 import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
 import { isAbsolutePath, concatPaths } from "../../utils/url";
+import { getLangs } from "../../data/env";
+
 let localBusiness = [];
 try {
   localBusiness = await Astro.glob("../../../content/local-business.md");
@@ -38,6 +40,11 @@ const schema = {
 };
 let origin = new URL(Astro.url).origin;
 let imageAbsolute = isAbsolutePath(image) ? image : concatPaths(origin, image);
+
+const { lang } = Astro.params;
+const LANGS = getLangs(Astro.request);
+if (!LANGS.includes(lang)) Astro.redirect(`/404`, 301);
+
 ---
 
 <Layout
