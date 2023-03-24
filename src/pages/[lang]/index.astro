@@ -43,7 +43,7 @@ let imageAbsolute = isAbsolutePath(image) ? image : concatPaths(origin, image);
 
 const { lang } = Astro.params;
 const LANGS = getLangs(Astro.request);
-if (!LANGS.includes(lang)) Astro.redirect(`/404`, 301);
+if (!LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
 
 ---
 
