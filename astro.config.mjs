@@ -19,10 +19,10 @@ export default defineConfig({
     mode: 'directory'
   }),
   integrations: [react(), tailwind(), mdx(),],
-  vite: {
-    server: { https: {
-      key: fs.readFileSync("./localhost+2-key.pem"),
-      cert: fs.readFileSync("./localhost+2.pem"),
-    } },
-  }
+  // vite: {
+  //   server: { https: {
+  //     key: fs.readFileSync("./localhost+2-key.pem"),
+  //     cert: fs.readFileSync("./localhost+2.pem"),
+  //   } },
+  // }
 });
