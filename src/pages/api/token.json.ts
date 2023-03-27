@@ -38,8 +38,13 @@ export const get: APIRoute = async ({ params, request }) => {
     //"https://www.googleapis.com/oauth2/v4/token"
   }
 
-  const token = await jwt.sign(payload, credentinal.private_key, { header });
+  let token = undefined;
+  try {
+    token = await jwt.sign(payload, credentinal.private_key, { header });
+  } catch(e) {
 
+  }
+  
   return new Response(token, {
     headers: {
       "Content-Type": "application/json"
