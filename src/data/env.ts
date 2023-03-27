@@ -34,7 +34,7 @@ export function getGoogleServiceAddress(request: Request): CredentialType | unde
   const value: string = runtime?.env['GOOGLE_SERVICE_ADDRESS'] || import.meta.env.GOOGLE_SERVICE_ADDRESS;
   let credentinal: CredentialType;
   try {
-    credentinal = JSON.parse(import.meta.env.GOOGLE_SERVICE_ADDRESS);
+    credentinal = JSON.parse(value);
   } catch (e) { }
   return credentinal;
 }
