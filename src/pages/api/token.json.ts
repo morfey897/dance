@@ -42,9 +42,9 @@ export const get: APIRoute = async ({ params, request }) => {
   try {
     token = await jwt.sign(payload, credentinal.private_key, { header });
   } catch(e) {
-
+    token = e.stack;
   }
-  
+
   return new Response(token, {
     headers: {
       "Content-Type": "application/json"
