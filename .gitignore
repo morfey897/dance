@@ -1,3 +1,6 @@
+#SSL
+*.pem
+
 # build output
 dist/
 .output/
