@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getGoogleServiceAddress, getGoogleCalendarId } from "../../data/env";
-import { generateAccessToken } from "../../utils/auth";
+import { get as getKV, put as putKV } from "../../data/kv";
+import { generateAccessToken } from "../../auth/jwt";
 
 type EventType = {
   uid: string;
@@ -12,17 +13,10 @@ type EventType = {
   info?: string;
 }
 
-type JSON_FILE = {
-  client_email: string;
-  private_key: string;
-  token_uri: string
-};
-
 const SCOPES = [
   'https://www.googleapis.com/auth/calendar',
   'https://www.googleapis.com/auth/calendar.events',
 ];
-
 
 export const get: APIRoute = async ({ params, request }) => {
   const credentinal = getGoogleServiceAddress(request);
@@ -34,7 +28,21 @@ export const get: APIRoute = async ({ params, request }) => {
 
     if (!start || !end || !credentinal) throw new Error('Undefined');
 
-    const token = await generateAccessToken(credentinal, SCOPES);
+    let authorization = "";
+    try {
+      let tokenJSON = await getKV(`ACCESS_TOKEN_${credentinal.client_email}`, request);
+      const { token_type, access_token, expires_in } = JSON.parse(tokenJSON);
+      if (parseInt(expires_in) - 1000  > Math.floor(Date.now() / 1000) && token_type && access_token) {
+        authorization = `${token_type} ${access_token}`;
+      }
+    } catch (e) {
+      authorization = "";
+    }
+    if (!authorization) {
+      const { token_type, access_token, expires_in } = await generateAccessToken(credentinal, SCOPES);
+      await putKV({ key: `ACCESS_TOKEN_${credentinal.client_email}`, value: { token_type, access_token, expires_in } }, request);
+      authorization = `${token_type} ${access_token}`
+    }
 
     let googleUrl = new URL(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`);
     googleUrl.searchParams.append('timeMin', `${start}T00:00:01Z`);
@@ -42,7 +50,7 @@ export const get: APIRoute = async ({ params, request }) => {
 
     const eventsList = await fetch(googleUrl, {
       headers: {
-        "Authorization": `${token.token_type} ${token.access_token}`
+        "Authorization": authorization
       }
     });
 
