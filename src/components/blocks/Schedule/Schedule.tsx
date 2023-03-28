@@ -77,6 +77,7 @@ function Schedule({ headline, subheadline, anchor, timeLabel, children }: Schedu
   const [state, dispatch] = useReducer(reducer, undefined, init);
   const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher);
 
+  console.log('RESPONSE', events, error);
   return <Section anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>
       {children}
