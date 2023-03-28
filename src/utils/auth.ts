@@ -32,7 +32,7 @@ export async function generateAccessToken(credentinal: JSON_FILE, scopes: Array<
   const response = await fetch(url, {
     method: "POST",
   });
-  const { access_token, token_type } = (await response.json()) as { access_token: string, token_type: string };
+  const { access_token, token_type, expires_in } = (await response.json()) as { access_token: string, token_type: string; expires_in: number };
 
-  return { access_token, token_type };
+  return { access_token, token_type, expires_in };
 }
