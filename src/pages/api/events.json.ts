@@ -60,6 +60,8 @@ export const get: APIRoute = async ({ params, request }) => {
     return {
       body: JSON.stringify({
         success: true,
+        token,
+        url: googleUrl,
         events: events || [],
         start,
         end
