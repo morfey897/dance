@@ -1,11 +1,12 @@
 import { useReducer } from "react";
-import { addDays, nextMonday, previousMonday, differenceInDays } from "date-fns";
+import { addDays, previousMonday, differenceInDays } from "date-fns";
 import { enUS, ru, uk } from 'date-fns/locale'
 import GridHeader from "./GridHeader";
 import ChangeDate from "./ChangeDate";
 import Grid from "./Grid";
 import type { GridState, DateAction, ScheduleType, EventType } from "./types";
 import useSWR from 'swr'
+import { toDate } from "../../../utils/data";
 
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
@@ -13,7 +14,6 @@ import Headline from "../../elements/Headline";
 const DAYS = new Array(7).fill(0).map((_, index) => index);
 
 const generateDates = (array: Array<number>, active: Date) => array.map((index) => addDays(active, index));
-const toDate = (d: Date) => d.toISOString().split('T')[0];
 
 function init() {
   const now = new Date(toDate(new Date()));
@@ -75,9 +75,8 @@ const fetcher = (url: string) => fetch(url)
 function Schedule({ headline, subheadline, anchor, timeLabel, children }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
-  const { data: events, error, isLoading } = useSWR(`https://6e361203.dance-4am.pages.dev/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher);
+  const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher);
 
-  console.log('RESPONSE', events, error);
   return <Section anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>
       {children}

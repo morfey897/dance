@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { useMemo } from "react";
-import { compareAsc } from "date-fns";
 import type { GridState, EventsType, EventType, DateType } from "./types";
 import Indicator from "../../elements/IngIndicator";
 import Tooltip from "../../elements/Tooltip";
+import { toDate } from "../../../utils/data";
 
 function Grid({ state, events, loading }: { state: GridState; events: EventsType; loading: boolean } & React.HTMLProps<HTMLDivElement>) {
 
@@ -17,7 +17,7 @@ function Grid({ state, events, loading }: { state: GridState; events: EventsType
         const event = list[j];
         const time = ('0' + event.time.replace(/\d{2}$/, '00')).slice(-5);
         const dataList = timesMap.get(time) || new Array(state.dates.length).fill(undefined);
-        let index = state.dates.findIndex((d) => compareAsc(date, d) === 0);
+        let index = state.dates.findIndex((d) => toDate(date) === toDate(d));
         if (index != -1) {
           if (!dataList[index]) {
             dataList[index] = event;
@@ -55,7 +55,7 @@ function Grid({ state, events, loading }: { state: GridState; events: EventsType
 function GridRow({ time, items, state, className }: { state: GridState } & DateType & React.HTMLProps<HTMLDivElement>) {
 
   const active = useMemo(() => (
-    state.dates.findIndex((date) => compareAsc(state.active, date) === 0)
+    state.dates.findIndex((date) => toDate(state.active) === toDate(date))
   ), [state]);
 
   return <div className={clsx('w-full min-h-[67px] py-3 inline-grid gap-0 md:gap-2 border-b border-b-pnk-200 border-opacity-60',
