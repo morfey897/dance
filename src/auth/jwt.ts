@@ -1,5 +1,3 @@
-// import jwt from '@tsndr/cloudflare-worker-jwt'
-
 type JSON_FILE = {
   client_email: string;
   private_key: string;
@@ -7,17 +5,17 @@ type JSON_FILE = {
   token_uri: string
 };
 
-export async function generateJWT(credentinal: JSON_FILE, scopes: Array<string> | string): Promise<{ token: string, exp: number } | null> {
+async function generateJWT(credentinal: JSON_FILE, scopes: Array<string> | string, expires_in: number = 3600): Promise<{ token: string, exp: number } | null> {
 
   const iat = Math.floor(Date.now() / 1000);
-  const exp = iat + 3600;
+  const exp = iat + expires_in;
   const payload = {
     iss: credentinal.client_email,
     scope: Array.isArray(scopes) ? scopes.join(' ') : scopes,
     aud: credentinal.token_uri,
     exp,
     iat,
-  }
+  };
 
   let token = null;
   try {
@@ -29,9 +27,23 @@ export async function generateJWT(credentinal: JSON_FILE, scopes: Array<string> 
   return { token, exp };
 }
 
-export async function generateAccessToken(credentinal: JSON_FILE, scopes: Array<string> | string): Promise<{ access_token: string; token_type: string; expires_in: number } | null> {
+export async function generateAccessToken(credentinal: JSON_FILE, scopes: Array<string> | string, expires_in: number = 3600): Promise<{ access_token: string; token_type: string; expires_in: number } | null> {
 
-  const jwt = await generateJWT(credentinal, scopes);
+  try {
+    if (import.meta.env.GENERATE_ACCESS_TOKEN) {
+      const url = new URL(import.meta.env.GENERATE_ACCESS_TOKEN);
+      url.searchParams.append('expired_in', '3600');
+      url.searchParams.append('scopes', Array.isArray(scopes) ? scopes.join(" ") : scopes);
+
+      const responseLocaly = await fetch(url);
+      const { access_token, token_type, expires_in } = (await responseLocaly.json()) as { access_token: string, token_type: string; expires_in: number };
+      return { access_token, token_type, expires_in };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  const jwt = await generateJWT(credentinal, scopes, expires_in);
   if (!jwt) return null;
   try {
     const url = new URL(credentinal.token_uri);
