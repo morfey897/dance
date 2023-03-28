@@ -1,4 +1,4 @@
-import { Base64 } from "js-base64";
+import jwt from '@tsndr/cloudflare-worker-jwt'
 
 type JSON_FILE = {
   client_email: string;
@@ -7,79 +7,32 @@ type JSON_FILE = {
   token_uri: string
 };
 
-async function pemToPrivateKey(privateKey: string) {
-  const pem = privateKey.replace(/\n/g, '');
-  const pemHeader = '-----BEGIN PRIVATE KEY-----';
-  const pemFooter = '-----END PRIVATE KEY-----';
+export async function generateAccessToken(credentinal: JSON_FILE, scopes: Array<string> | string) {
 
-  if (!pem.startsWith(pemHeader) || !pem.endsWith(pemFooter)) {
-    throw new Error('Invalid service account private key');
-  }
-
-  const pemContents = pem.substring(pemHeader.length, pem.length - pemFooter.length);
-
-  const algorithm = {
-    name: 'RSASSA-PKCS1-v1_5',
-    hash: {
-      name: 'SHA-256',
-    }
-  };
-
-  const buffer = Base64.toUint8Array(pemContents);
-
-  const result = await crypto.subtle.importKey('pkcs8', buffer, algorithm, false, ['sign']);
-
-  return result;
-}
-
-export async function generateJWT(jsonFile: JSON_FILE, scopes: Array<string> | string) {
-  const header = {
-    alg: "RS256",
-    typ: "JWT",
-    kid: jsonFile.private_key_id,
-  };
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + 3600;
   const payload = {
-    iss: jsonFile.client_email,
-    sub: jsonFile.client_email,
-    iat,
-    exp,
+    iss: credentinal.client_email,
     scope: Array.isArray(scopes) ? scopes.join(' ') : scopes,
-    aud: jsonFile.token_uri,
-    //"https://www.googleapis.com/oauth2/v4/token"
+    aud: credentinal.token_uri,
+    exp,
+    iat,
   }
 
-  const encodedHeader = Base64.toBase64(JSON.stringify(header));
-  const encodedPayload = Base64.toBase64(JSON.stringify(payload));
+  let token = undefined;
+  try {
+    token = await jwt.sign(payload, credentinal.private_key, { algorithm: 'RS256', header: null });
+  } catch (e) {
+    token = e;
+  }
+  const url = new URL(credentinal.token_uri);
+  url.searchParams.append('grant_type', 'urn:ietf:params:oauth:grant-type:jwt-bearer');
+  url.searchParams.append('assertion', token);
 
-  const textEncoder = new TextEncoder()
-  const inputArrayBuffer = textEncoder.encode(`${encodedHeader}.${encodedPayload}`)
-
-  // const client = new SubtleCrypto();
-  const outputArrayBuffer = await crypto.subtle.sign(
-    { name: 'RSASSA-PKCS1-v1_5' },
-    await pemToPrivateKey(jsonFile.private_key),
-    inputArrayBuffer
-  )
-
-  const encodedSignature = Base64.fromUint8Array(new Uint8Array(outputArrayBuffer), true);
-  const token = `${encodedHeader}.${encodedPayload}.${encodedSignature}`;
-  return token;
-
-}
-
-export async function generateAccessToken(jsonFile: JSON_FILE, scopes: Array<string> | string) {
-
-  const token = await generateJWT(jsonFile, scopes);
-console.log('token', token);
-  const response = await fetch(`${jsonFile.token_uri}?grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${token}`, {
-    method: 'POST',
-    headers: {
-      'ContentType': 'application/x-www-form-urlencoded'
-    }
+  const response = await fetch(url, {
+    method: "POST",
   });
+  const { access_token, token_type } = (await response.json()) as { access_token: string, token_type: string };
 
-  const content = await response.json();
-  return content;
+  return { access_token, token_type };
 }

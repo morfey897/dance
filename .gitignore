@@ -1,5 +1,6 @@
 #SSL
 *.pem
+test.*
 
 # build output
 dist/
