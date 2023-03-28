@@ -62,6 +62,7 @@ export const get: APIRoute = async ({ params, request }) => {
         success: true,
         token,
         url: googleUrl,
+        calendarId,
         events: events || [],
         start,
         end
