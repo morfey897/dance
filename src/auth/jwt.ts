@@ -1,4 +1,4 @@
-import jwt from '@tsndr/cloudflare-worker-jwt'
+// import jwt from '@tsndr/cloudflare-worker-jwt'
 
 type JSON_FILE = {
   client_email: string;
@@ -21,9 +21,9 @@ export async function generateJWT(credentinal: JSON_FILE, scopes: Array<string> 
 
   let token = null;
   try {
+    const jwt = await import('@tsndr/cloudflare-worker-jwt');
     token = await jwt.sign(payload, credentinal.private_key, { algorithm: 'RS256', header: null });
   } catch (e) {
-    console.error(e);
     return null;
   }
   return { token, exp };
