@@ -1,7 +1,7 @@
 ---
-headline: '1 година (2 людина)'
+headline: '1 година (2 людини)'
 subheadline: ''
 currency: 'грн'
-price: 500
-priority: 1
+price: 600
+priority: 9
 ---

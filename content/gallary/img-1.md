@@ -1,7 +1,5 @@
 ---
-headline: "It's our gym"
-image: {
-  src: 'https://picsum.photos/320/400',
-  alt: ''
-}
+headline: "Сірий зал з підсвіткою"
+image: '/IMG_5399.jpg'
+priority: 101
 ---

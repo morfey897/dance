@@ -1,5 +1,5 @@
 ---
-headline: '1 година'
+headline: '1 година (персональна робота)'
 subheadline: ''
 currency: 'грн'
 price: 200

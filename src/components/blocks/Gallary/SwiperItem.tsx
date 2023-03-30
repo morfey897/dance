@@ -6,7 +6,7 @@ function SwiperItem({ children, className, scale = 1, ...props }: { scale?: numb
     "xl:w-[calc((1248px-2*48px)/3)] xl:h-[622px]",
     "lg:w-[calc((992px-2*31px)/3)] lg:h-[560px]",
     "md:w-[calc((736px-2*8px)/3)] md:h-[520px]",
-    "w-[188px] h-[334px]", className)} style={{ scale: scale.toString(), filter: `grayscale(${(scale + 0.1 >= 1 ? 0 : 100) + "%"})` }} {...props}>
+    "w-[188px] h-[334px]", className)} style={{ scale: scale.toString() }} {...props}>
     {children}
   </li>
 }

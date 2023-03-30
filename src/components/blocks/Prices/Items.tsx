@@ -4,7 +4,7 @@ import RenderHTML from "../../elements/RenderHTML";
 
 export function Item({ item, className }: { item: PriceType } & React.HTMLProps<HTMLDivElement>) {
 
-  const hasOldPrice = item.oldPrice && item.oldPrice != item.price;
+  const hasOldPrice = item.oldPrice > 0 && item.oldPrice != item.price;
   return <BaseItem className={className}>
     {item.top && <p className="absolute top-[-24px] right-0 text-pnk-100 uppercase rounded-full border w-14 h-14 font-light text-sm flex justify-center items-center leading-tight rotate-45">top sale</p>}
     <h3 className="font-medium text-xl md:text-4xl">{item.headline}</h3>
@@ -31,10 +31,10 @@ export function GroupItem({ item, className }: { item: GroupType } & React.HTMLP
     <p className="">{item.subheadline}</p>
     <ul className="divide-y divide-pnk-100 mt-7 md:mt-8">
       {item.items.map((itm) => {
-        const hasOldPrice = itm.oldPrice && itm.oldPrice != itm.price;
+        const hasOldPrice = itm.oldPrice > 0 && itm.oldPrice != itm.price;
         return (
           <li className={clsx("flex justify-between text-sm md:text-lg font-light py-2", hasOldPrice && 'pt-5')} key={itm.uid}>
-            <p>{itm.headline}</p>
+            <p className="text-left">{itm.headline}</p>
             <div className="flex gap-x-2">
               <p className={clsx(hasOldPrice && 'text-pnk-200')}>{itm.price}<span className="ml-1">{itm.currency}</span></p>
               {hasOldPrice && <span className="text-xs md:text-base relative top-[-20px] right-0 opacity-40 before:block before:border before:absolute before:w-[115%] before:left-[-5%] before:top-[40%]">

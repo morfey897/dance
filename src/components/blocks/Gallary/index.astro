@@ -1,7 +1,7 @@
 ---
 import Gallary from "./Gallary";
 import type { GallaryType } from "./types";
-import { getIndex, getList } from "../../../utils/md";
+import { getIndex, getList, sortComparator } from "../../../utils/md";
 
 let directions = [];
 try {
@@ -11,7 +11,7 @@ try {
 const indexDirection = getIndex(directions);
 const list = getList(directions);
 
-const childrenList = list.map((data) => {
+const childrenList = list.sort(sortComparator).map((data) => {
   const uid = data.file.match(/\/([^\/]+)\.md?$/)[1];
   const frontmatter = data.frontmatter;
   return {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DirectionItem from "./Item";
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
+import Image from "../../elements/Image";
 
 import type { DirectionType, DirectionsType } from "./types";
 
@@ -32,10 +33,10 @@ function Directions({ headline, subheadline, anchor, list, children }: Direction
       </div>
       <div className="grow w-full mt-4 lg:mt-0 relative min-h-[217px] md:min-h-[350px] lg:min-h-auto overflow-hidden">
         {list?.map((item) => (
-          <img key={`image-${item.uid}`} className={clsx("absolute transition-opacity duration-500 opacity-0 w-full object-contain lg:object-cover h-[217px] md:h-[350px] lg:h-auto", {
+          <Image key={`image-${item.uid}`} className={clsx("absolute transition-opacity duration-500 opacity-0 w-full object-contain lg:object-cover h-[217px] md:h-[350px] lg:h-auto", {
             '!opacity-0': active.prev === item.uid,
             '!opacity-100': active.cur === item.uid,
-          })} loading="lazy" src={active.prev === item.uid || active.cur === item.uid ? item.image : ""} alt='' />
+          })} image={active.prev === item.uid || active.cur === item.uid ? item.image : ""} block="directions" alt={item.headline} />
         ))}
       </div>
     </div>

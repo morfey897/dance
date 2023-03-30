@@ -11,7 +11,7 @@ function Gallery({ headline, subheadline, anchor, children, list }: GallaryType)
     <Headline headline={headline} subheadline={subheadline}>
       {children}
     </Headline>
-    <Swiper<ImageType> items={list} Controls={Controls} Item={Item} />
+    <Swiper<ImageType> items={list} Controls={Controls} Item={Item} autoScroll={5} startAt={1} />
   </Section >;
 }
 

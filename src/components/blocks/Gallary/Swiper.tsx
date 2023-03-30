@@ -4,6 +4,7 @@ import { throttle } from "throttle-debounce";
 import clsx from "clsx";
 import SwiperItem from "./SwiperItem";
 import type { ControlsType } from "./types";
+import { useInView } from 'react-intersection-observer';
 
 const SCROLL_EPS = 0.1;
 
@@ -12,7 +13,7 @@ const smoothScroll = (index: number, root: HTMLElement | null, behavior: 'auto' 
   const items = [...root.children].filter(children => children.getAttribute('data-item') === 'true');
   if (index < 0 || index >= items.length) return resolve();
   const element = items[index];
-  if (!element || typeof element.scrollIntoView !== 'function') return resolve(false);
+  if (!element) return resolve(false);
   const rootRect = root.getBoundingClientRect();
   const elementRect = element.getBoundingClientRect();
   const rootCenter = rootRect.x + rootRect.width / 2;
@@ -36,9 +37,14 @@ const calculateScale = (root: HTMLElement | null): Array<number> => {
   });
 };
 
-function Swiper<T>({ items, Controls, Item, className, ...props }: { items?: Array<{ uid: string } & T>; Controls?: FC<ControlsType>; Item?: FC<T>; } & React.HTMLProps<HTMLDivElement>) {
+function Swiper<T>({ items, Controls, Item, autoScroll, startAt, className, ...props }: { items?: Array<{ uid: string } & T>; Controls?: FC<ControlsType>; Item?: FC<T>; autoScroll?: number; startAt?: number } & React.HTMLProps<HTMLDivElement>) {
 
   const ref = useRef<HTMLUListElement>(null);
+
+  const { ref: inViewRef, inView } = useInView({
+    threshold: 0.5,
+  });
+
   const [scales, setScales] = useState<Array<number>>([]);
 
   const pages = useMemo(() => new Array(items ? items.length : 0).fill(1).map((_, index) => index), [items]);
@@ -59,7 +65,7 @@ function Swiper<T>({ items, Controls, Item, className, ...props }: { items?: Arr
   }), []);
 
   const onResize = useMemo(() => throttle(300, () => {
-    smoothScroll(0, ref.current, 'auto');
+    smoothScroll(startAt ?? 0, ref.current, 'auto');
     setScales(calculateScale(ref.current));
   }), []);
 
@@ -80,7 +86,22 @@ function Swiper<T>({ items, Controls, Item, className, ...props }: { items?: Arr
     }
   }, []);
 
-  return <div className={clsx("relative", className)} {...props}>
+  useEffect(() => {
+    const changeUID = setInterval(() => {
+      if (inView) {
+        if (activePage + 1 >= pages.length) {
+          onSelectPage(0);
+        } else {
+          onSelectPage(activePage + 1);
+        }
+      }
+    }, autoScroll * 1000);
+    return () => {
+      clearInterval(changeUID);
+    }
+  }, [inView, activePage, pages]);
+
+  return <div className={clsx("relative", className)} {...props} ref={autoScroll > 0 ? inViewRef : undefined}>
     <ul
       onScroll={!!items ? onScroll : undefined}
       ref={ref}
