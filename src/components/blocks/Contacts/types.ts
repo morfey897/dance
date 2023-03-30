@@ -5,4 +5,5 @@ export interface ContactsType extends BlockType {
   address: { country: string; city: string; district: string; street: string; place: string; lat: number; lng: number; };
   phones: Array<string>;
   socials: Array<{ type: string; href: string; title: string; }>;
+  images?: Array<string | { src: string, alt: string; }>;
 }

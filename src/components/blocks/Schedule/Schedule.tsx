@@ -1,11 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import { addDays, previousMonday, differenceInDays } from "date-fns";
 import { enUS, ru, uk } from 'date-fns/locale'
 import GridHeader from "./GridHeader";
 import ChangeDate from "./ChangeDate";
 import Grid from "./Grid";
 import type { GridState, DateAction, ScheduleType, EventType } from "./types";
-import useSWR from 'swr'
+import useSWR from 'swr';
 import { toDate } from "../../../utils/data";
 
 import Section from "../../elements/Section";
@@ -20,7 +20,7 @@ function init() {
   const active = previousMonday(now);
   return {
     now,
-    active,
+    active: now,
     locale: uk,
     dates: generateDates(DAYS.map((index) => index), active),
   }
@@ -75,7 +75,10 @@ const fetcher = (url: string) => fetch(url)
 function Schedule({ headline, subheadline, anchor, timeLabel, children }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
-  const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher);
+  const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   return <Section anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>

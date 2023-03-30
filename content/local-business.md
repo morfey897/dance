@@ -13,28 +13,18 @@ address: {
   lng: 30.634076,
 }
 # List of phones
-phones: ["+38 (066) 39-79-488", "+38 (066) 39-79-487", "+38 (066) 39-79-489"]
+phones: ["+380 63 863 59 92"]
 # List of social links
 socials: [
     {
       type: "instagram",
       title: "Instagram",
-      href: "https://instagram.com",
+      href: "https://instagram.com/kalipso.studio.kyiv",
     },
     {
       type: "telegram",
       title: "Telegram",
-      href: "tel://instagram1.com",
-    },
-    {
-      type: "viber",
-      title: "Viber",
-      href: "viber://instagram2.com",
-    },
-    {
-      type: "tiktok",
-      title: "TikTok",
-      href: "viber://instagram3.com",
+      href: "https://t.me/PD_kalipso",
     },
   ]
 # Opening hours

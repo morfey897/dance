@@ -8,7 +8,7 @@ const ICONS = {
 };
 
 function SocialMedia({ type, title, href, ...props }: { type: string; title?: string; } & React.HTMLProps<HTMLAnchorElement>) {
-  return <a className="font-medium text-base md:text-3xl flex gap-x-4 flex-row-reverse lg:flex-row items-baseline justify-center lg:justify-end" href={href} target="_blank" rel="noreferrer" {...props}>
+  return <a className="font-medium text-sm md:text-3xl flex gap-x-4 flex-row-reverse lg:flex-row items-baseline justify-center lg:justify-end" href={href} target="_blank" rel="noreferrer" {...props}>
     {title && <span>{title}</span>}
     <span className="inline-block fill-white">{ICONS[type.toLowerCase()]}</span>
   </a>;

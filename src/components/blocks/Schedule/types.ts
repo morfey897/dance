@@ -5,6 +5,7 @@ export type EventType = {
   time: string;
   duration: number;
   direction: string;
+  trainer: string;
   gym: string;
   date: string;
   info?: string;
