@@ -2,8 +2,9 @@ import clsx from "clsx";
 import Section from "../../elements/Section";
 import Image from "../../elements/Image";
 import type { AboutType } from "./types";
+import RenderHTML from "../../elements/RenderHTML";
 
-function About({ headline, subheadline, anchor, image, cta, children }: AboutType) {
+function About({ headline, subheadline, anchor, image, cta, bodyHTML }: AboutType) {
 
   return <Section className="text-center pt-[74px]" anchor={anchor}>
     <div className="absolute inset-0 z-0">
@@ -16,7 +17,7 @@ function About({ headline, subheadline, anchor, image, cta, children }: AboutTyp
         "text-sm md:text-lg mt-7 max-w-screen-lg m-auto",
       )}>
         {subheadline && <p>{subheadline}</p>}
-        {children}
+        <RenderHTML>{bodyHTML}</RenderHTML>
       </div>
       {cta && <a href={cta.href} className="group space-x-2 block w-fit m-auto mt-7 text-sm md:text-lg text-center border-2 border-pnk-200 rounded-3xl py-2 px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 active:border-pnk-100 active:shadow active:shadow-pnk-100">
         <span className="inline-block">{cta.label}</span>

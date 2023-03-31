@@ -10,6 +10,7 @@ import { toDate } from "../../../utils/data";
 
 import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
+import RenderHTML from "../../elements/RenderHTML";
 
 const DAYS = new Array(7).fill(0).map((_, index) => index);
 
@@ -72,7 +73,7 @@ const fetcher = (url: string) => fetch(url)
     return list
   });
 
-function Schedule({ headline, subheadline, anchor, timeLabel, children }: ScheduleType) {
+function Schedule({ headline, subheadline, anchor, timeLabel, bodyHTML }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, undefined, init);
   const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher, {
@@ -82,7 +83,7 @@ function Schedule({ headline, subheadline, anchor, timeLabel, children }: Schedu
 
   return <Section anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>
-      {children}
+      <RenderHTML>{bodyHTML}</RenderHTML>
     </Headline>
     <ChangeDate
       className="mt-12"

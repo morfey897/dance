@@ -14,14 +14,12 @@ try {
 } catch (e) {}
 const indexContacts = getIndex(contacts);
 
-const { Content } = indexContacts || { Content: () => {} };
 const props = {
   ...indexContacts?.frontmatter,
   ...(localBusiness || [])[0]?.frontmatter,
+  bodyHTML: indexContacts?.compiledContent(),
   google_api_key: getGoogleApiKey(Astro.request),
-};
+} as ContactsType;
 ---
 
-<Contacts {...props} client:load>
-  <Content />
-</Contacts>
+<Contacts {...props} client:load />

@@ -23,14 +23,12 @@ const childrenList = list.sort(sortComparator).map((data) => {
   };
 });
 
-const { Content } = indexDirection || { Content: () => {} };
 const props = {
   ...indexDirection?.frontmatter,
   list: childrenList,
+  bodyHTML: indexDirection?.compiledContent(),
 } as GallaryType;
 
 ---
 
-<Gallary {...props} client:load>
-  <Content />
-</Gallary>
+<Gallary {...props} client:load />

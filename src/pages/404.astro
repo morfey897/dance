@@ -19,7 +19,6 @@ try {
 
 const indexNotFound = notFound[0];
 
-const { Content } = indexNotFound || { Content: () => {} };
 const { headline, cta, title, description, image } = {
   ...indexNotFound?.frontmatter,
 } as {

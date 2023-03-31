@@ -77,10 +77,11 @@ prices = prices
 const indexPrice = prices.find(({ group }) => group[0] === "index");
 const items = prepareGroups(prices.filter(({ group }) => group[0] !== "index"));
 
-const { Content } = indexPrice || { Content: () => {} };
-const props = { ...indexPrice?.frontmatter, list: items } as PricesType;
+const props = {
+  ...indexPrice?.frontmatter,
+  list: items,
+  bodyHTML: indexPrice?.compiledContent(),
+} as PricesType;
 ---
 
-<Prices {...props} client:load>
-  <Content />
-</Prices>
+<Prices {...props} client:load />

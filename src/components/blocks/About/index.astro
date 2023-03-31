@@ -10,10 +10,7 @@ try {
 
 const indexAbout = getIndex(contacts);
 
-const { Content } = indexAbout || { Content: () => {} };
-const props = { ...indexAbout?.frontmatter } as AboutType;
+const props = { ...indexAbout?.frontmatter, bodyHTML: indexAbout?.compiledContent() } as AboutType;
 ---
 
-<About {...props}>
-  <Content />
-</About>
+<About {...props} />

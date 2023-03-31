@@ -7,8 +7,9 @@ import clsx from "clsx";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import type { ContactsType } from "./types";
 import Image from "../../elements/Image";
+import RenderHTML from "../../elements/RenderHTML";
 
-function Contacts({ headline, subheadline, images, google_api_key, address, phones, socials, anchor, children }: ContactsType) {
+function Contacts({ headline, subheadline, images, google_api_key, address, phones, socials, anchor, bodyHTML }: ContactsType) {
 
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -30,7 +31,7 @@ function Contacts({ headline, subheadline, images, google_api_key, address, phon
           <a className="block text-base md:text-3xl mt-10 max-w-screen-md m-auto text-left underline" href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(`${address.place}`)}`} target="_blank" rel="noreferrer">{[address.city, address.district, address.street].filter(a => !!a).join(", ")}</a>
           <div className="text-xs md:text-base mt-5 max-w-screen-md m-auto text-left">
             {subheadline && <p>{subheadline}</p>}
-            {children}
+            <RenderHTML>{bodyHTML}</RenderHTML>
           </div>
         </div>
         <div className="flex flex-col-reverse lg:flex-col">

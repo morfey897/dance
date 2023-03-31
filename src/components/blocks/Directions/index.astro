@@ -25,13 +25,11 @@ const childrenList = list.sort(sortComparator).map((data) => {
   };
 });
 
-const { Content } = indexDirection || { Content: () => {} };
 const props = {
   ...indexDirection?.frontmatter,
+  bodyHTML: indexDirection?.compiledContent(),
   list: childrenList,
 } as DirectionsType;
 ---
 
-<Directions {...props} client:load>
-  <Content />
-</Directions>
+<Directions {...props} client:load />

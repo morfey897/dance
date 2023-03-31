@@ -6,8 +6,9 @@ import Headline from "../../elements/Headline";
 import Image from "../../elements/Image";
 
 import type { DirectionType, DirectionsType } from "./types";
+import RenderHTML from "../../elements/RenderHTML";
 
-function Directions({ headline, subheadline, anchor, list, children }: DirectionsType) {
+function Directions({ headline, subheadline, anchor, list, bodyHTML }: DirectionsType) {
 
   const [active, setActive] = useState({ cur: '', prev: '' });
 
@@ -19,7 +20,7 @@ function Directions({ headline, subheadline, anchor, list, children }: Direction
 
   return <Section effect={{ x: 'left', y: 'center' }} anchor={anchor}>
     <Headline headline={headline} subheadline={subheadline}>
-      {children}
+      <RenderHTML>{bodyHTML}</RenderHTML>
     </Headline>
     <div className="flex mt-12 flex-col lg:flex-row">
       <div className="grow w-full">

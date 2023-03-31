@@ -10,12 +10,10 @@ try {
 
 const indexDirection = getIndex(schedule);
 
-const { Content } = indexDirection || { Content: () => {} };
 const props = {
   ...indexDirection?.frontmatter,
+  bodyHTML: indexDirection?.compiledContent(),
 } as ScheduleType;
 ---
 
-<Schedule {...props} client:visible>
-  <Content />
-</Schedule>
+<Schedule {...props} client:visible />
