@@ -1,0 +1,14 @@
+---
+const isProd = Astro.url.origin === Astro.site.origin;
+
+const txt = isProd ? [
+  "Disallow: /api/",
+  `Sitemap: ${Astro.site.origin}/sitemap.xml`,
+] : ["Disallow: /"];
+
+return new Response(['User-agent: *', ...txt].join("\n"), {
+  headers: {
+    "Content-Type": "text/plain; charset=utf-8",
+  },
+});
+---

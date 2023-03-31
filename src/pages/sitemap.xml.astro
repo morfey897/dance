@@ -1,0 +1,32 @@
+---
+import { getLangs } from "../data/env";
+const isProd = Astro.url.origin === Astro.site.origin;
+if (!isProd)
+  return new Response(null, {
+    status: 404,
+  });
+
+const [mainLang, ...langs] = getLangs(Astro.request);
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>${Astro.site.origin}/${mainLang || "uk"}</loc>
+    ${langs
+      .map(
+        (lang) => `<xhtml:link
+      rel="alternate"
+      hreflang="${lang}"
+      href="${Astro.site.origin}/${lang}" />`
+      )
+      .join("\n")}
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+
+return new Response(sitemap, {
+  headers: {
+    "Content-Type": "application/xml; charset=utf-8",
+  },
+});
+---

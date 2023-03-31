@@ -3,7 +3,7 @@ import "@fontsource/comfortaa/300.css";
 import "@fontsource/comfortaa/400.css";
 import "@fontsource/comfortaa/500.css";
 
-import { getLang, normalize } from "../utils/url";
+import { getLang, normalize, cannonical } from "../utils/url";
 
 export interface Props {
 	title: string;
@@ -18,6 +18,7 @@ export interface Props {
 }
 const { lang, title, description, image, og, schema } = Astro.props;
 const url = normalize(Astro.url);
+const cannonicalURL = cannonical(Astro.url, Astro.site);
 const contentLang = lang || getLang(Astro.url);
 
 let structuredData = JSON.stringify({
@@ -71,7 +72,7 @@ let structuredData = JSON.stringify({
 	<meta charset="UTF-8" />
 	<meta content="width=device-width,initial-scale=1" name="viewport" />
 	<meta content={url} property="og:url" />
-	<link rel="canonical" href={url} />
+	<link rel="canonical" href={cannonicalURL} />
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

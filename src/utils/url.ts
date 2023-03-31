@@ -19,6 +19,12 @@ export function normalize(href: string | URL) {
   return url.origin + url.pathname.replace(/\/$/g, "");
 }
 
+export function cannonical(href: string | URL, site: string | URL) {
+  const url = new URL(href);
+  const siteURL = new URL(site);
+  return siteURL.origin + url.pathname.replace(/\/$/g, "");
+}
+
 export function getPreferableLangs(request: Request) {
   const langList: Array<{ code: string }> = parse(
     request.headers.get("accept-language")
@@ -26,11 +32,11 @@ export function getPreferableLangs(request: Request) {
   return [...new Set(langList.map(({ code }) => code))];
 }
 
-export function isAbsolutePath(path:string) {
+export function isAbsolutePath(path: string) {
   return /^(:?https?:)?\/{2}/.test(path);
 }
 
-export function concatPaths(origin:string, ...urls:string[]) {
+export function concatPaths(origin: string, ...urls: string[]) {
   if (isAbsolutePath(origin)) {
     return [origin.replace(/\+$/, ""), urls.join('/').replace(/\/{2,}/g, "/").replace(/^\/+/, "")].join('/');
   }

@@ -70,17 +70,6 @@ export const get: APIRoute = async ({ params, request }) => {
     });
 
     const data = (await eventsList.json()) as { items: Array<GoogleEventType> };
-    // console.log(new Date(end));
-    // console.log(rrulestr("DTSTART:20230307T060000Z\nRRULE:FREQ=WEEKLY;WKST=MO;BYDAY=TH,TU").between(new Date(start), new Date(end)));
-    // return {
-    //   body: JSON.stringify({
-    //     success: true,
-    //     data: data.items?.map(({ id, summary, description, location, start, end, recurrence }) => ({ id, summary, description, location, start, end, recurrence })),
-    //     start,
-    //     end
-    //   }, null, 4)
-    // };
-
     let events: Array<EventType> = data.items?.reduce((list, { id, summary, description, location, start: startEvent, end: endEvent, recurrence }) => {
       const [direction, trainer] = summary.split("|").map(a => a.trim());
       const [startDateOnly, startTiemOnly] = startEvent.dateTime.split('T');
