@@ -1,4 +1,5 @@
 interface BlockType {
+  lang: string;
   headline: string;
   subheadline?: string;
   bodyHTML?: string;

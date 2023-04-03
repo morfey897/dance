@@ -1,22 +1,24 @@
 ---
-import { getLangs } from "../data/env";
-const isProd = Astro.url.origin === Astro.site.origin;
+import { getEnv } from "../services/cloudflare";
+const { LANGS, SITE } = getEnv(Astro.request);
+
+const isProd = Astro.url.origin === SITE;
 if (!isProd)
   return new Response(null, {
     status: 404,
   });
 
-const [mainLang, ...langs] = getLangs(Astro.request);
+const [mainLang, ...langs] = LANGS;
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>${Astro.site.origin}/${mainLang || "uk"}</loc>
+    <loc>${SITE}/${mainLang || "uk"}</loc>
     ${langs
       .map(
         (lang) => `<xhtml:link
       rel="alternate"
       hreflang="${lang}"
-      href="${Astro.site.origin}/${lang}" />`
+      href="${SITE}/${lang}" />`
       )
       .join("\n")}
     <changefreq>daily</changefreq>

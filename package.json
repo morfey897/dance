@@ -42,6 +42,7 @@
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
+    "flat": "^5.0.2",
     "npm": "^9.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230115.0",
     "@types/accept-language-parser": "^1.5.3",
+    "@types/flat": "^5.0.2",
     "@types/google.maps": "^3.52.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

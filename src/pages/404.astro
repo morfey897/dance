@@ -1,11 +1,12 @@
 ---
 import { concatPaths, getLang, getPreferableLangs } from "../utils/url";
-import { getLangs } from "../data/env";
+import { getEnv } from "../services/cloudflare";
 
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/blocks/Header/Header";
 import Footer from "../components/blocks/Footer/Footer";
 import Section from "../components/elements/Section";
+import RenderHTML from "../components/elements/RenderHTML";
 
 let notFound = [];
 try {
@@ -29,10 +30,11 @@ const { headline, cta, title, description, image } = {
   cta: { href: string; label: string };
 };
 
+const bodyHtml = indexNotFound?.compiledContent();
 const localBusinessProps = (localBusiness || [])[0]?.frontmatter || {};
 
 let lang: string = getLang(Astro.url);
-const LANGS = getLangs(Astro.request);
+const { LANGS } = getEnv(Astro.request);
 if (!LANGS.includes(lang)) {
   lang =
     getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
@@ -46,13 +48,16 @@ if (!LANGS.includes(lang)) {
   description={description || ""}
   image={image || ""}
 >
-  <Header navigation={[]} langs={[]} url={''} lang={lang} />
+  <Header navigation={[]} langs={[]} url={""} lang={lang} />
   <main>
-    <Section className="text-center pt-[74px] pb-[124px] md:pt-[274px] md:pb-[270px]" effect={{x: 'left'}}>
+    <Section
+      className="text-center pt-[74px] pb-[124px] md:pt-[274px] md:pb-[270px]"
+      effect={{ x: "left" }}
+    >
       <div class="text-center">
         <h1 class="uppercase text-4xl md:text-6xl mt-14">{headline}</h1>
         <div class={"text-sm md:text-lg mt-7 max-w-screen-lg m-auto"}>
-          <Content />
+          <RenderHTML>{bodyHtml}</RenderHTML>
         </div>
         <a
           href={concatPaths(cta.href || "/", lang)}
@@ -91,5 +96,5 @@ if (!LANGS.includes(lang)) {
       </div>
     </Section>
   </main>
-  <Footer {...localBusinessProps}/>
+  <Footer {...localBusinessProps} />
 </Layout>

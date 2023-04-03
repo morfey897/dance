@@ -17,7 +17,7 @@ export function Image({ image, block, alt: alternative, src: resource, ...props 
     }
 
     return {
-      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : concatPaths((block && !(new RegExp(`^\/?${block}\/`).test(src)) ? block : "") || "", src),
+      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : concatPaths(block && !(new RegExp(`^\/?${block}\/`).test(src)) ? `/${block}` : "/", src),
       alt: alt || ''
     }
 

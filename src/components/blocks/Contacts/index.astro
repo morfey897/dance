@@ -1,5 +1,5 @@
 ---
-import { getGoogleApiKey } from "../../../data/env";
+import { getEnv } from "../../../services/cloudflare";
 import Contacts from "./Contacts";
 import type { ContactsType } from "./types";
 import { getIndex } from "../../../utils/md";
@@ -18,7 +18,7 @@ const props = {
   ...indexContacts?.frontmatter,
   ...(localBusiness || [])[0]?.frontmatter,
   bodyHTML: indexContacts?.compiledContent(),
-  google_api_key: getGoogleApiKey(Astro.request),
+  google_api_key: getEnv(Astro.request).GOOGLE_API_KEY,
 } as ContactsType;
 ---
 

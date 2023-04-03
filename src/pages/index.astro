@@ -1,14 +1,14 @@
 ---
 import { getPreferableLangs } from "../utils/url";
-import { getLangs } from "../data/env";
+import { getEnv } from "../services/cloudflare";
 
-const LANGS = getLangs(Astro.request);
+const { LANGS } = getEnv(Astro.request);
 let redirectLang =
 	getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
 	LANGS[0];
 
-if (redirectLang == 'ru') {
-	redirectLang = 'uk';
+if (redirectLang == "ru") {
+	redirectLang = "uk";
 }
 return Astro.redirect(`/${redirectLang}`, 301);
 ---

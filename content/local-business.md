@@ -27,6 +27,7 @@ socials: [
       href: "https://t.me/PD_kalipso",
     },
   ]
+payment: ["Готівка", "Кредитна карта"]
 # Opening hours
 openingHours: [
   {

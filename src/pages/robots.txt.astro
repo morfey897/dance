@@ -1,12 +1,14 @@
 ---
-const isProd = Astro.url.origin === Astro.site.origin;
+import { getEnv } from "../services/cloudflare";
 
-const txt = isProd ? [
-  "Disallow: /api/",
-  `Sitemap: ${Astro.site.origin}/sitemap.xml`,
-] : ["Disallow: /"];
+const { SITE } = getEnv(Astro.request);
+const isProd = Astro.url.origin === SITE;
 
-return new Response(['User-agent: *', ...txt].join("\n"), {
+const txt = isProd
+  ? ["Disallow: /api/", `Sitemap: ${SITE}/sitemap.xml`]
+  : ["Disallow: /"];
+
+return new Response(["User-agent: *", ...txt].join("\n"), {
   headers: {
     "Content-Type": "text/plain; charset=utf-8",
   },

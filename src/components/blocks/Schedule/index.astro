@@ -2,6 +2,10 @@
 import Schedule from "./Schedule";
 import type { ScheduleType } from "./types";
 import { getIndex } from "../../../utils/md";
+import { getLang } from "../../../utils/url";
+
+// const { lang } = Astro.params;
+// console.log("LANG", getLang(Astro.url));
 
 let schedule = [];
 try {
@@ -11,6 +15,7 @@ try {
 const indexDirection = getIndex(schedule);
 
 const props = {
+  lang: getLang(Astro.url),
   ...indexDirection?.frontmatter,
   bodyHTML: indexDirection?.compiledContent(),
 } as ScheduleType;

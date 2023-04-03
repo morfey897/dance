@@ -1,4 +1,5 @@
 ---
+import { getEnv } from "../../../services/cloudflare";
 import { getLang } from "../../../utils/url";
 import Header from "./Header";
 import type { HeaderType } from "./types";
@@ -8,7 +9,7 @@ try {
 } catch (e) {}
 
 const { header } = (navigation || [])[0]?.frontmatter || {};
-const props: HeaderType = { navigation: header, url: Astro.url.href, lang: getLang(Astro.url), langs: ['uk', 'en'] };
+const props: HeaderType = { navigation: header, url: Astro.url.href, lang: getLang(Astro.url), langs: getEnv(Astro.request).LANGS };
 ---
 
 <Header {...props} client:load />

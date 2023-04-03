@@ -3,6 +3,7 @@ import "@fontsource/comfortaa/300.css";
 import "@fontsource/comfortaa/400.css";
 import "@fontsource/comfortaa/500.css";
 
+import { getEnv } from "../services/cloudflare";
 import { getLang, normalize, cannonical } from "../utils/url";
 
 export interface Props {
@@ -18,7 +19,7 @@ export interface Props {
 }
 const { lang, title, description, image, og, schema } = Astro.props;
 const url = normalize(Astro.url);
-const cannonicalURL = cannonical(Astro.url, Astro.site);
+const cannonicalURL = cannonical(Astro.url, getEnv(Astro.request).SITE);
 const contentLang = lang || getLang(Astro.url);
 
 let structuredData = JSON.stringify({

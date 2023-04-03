@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer } from "react";
+import { useReducer } from "react";
 import { addDays, previousMonday, differenceInDays } from "date-fns";
 import { enUS, ru, uk } from 'date-fns/locale'
 import GridHeader from "./GridHeader";
@@ -12,25 +12,38 @@ import Section from "../../elements/Section";
 import Headline from "../../elements/Headline";
 import RenderHTML from "../../elements/RenderHTML";
 
+const LOCALES = {
+  uk: uk,
+  ru: ru,
+  en: enUS,
+};
+
 const DAYS = new Array(7).fill(0).map((_, index) => index);
 
 const generateDates = (array: Array<number>, active: Date) => array.map((index) => addDays(active, index));
 
-function init() {
+function init({ lang }: { lang: string }) {
   const now = new Date(toDate(new Date()));
   const active = previousMonday(now);
   return {
     now,
     active: now,
-    locale: uk,
+    locale: LOCALES[lang] || uk,
     dates: generateDates(DAYS.map((index) => index), active),
   }
 }
 
 function reducer(state: GridState, action: DateAction): GridState {
   switch (action.type) {
-    case 'now':
-      return init();
+    case 'now': {
+      const now = new Date(toDate(new Date()));
+      const active = previousMonday(now);
+      return {
+        ...state,
+        active: now,
+        dates: generateDates(DAYS.map((index) => index), active),
+      };
+    }
     case 'inc': {
       const active = addDays(state.dates[0], 7);
       return {
@@ -73,9 +86,9 @@ const fetcher = (url: string) => fetch(url)
     return list
   });
 
-function Schedule({ headline, subheadline, anchor, timeLabel, bodyHTML }: ScheduleType) {
+function Schedule({ lang, headline, subheadline, anchor, timeLabel, bodyHTML }: ScheduleType) {
 
-  const [state, dispatch] = useReducer(reducer, undefined, init);
+  const [state, dispatch] = useReducer(reducer, { lang }, init);
   const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

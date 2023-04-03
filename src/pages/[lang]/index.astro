@@ -9,16 +9,43 @@ import Directions from "../../components/blocks/Directions/index.astro";
 import Gallery from "../../components/blocks/Gallary/index.astro";
 import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
-import { isAbsolutePath, concatPaths } from "../../utils/url";
-import { getLangs } from "../../data/env";
+import { isAbsolutePath, concatPaths, normalizeURL } from "../../utils/url";
+import { getEnv } from "../../services/cloudflare";
+import { translateJSON } from "../../services/translate";
+
+const { lang } = Astro.params;
+const { LANGS } = getEnv(Astro.request);
+if (!LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
+
+const newUrl = normalizeURL(Astro.url);
+if (newUrl != Astro.url.toString()) return Astro.redirect(newUrl, 301);
 
 let localBusiness = [];
 try {
   localBusiness = await Astro.glob("../../../content/local-business.md");
 } catch (e) {}
 
-const { title, description, image, address, phones, openingHours } =
-  (localBusiness || [])[0]?.frontmatter || {};
+const fileData = { ...((localBusiness || [])[0]?.frontmatter || {}) };
+
+const translation = null;
+// await translateJSON(
+//   {
+//     target: lang,
+//     content: {
+//       title: fileData.title,
+//       description: fileData.description,
+//       address: fileData.address,
+//       payment: fileData.payment,
+//     },
+//   },
+//   Astro.request
+// );
+
+const { title, description, image, address, phones, openingHours, payment } = {
+  ...fileData,
+  ...translation,
+} as any;
+
 const schema = {
   name: title,
   description,
@@ -36,15 +63,12 @@ const schema = {
   telephone: (phones && phones[0]) || "",
   sameAs: (address?.socials || []).map(({ href }) => href),
   openingHoursSpecification: openingHours || [],
-  paymentAccepted: ["Готівка", "Кредитна карта"],
+  paymentAccepted: payment || [],
 };
-let origin = new URL(Astro.url).origin;
-let imageAbsolute = isAbsolutePath(image) ? image : concatPaths(origin, image);
-
-const { lang } = Astro.params;
-const LANGS = getLangs(Astro.request);
-if (!LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
-
+const origin = new URL(Astro.url).origin;
+const imageAbsolute = isAbsolutePath(image)
+  ? image
+  : concatPaths(origin, image);
 ---
 
 <Layout

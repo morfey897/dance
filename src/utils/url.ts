@@ -14,15 +14,20 @@ export function changeLang(href: string | URL, lang: string, absolutePath: boole
   return absolutePath ? path : path.replace(url.origin, '');
 }
 
+export function normalizeURL(href: string | URL) {
+  const url = new URL(href);
+  url.pathname = url.pathname.replace(/\/+$/g, "");
+  return url.toString();
+}
+
 export function normalize(href: string | URL) {
   const url = new URL(href);
   return url.origin + url.pathname.replace(/\/$/g, "");
 }
 
-export function cannonical(href: string | URL, site: string | URL) {
+export function cannonical(href: string | URL, site: string) {
   const url = new URL(href);
-  const siteURL = new URL(site);
-  return siteURL.origin + url.pathname.replace(/\/$/g, "");
+  return site + url.pathname.replace(/\/$/g, "");
 }
 
 export function getPreferableLangs(request: Request) {
