@@ -47,3 +47,13 @@ export function concatPaths(origin: string, ...urls: string[]) {
   }
   return [origin, ...urls].join('/').replace(/\/{2,}/g, "/");
 }
+
+export function toBase64(json: any) {
+  const jsonString = typeof json === 'object' ? JSON.stringify(json) : String(json);
+  const btyeArray = Buffer.from(jsonString);
+  return btyeArray.toString("base64");
+}
+
+export function toBase64URL(json: any) {
+  return toBase64(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}

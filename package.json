@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "astro build",
-    "start": "astro dev --port 3000",
+    "start": "concurrently \"kill-port 3000\" \"astro dev --port 3000\"",
     "preview": "concurrently \"run-s preview:*\"",
     "preview:build": "astro build",
     "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",
@@ -36,6 +36,7 @@
     "accept-language-parser": "^1.5.0",
     "astro": "^2.0.10",
     "clsx": "^1.2.1",
+    "cookie": "^0.5.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "flat": "^5.0.2",
@@ -51,6 +52,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230115.0",
     "@types/accept-language-parser": "^1.5.3",
+    "@types/cookie": "^0.5.1",
     "@types/flat": "^5.0.2",
     "@types/google.maps": "^3.52.1",
     "@types/react": "^18.0.27",

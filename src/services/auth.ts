@@ -1,3 +1,5 @@
+import { toBase64URL } from '../utils/url';
+
 type PayloadType = {
   iss: string;
   scope: string;
@@ -13,12 +15,6 @@ type JSON_FILE = {
   token_uri: string
 };
 
-
-const toBase64URL = (json: any) => {
-  const jsonString = JSON.stringify(json);
-  const btyeArray = Buffer.from(jsonString);
-  return btyeArray.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-}
 
 async function _generateJWT_WebCrypto(payload: PayloadType, secret: string) {
   let token: string | null = null;
@@ -116,7 +112,7 @@ export async function getAccessToken(
   cache: { get: (key: string) => Promise<string>; put: (key: string, value: string) => Promise<string> }
 ): Promise<string | null> {
   let authorization: string | null = null;
-  const key = `${scopes.map(sc => sc.split("/").reverse()[0]).join('-')}_${credentinal.client_email}`;
+  const key = `AUTH_${scopes.map(sc => sc.split("/").reverse()[0]).join('-')}_${credentinal.client_email}`;
   try {
     let tokenJSON = await cache.get(key);
     if (tokenJSON) {

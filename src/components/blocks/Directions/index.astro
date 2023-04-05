@@ -1,7 +1,7 @@
 ---
 import Directions from "./Directions";
 import type { DirectionsType } from "./types";
-import { getIndex, getList, sortComparator } from "../../../utils/md";
+import { getIndex, getList, sortComparator, getFileName } from "../../../utils/md";
 
 
 let directions = [];
@@ -13,7 +13,7 @@ const indexDirection = getIndex(directions);
 const list = getList(directions);
 
 const childrenList = list.sort(sortComparator).map((data) => {
-  const uid = data.file.match(/\/([^\/]+)\.md?$/)[1];
+  const uid = getFileName(data);
   const frontmatter = data.frontmatter;
   return {
     uid,

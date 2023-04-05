@@ -49,18 +49,31 @@ export async function getKV(request: Request) {
   if (!KV) {
     try {
       const fs = await import('fs/promises');
-      await fs.mkdir("./.wrangler/state/kv", { recursive: true });
+      const fileDirrectory = `./.wrangler/state/kv`;
+      await fs.mkdir(fileDirrectory, { recursive: true });
+
       return {
         get: async (key: string) => {
-          const bf = await fs.readFile(`./.wrangler/state/kv/${key}`, { encoding: 'utf-8' });
+          key = key.slice(0, 128);
+          const fileName = `${fileDirrectory}/${key}`;
+          try {
+            await fs.access(fileName, fs.constants.R_OK);
+          } catch(error) {
+            return null;
+          }
+          const bf = await fs.readFile(fileName, { encoding: 'utf-8' });
           return bf?.toString();
         },
         put: async (key: string, value: string) => {
-          await fs.writeFile(`./.wrangler/state/kv/${key}`, value, { encoding: 'utf-8' });
+          key = key.slice(0, 128);
+          const fileName = `${fileDirrectory}/${key}`;
+          await fs.writeFile(fileName, value, { encoding: 'utf-8' });
           return value;
         },
         del: async (key: string) => {
-          await fs.unlink(`./.wrangler/state/kv/${key}`);
+          key = key.slice(0, 128);
+          const fileName = `${fileDirrectory}/${key}`;
+          await fs.unlink(fileName);
           return;
         }
       }
@@ -72,16 +85,19 @@ export async function getKV(request: Request) {
   return {
     get: async (key: string) => {
       if (!KV) return null;
+      key = key.slice(0, 128);
       const value: string = await KV.get(key);
       return value;
     },
     put: async (key: string, value: string) => {
       if (!KV) return null;
+      key = key.slice(0, 128);
       await KV.put(key, value);
       return value;
     },
     del: async (key: string) => {
       if (!KV) return null;
+      key = key.slice(0, 128);
       await KV.delete(key);
       return;
     }

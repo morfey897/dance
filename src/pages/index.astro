@@ -1,11 +1,23 @@
 ---
 import { getPreferableLangs } from "../utils/url";
 import { getEnv } from "../services/cloudflare";
+import { LANG } from "../constants/cookie";
+
+const cookieLang = Astro.cookies.get(LANG)?.value;
 
 const { LANGS } = getEnv(Astro.request);
-let redirectLang =
-	getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
-	LANGS[0];
+
+let redirectLang = LANGS[0];
+if (cookieLang && LANGS.includes(cookieLang)) {
+	redirectLang = cookieLang;
+} else {
+	const prefLangs = getPreferableLangs(Astro.request).find((code) =>
+		LANGS.includes(code)
+	);
+	if (prefLangs) {
+		redirectLang = prefLangs;
+	}
+}
 
 if (redirectLang == "ru") {
 	redirectLang = "uk";

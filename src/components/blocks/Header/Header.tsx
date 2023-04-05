@@ -3,6 +3,9 @@ import { useScrollDirection } from "../../../hooks/useScrollDetect";
 import Link from "./Link";
 import type { HeaderType, NavigationType } from "./types";
 import { changeLang, concatPaths } from "../../../utils/url";
+import { useCallback } from "react";
+import cookie from "cookie";
+import { LANG } from "../../../constants/cookie";
 
 const TRANSLATE: { [lang: string]: { short: string; long: string; } } = {
   uk: {
@@ -65,6 +68,13 @@ function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationTy
 }
 
 function Languages({ lang, url, langs }: { lang: string; url: string; langs: Array<string> }) {
+
+  const onSetLang = useCallback((lang: string) => {
+    // const cookies = cookie.parse(document.cookie);
+    // cookies[LANG] = lang;
+    document.cookie = cookie.serialize(LANG, lang);
+  }, []);
+
   return <div className="relative group">
     <button className="flex items-baseline gap-x-1">
       <LangTranslate lang={lang} short />
@@ -73,7 +83,7 @@ function Languages({ lang, url, langs }: { lang: string; url: string; langs: Arr
       {
         langs?.map((lang) => (
           lang != 'ru' ? <li key={lang} className="text-center">
-            <a href={changeLang(url, lang)} className="flex items-baseline justify-center gap-x-1">
+            <a onClick={() => onSetLang(lang)} href={changeLang(url, lang)} className="flex items-baseline justify-center gap-x-1">
               <LangTranslate lang={lang} />
             </a>
           </li> : null

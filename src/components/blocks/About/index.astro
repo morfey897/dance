@@ -2,6 +2,9 @@
 import About from "./About";
 import type { AboutType } from "./types";
 import { getIndex } from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
+
+const { lang } = Astro.params;
 
 let contacts = [];
 try {
@@ -10,7 +13,25 @@ try {
 
 const indexAbout = getIndex(contacts);
 
-const props = { ...indexAbout?.frontmatter, bodyHTML: indexAbout?.compiledContent() } as AboutType;
+const fileProps = {
+  ...indexAbout?.frontmatter,
+  bodyHTML: indexAbout?.compiledContent(),
+} as AboutType;
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      about: { ...fileProps },
+    },
+  },
+  Astro.request
+);
+
+const props = {
+  ...fileProps,
+  ...translation?.about,
+};
 ---
 
 <About {...props} />

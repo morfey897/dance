@@ -10,6 +10,7 @@ import Gallery from "../../components/blocks/Gallary/index.astro";
 import Footer from "../../components/blocks/Footer/index.astro";
 import ClearAnchor from "../../components/elements/ClearAnchor";
 import { isAbsolutePath, concatPaths, normalizeURL } from "../../utils/url";
+import { getIndex } from "../../utils/md";
 import { getEnv } from "../../services/cloudflare";
 import { translateJSON } from "../../services/translate";
 
@@ -25,25 +26,27 @@ try {
   localBusiness = await Astro.glob("../../../content/local-business.md");
 } catch (e) {}
 
-const fileData = { ...((localBusiness || [])[0]?.frontmatter || {}) };
+const indexLocalBusiness = getIndex(localBusiness);
+const props = { ...indexLocalBusiness?.frontmatter };
 
-const translation = null;
-// await translateJSON(
-//   {
-//     target: lang,
-//     content: {
-//       title: fileData.title,
-//       description: fileData.description,
-//       address: fileData.address,
-//       payment: fileData.payment,
-//     },
-//   },
-//   Astro.request
-// );
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      localBusiness: {
+        title: props.title,
+        description: props.description,
+        address: props.address,
+        payment: props.payment,
+      },
+    },
+  },
+  Astro.request
+);
 
 const { title, description, image, address, phones, openingHours, payment } = {
-  ...fileData,
-  ...translation,
+  ...props,
+  ...translation?.localBusiness,
 } as any;
 
 const schema = {
