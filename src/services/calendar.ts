@@ -37,11 +37,12 @@ export async function events({ start: st, end: ed }: { start: string | Date; end
     const start = (typeof st === 'string' ? st : st.toISOString()).split("T")[0];
     const end = (typeof ed === 'string' ? ed : ed.toISOString()).split("T")[0];
 
-    if (!start || !end || !GOOGLE_SERVICE_ADDRESS) throw new Error('Undefined');
+    if (!start || !end || !GOOGLE_SERVICE_ADDRESS) throw new Error('Undefined env');
     const startDateTime = `${start}T00:00:01Z`;
     const endDateTime = `${end}T23:59:59Z`;
 
     const authorization = await getAccessToken(GOOGLE_SERVICE_ADDRESS, SCOPES, undefined, await getKV(request));
+    if (!authorization) throw new Error('Undefined authorization');
 
     const googleUrl = new URL(`https://www.googleapis.com/calendar/v3/calendars/${GOOGLE_CALENDAR_ID}/events`);
     googleUrl.searchParams.append('timeMin', startDateTime);

@@ -3,11 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "astro build",
-    "node": "concurrently \"kill-port 5000\" \"run-s node:*\"",
-    "node:server": "node node.js --port 5000",
-    "start": "concurrently \"kill-port 3000 5000\" \"run-p start:*\"",
-    "start:node": "node node.js --port 5000",
-    "start:astro": "astro dev --port 3000",
+    "start": "astro dev --port 3000",
     "preview": "concurrently \"run-s preview:*\"",
     "preview:build": "astro build",
     "preview:wrangler": "concurrently \"kill-port 8788\" \"wrangler pages dev ./dist --local --persist --port 8788 --kv DANCE_KV --binding LANGS=uk,en,ru --compatibility-flag streams_enable_constructors\"",

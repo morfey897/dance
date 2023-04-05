@@ -13,7 +13,9 @@ export async function translate({ target, source = 'uk', content }: { target: st
   const { GOOGLE_PROJECT_ID, GOOGLE_SERVICE_ADDRESS } = getEnv(request);
   try {
 
+    if (!GOOGLE_SERVICE_ADDRESS) throw new Error('Undefined env');
     const authorization = await getAccessToken(GOOGLE_SERVICE_ADDRESS, SCOPES, undefined, await getKV(request));
+    if (!authorization) throw new Error('Undefined authorization');
     const googleUrl = new URL(`https://translation.googleapis.com/v3/projects/${GOOGLE_PROJECT_ID}:translateText`);
 
     const translateResponse = await fetch(googleUrl, {
@@ -48,7 +50,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
     }
     return to;
   }, { toTranslate: [], indexes: new Map<number, number>() });
-  const translation = await translate({target, source, content: toTranslate}, request);
+  const translation = await translate({ target, source, content: toTranslate }, request);
 
   if (!translation) return null;
 
