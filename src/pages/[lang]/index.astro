@@ -13,6 +13,7 @@ import { isAbsolutePath, concatPaths, normalizeURL } from "../../utils/url";
 import { getIndex } from "../../utils/md";
 import { getEnv } from "../../services/cloudflare";
 import { translateJSON } from "../../services/translate";
+import { LANG } from "../../constants/cookie";
 
 const { lang } = Astro.params;
 const { LANGS } = getEnv(Astro.request);
@@ -20,6 +21,8 @@ if (!LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
 
 const newUrl = normalizeURL(Astro.url);
 if (newUrl != Astro.url.toString()) return Astro.redirect(newUrl, 301);
+
+Astro.cookies.set(LANG, lang);
 
 let localBusiness = [];
 try {
