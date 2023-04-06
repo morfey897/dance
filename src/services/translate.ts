@@ -83,45 +83,44 @@ export async function translateJSON({ target, source = 'uk', content }: { target
     const str = values[index];
     if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
       const base64 = keyToBase64(str);
-  //     // const trans = await KV.get(`${KEY}${base64}`);
-  //     // if (!trans) {
+      const trans = await KV.get(`${KEY}${base64}`);
+      if (!trans) {
         toTranslate.add(index, str);
-  //     // } else {
-  //     //   translated.add(index, trans);
-  //     // }
+      } else {
+        translated.add(index, trans);
+      }
     }
   }
   const toTranslateValues = toTranslate.values;
   const translation = await translate({ target, source, content: toTranslateValues }, request);
 
-  return content;
   if (!translation) return null;
 
-  // for (let index = 0; index < translation.length; index++) {
-  //   const trans = translation[index];
-  //   if (trans) {
-  //     const str = toTranslateValues[index];
-  //     const base64 = keyToBase64(str);
-  //     await KV.put(`${KEY}${base64}`, trans);
-  //   }
-  // }
+  for (let index = 0; index < translation.length; index++) {
+    const trans = translation[index];
+    if (trans) {
+      const str = toTranslateValues[index];
+      const base64 = keyToBase64(str);
+      await KV.put(`${KEY}${base64}`, trans);
+    }
+  }
 
-  // const result: { [key: string]: any } = flatten.unflatten(keys.reduce((obj, key, index) => {
-  //   let value = values[index];
+  const result: { [key: string]: any } = flatten.unflatten(keys.reduce((obj, key, index) => {
+    let value = values[index];
 
-  //   const toTranslateIndex = toTranslate.getIndex(index);
-  //   if (typeof toTranslateIndex === 'number') {
-  //     value = translation[toTranslateIndex];
-  //   } else {
-  //     const translatedValue = translated.getValue(index);
-  //     if (typeof translatedValue === 'string') {
-  //       value = translatedValue;
-  //     }
-  //   }
-  //   obj[key] = value;
-  //   return obj;
-  // }, {}));
+    const toTranslateIndex = toTranslate.getIndex(index);
+    if (typeof toTranslateIndex === 'number') {
+      value = translation[toTranslateIndex];
+    } else {
+      const translatedValue = translated.getValue(index);
+      if (typeof translatedValue === 'string') {
+        value = translatedValue;
+      }
+    }
+    obj[key] = value;
+    return obj;
+  }, {}));
 
 
-  // return result;
+  return result;
 }
