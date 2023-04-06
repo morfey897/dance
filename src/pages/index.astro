@@ -22,5 +22,7 @@ if (cookieLang && LANGS.includes(cookieLang)) {
 if (redirectLang == "ru") {
 	redirectLang = "uk";
 }
+// TODO HARD REDIRECT
+redirectLang = "uk";
 return Astro.redirect(`/${redirectLang}`, 301);
 ---
