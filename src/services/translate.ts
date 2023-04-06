@@ -76,23 +76,23 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   const keys = data.map(([key]) => key);
   const values: Array<string | number> = data.map(([_, value]) => value);
 
-  const toTranslate = new TranslationList();
-  const translated = new TranslationList();
+  // const toTranslate = new TranslationList();
+  // const translated = new TranslationList();
 
-  for (let index = 0; index < values.length; index++) {
-    const str = values[index];
-    if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
-      const base64 = keyToBase64(str);
-      // const trans = await KV.get(`${KEY}${base64}`);
-      // if (!trans) {
-        toTranslate.add(index, str);
-      // } else {
-      //   translated.add(index, trans);
-      // }
-    }
-  }
-  const toTranslateValues = toTranslate.values;
-  const translation = await translate({ target, source, content: toTranslateValues }, request);
+  // for (let index = 0; index < values.length; index++) {
+  //   const str = values[index];
+  //   if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
+  //     const base64 = keyToBase64(str);
+  //     // const trans = await KV.get(`${KEY}${base64}`);
+  //     // if (!trans) {
+  //       toTranslate.add(index, str);
+  //     // } else {
+  //     //   translated.add(index, trans);
+  //     // }
+  //   }
+  // }
+  // const toTranslateValues = toTranslate.values;
+  const translation = await translate({ target, source, content: ['Це тест', "Тест тексту"] }, request);
 
   return content;
   if (!translation) return null;
