@@ -5,6 +5,7 @@ import { LANG } from "../constants/cookie";
 
 const cookieLang = Astro.cookies.get(LANG)?.value;
 
+console.log('COOKIE_LANG', cookieLang);
 const { LANGS } = getEnv(Astro.request);
 
 let redirectLang = LANGS[0];
@@ -22,5 +23,5 @@ if (cookieLang && LANGS.includes(cookieLang)) {
 if (redirectLang == "ru") {
 	redirectLang = "uk";
 }
-return Astro.redirect(`/${redirectLang}`, 301);
+return Astro.redirect(`/${redirectLang}`, 302);
 ---
