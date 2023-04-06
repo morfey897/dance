@@ -28,7 +28,7 @@ function GridHeader({ timeLabel, state, onSelectDate }: { timeLabel: string; sta
               {format(date, "d MMM", { locale: state.locale })}
             </span>
           </p>
-          <button onClick={() => onSelectDate(date)} className={clsx("block md:hidden text-xs font-light text-center py-1 border-2 rounded-full",
+          <button aria-label={'select date'} onClick={() => onSelectDate(date)} className={clsx("block md:hidden text-xs font-light text-center py-1 border-2 rounded-full",
             today && 'bg-pnk-100 !border-pnk-100',
             (today && !isActive) && 'opacity-50',
             past ? 'border-white' : 'border-pnk-200',

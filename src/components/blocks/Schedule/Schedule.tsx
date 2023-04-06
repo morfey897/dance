@@ -86,7 +86,7 @@ const fetcher = (url: string) => fetch(url)
     return list
   });
 
-function Schedule({ lang, headline, subheadline, anchor, timeLabel, bodyHTML }: ScheduleType) {
+function Schedule({ lang, headline, subheadline, anchor, timeLabel, todayLabel, bodyHTML }: ScheduleType) {
 
   const [state, dispatch] = useReducer(reducer, { lang }, init);
   const { data: events, error, isLoading } = useSWR(`/api/events.json?start=${toDate(state.dates[0])}&end=${toDate(state.dates[state.dates.length - 1])}`, fetcher, {
@@ -101,6 +101,7 @@ function Schedule({ lang, headline, subheadline, anchor, timeLabel, bodyHTML }: 
     <ChangeDate
       className="mt-12"
       state={state}
+      todayLabel={todayLabel} 
       onNext={() => dispatch({ type: 'inc' })}
       onPrev={() => dispatch({ type: 'dec' })}
       onNow={() => dispatch({ type: 'now' })} />

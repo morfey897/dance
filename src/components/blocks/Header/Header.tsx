@@ -67,14 +67,14 @@ function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationTy
 function Languages({ lang, url, langs }: { lang: string; url: string; langs: Array<string> }) {
 
   return <div className="relative group">
-    <button className="flex items-baseline gap-x-1">
+    <button aria-label={'language'} className="flex items-baseline gap-x-1">
       <LangTranslate lang={lang} short />
     </button>
     <ul className="absolute top-full right-0 -translate-y-2 transition-all invisible opacity-0 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 bg-black bg-opacity-60 p-2.5 space-y-4 rounded-sm">
       {
         langs?.map((lang) => (
           lang != 'ru' ? <li key={lang} className="text-center">
-            <a href={changeLang(url, lang)} className="flex items-baseline justify-center gap-x-1">
+            <a aria-label={lang} href={changeLang(url, lang)} className="flex items-baseline justify-center gap-x-1">
               <LangTranslate lang={lang} />
             </a>
           </li> : null
@@ -93,12 +93,12 @@ function Header({ navigation, url, lang, langs }: HeaderType) {
   })}>
     <div className="max-w-screen-xl mx-auto py-2.5 px-4">
       <nav className="flex items-center justify-between">
-        <a href={concatPaths("/", lang)}>
+        <a aria-label={'home page'} href={concatPaths("/", lang)}>
           <img loading="lazy" src='/logo.png' alt='' className={clsx("h-[40px]")} />
         </a>
         <div className="flex items-center gap-x-1 flex-row-reverse md:flex-row">
           <div className="block md:hidden">
-            <button className="bg-pnk-200 rounded-full h-[30px] w-[30px] text-center group relative">
+            <button aria-label={'menu'}className="bg-pnk-200 rounded-full h-[30px] w-[30px] text-center group relative">
               <svg className="m-auto" width="20" height="11" viewBox="0 0 20 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <line y1="0.5" x2="15" y2="0.5" stroke="white" />
                 <line y1="5.5" x2="10" y2="5.5" stroke="white" />

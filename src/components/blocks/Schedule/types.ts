@@ -35,4 +35,5 @@ export type DateAction = {
 
 export interface ScheduleType extends BlockType {
   timeLabel: string;
+  todayLabel: string;
 }

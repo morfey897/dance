@@ -15,14 +15,14 @@ const { LANGS } = getEnv(Astro.request);
 
 let lang = LANGS[0];
 if (cookieLang && LANGS.includes(cookieLang)) {
-	lang = cookieLang;
+  lang = cookieLang;
 } else {
-	const prefLangs = getPreferableLangs(Astro.request).find((code) =>
-		LANGS.includes(code)
-	);
-	if (prefLangs) {
-		lang = prefLangs;
-	}
+  const prefLangs = getPreferableLangs(Astro.request).find((code) =>
+    LANGS.includes(code)
+  );
+  if (prefLangs) {
+    lang = prefLangs;
+  }
 }
 
 let notFound = [];
@@ -40,9 +40,9 @@ const indexLocalBusiness = getIndex(localBusiness);
 
 const indexProps = {
   ...indexNotFound?.frontmatter,
-  bodyHTML: indexNotFound?.compiledContent()
+  bodyHTML: indexNotFound?.compiledContent(),
 };
-const localBusinessProps = {...indexLocalBusiness?.frontmatter};
+const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
 const translation = await translateJSON(
   {
@@ -69,8 +69,8 @@ const { headline, cta, title, description, image, bodyHTML } = {
 
 const localBuiseness = {
   ...localBusinessProps,
-  ...translation?.localBusiness
-}
+  ...translation?.localBusiness,
+};
 ---
 
 <Layout
@@ -91,6 +91,7 @@ const localBuiseness = {
           <Fragment set:html={bodyHTML} />
         </div>
         <a
+          aria-label={"home page"}
           href={concatPaths(cta.href || "/", lang)}
           class="group space-x-2 block w-fit m-auto mt-7 text-sm md:text-lg text-center border-2 border-pnk-200 rounded-3xl py-2 px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 active:border-pnk-100 active:shadow active:shadow-pnk-100"
         >

@@ -19,7 +19,7 @@ function About({ headline, subheadline, anchor, image, cta, bodyHTML }: AboutTyp
         {subheadline && <p>{subheadline}</p>}
         <RenderHTML>{bodyHTML}</RenderHTML>
       </div>
-      {cta && <a href={cta.href} className="group space-x-2 block w-fit m-auto mt-7 text-sm md:text-lg text-center border-2 border-pnk-200 rounded-3xl py-2 px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 active:border-pnk-100 active:shadow active:shadow-pnk-100">
+      {cta && <a aria-label={cta.label} href={cta.href} className="group space-x-2 block w-fit m-auto mt-7 text-sm md:text-lg text-center border-2 border-pnk-200 rounded-3xl py-2 px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 active:border-pnk-100 active:shadow active:shadow-pnk-100">
         <span className="inline-block">{cta.label}</span>
         <svg className="animate-bounce inline-block fill-pnk-100 group-hover:animate-none" height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 512 512" xmlSpace="preserve">
