@@ -29,6 +29,7 @@
     "@astrojs/mdx": "^0.16.0",
     "@astrojs/react": "^2.0.0",
     "@astrojs/tailwind": "^3.0.0",
+    "@cfworker/base64url": "^1.12.5",
     "@fontsource/comfortaa": "^4.5.11",
     "@googlemaps/markerwithlabel": "^2.0.14",
     "@googlemaps/react-wrapper": "^1.1.35",

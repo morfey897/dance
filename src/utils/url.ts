@@ -1,3 +1,4 @@
+import { encode } from '@cfworker/base64url';
 import { parse } from "accept-language-parser";
 const LANG_REG = /^\/([a-z]{2})(?:\/|\?|$)/;
 
@@ -50,8 +51,7 @@ export function concatPaths(origin: string, ...urls: string[]) {
 
 export function toBase64(json: any) {
   const jsonString = typeof json === 'object' ? JSON.stringify(json) : String(json);
-  const btyeArray = Buffer.from(jsonString);
-  return btyeArray.toString("base64");
+  return encode(jsonString);
 }
 
 export function toBase64URL(json: any) {
