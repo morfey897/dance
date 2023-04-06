@@ -82,7 +82,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   for (let index = 0; index < values.length; index++) {
     const str = values[index];
     if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
-      const base64 = toBase64URL(str);
+      const base64 = keyToBase64(str);
   //     // const trans = await KV.get(`${KEY}${base64}`);
   //     // if (!trans) {
         toTranslate.add(index, str);
