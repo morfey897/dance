@@ -33,10 +33,7 @@ const translation = await translateJSON(
 );
 
 const props: FooterType = {
-  navigation: {
-    ...footer,
-    ...translation?.footer,
-  },
+  navigation: translation?.footer || footer,
   ...localBusinessProps,
   ...translation?.localBusiness,
 };

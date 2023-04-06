@@ -27,10 +27,7 @@ const translation = await translateJSON(
 );
 
 const props: HeaderType = {
-  navigation: {
-    ...header,
-    ...translation?.header,
-  },
+  navigation: translation?.header || header,
   url: Astro.url.href,
   lang,
   langs: getEnv(Astro.request).LANGS,

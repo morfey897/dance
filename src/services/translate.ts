@@ -3,7 +3,10 @@
 import { getEnv, getKV } from "./cloudflare";
 import { getAccessToken } from "./auth";
 import flatten from "flat";
-import { encode } from '@cfworker/base64url';
+import { base64url } from 'rfc4648';
+function encode(s) {
+    return base64url.stringify(new TextEncoder().encode(s), { pad: false });
+}
 
 const URL_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-\#\?=&]+$/i;
 const NUMBER_REG = /^[+-]?\d*\.?\d*$/i;
@@ -42,8 +45,6 @@ class TranslationList {
   }
 
 }
-
-const keyToBase64 = (str: string) => encode(str.replace(/[\s\-_\.,;\d]/g, ""));
 
 export async function translate({ target, source = 'uk', content }: { target: string; source?: string; content: Array<string> }, request: Request): Promise<Array<string> | null> {
   if (!source || !target || source === target || !content || content.length == 0) return content;
@@ -91,10 +92,10 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   for (let index = 0; index < values.length; index++) {
     const str = values[index];
     if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str) && !NUMBER_REG.test(str)) {
-      const base64 = keyToBase64(str);
+      const base64 = encode(str.replace(/[\s\-_\.,;\d]/g, ""));
       const trans = await KV.get(`${KEY}${base64}`);
       if (!trans) {
-        toTranslate.add(index, str);
+        toTranslate.add(index, str, base64);
       } else {
         translated.add(index, trans);
       }
