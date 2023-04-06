@@ -32,7 +32,7 @@ try {
 const indexLocalBusiness = getIndex(localBusiness);
 const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
-const translation = await translateJSON_test(
+const translation = await translateJSON(
   {
     target: lang,
     content: {

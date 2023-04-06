@@ -5,11 +5,10 @@ import { getAccessToken } from "./auth";
 import flatten from "flat";
 import { base64url } from 'rfc4648';
 function encode(s) {
-    return base64url.stringify(new TextEncoder().encode(s), { pad: false });
+  return base64url.stringify(new TextEncoder().encode(s), { pad: false });
 }
 
 const URL_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-\#\?=&]+$/i;
-const NUMBER_REG = /^[+-]?\d*\.?\d*$/i;
 
 const SCOPES = ["https://www.googleapis.com/auth/cloud-platform"];
 
@@ -77,10 +76,6 @@ export async function translate({ target, source = 'uk', content }: { target: st
 }
 
 export async function translateJSON({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } | string | number } }, request: Request): Promise<any | null> {
-  return content;
-}
-
-export async function translateJSON_test({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } | string | number } }, request: Request): Promise<any | null> {
   if (!source || !target || source === target) return content;
 
   const KEY = `TRANSLATE_${target}`;
@@ -95,19 +90,21 @@ export async function translateJSON_test({ target, source = 'uk', content }: { t
 
   for (let index = 0; index < values.length; index++) {
     const str = values[index];
-    if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str) && !NUMBER_REG.test(str)) {
-      const base64 = encode(str.replace(/[\s\-_\.,;\d]/g, ""));
-      const trans = await KV.get(`${KEY}${base64}`);
-      if (!trans) {
-        toTranslate.add(index, str, base64);
-      } else {
-        translated.add(index, trans);
+    if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str)) {
+      const token = str.replace(/[\s\-_\.,;\d]/g, "");
+      if (token.length) {
+        const base64 = encode(token);
+        const trans = await KV.get(`${KEY}${base64}`);
+        if (!trans) {
+          toTranslate.add(index, str, base64);
+        } else {
+          translated.add(index, trans);
+        }
       }
     }
   }
   const toTranslateValues = toTranslate.values;
   const toTranslateBase64s = toTranslate.base64s;
-  KV.put('TO_TRANSLATE', String(toTranslateValues.length));
   const translation = await translate({ target, source, content: toTranslateValues }, request);
 
   if (!translation) return null;
