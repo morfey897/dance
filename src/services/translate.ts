@@ -70,29 +70,29 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   if (!source || !target || source === target) return content;
 
   const KEY = `TRANSLATE_${target}`;
-  // const KV = await getKV(request);
+  const KV = await getKV(request);
 
-  // const data = Object.entries(flatten(content));
-  // const keys = data.map(([key]) => key);
-  // const values: Array<string | number> = data.map(([_, value]) => value);
+  const data = Object.entries(flatten(content));
+  const keys = data.map(([key]) => key);
+  const values: Array<string | number> = data.map(([_, value]) => value);
 
-  // const toTranslate = new TranslationList();
-  // const translated = new TranslationList();
+  const toTranslate = new TranslationList();
+  const translated = new TranslationList();
 
-  // for (let index = 0; index < values.length; index++) {
-  //   const str = values[index];
-  //   if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
-  //     const base64 = keyToBase64(str);
-  //     // const trans = await KV.get(`${KEY}${base64}`);
-  //     // if (!trans) {
-  //       toTranslate.add(index, str);
-  //     // } else {
-  //     //   translated.add(index, trans);
-  //     // }
-  //   }
-  // }
-  // const toTranslateValues = toTranslate.values;
-  const translation = await translate({ target, source, content: ['Це тест', "Тест тексту"] }, request);
+  for (let index = 0; index < values.length; index++) {
+    const str = values[index];
+    if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
+      const base64 = keyToBase64(str);
+      // const trans = await KV.get(`${KEY}${base64}`);
+      // if (!trans) {
+        toTranslate.add(index, str);
+      // } else {
+      //   translated.add(index, trans);
+      // }
+    }
+  }
+  const toTranslateValues = toTranslate.values;
+  const translation = await translate({ target, source, content: toTranslateValues }, request);
 
   return content;
   if (!translation) return null;
