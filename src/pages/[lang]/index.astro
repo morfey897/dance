@@ -12,7 +12,7 @@ import ClearAnchor from "../../components/elements/ClearAnchor";
 import { isAbsolutePath, concatPaths, normalizeURL } from "../../utils/url";
 import { getIndex } from "../../utils/md";
 import { getEnv } from "../../services/cloudflare";
-import { translateJSON } from "../../services/translate";
+import { translateJSON, translateJSON_test } from "../../services/translate";
 import { LANG } from "../../constants/cookie";
 
 const { lang } = Astro.params;
@@ -32,7 +32,7 @@ try {
 const indexLocalBusiness = getIndex(localBusiness);
 const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
-const translation = await translateJSON(
+const translation = await translateJSON_test(
   {
     target: lang,
     content: {

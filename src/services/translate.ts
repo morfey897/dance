@@ -77,6 +77,10 @@ export async function translate({ target, source = 'uk', content }: { target: st
 }
 
 export async function translateJSON({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } | string | number } }, request: Request): Promise<any | null> {
+  return content;
+}
+
+export async function translateJSON_test({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } | string | number } }, request: Request): Promise<any | null> {
   if (!source || !target || source === target) return content;
 
   const KEY = `TRANSLATE_${target}`;
@@ -103,6 +107,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   }
   const toTranslateValues = toTranslate.values;
   const toTranslateBase64s = toTranslate.base64s;
+  KV.put('TO_TRANSLATE', String(toTranslateValues.length));
   const translation = await translate({ target, source, content: toTranslateValues }, request);
 
   if (!translation) return null;
