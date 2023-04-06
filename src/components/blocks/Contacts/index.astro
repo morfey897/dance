@@ -3,6 +3,9 @@ import { getEnv } from "../../../services/cloudflare";
 import Contacts from "./Contacts";
 import type { ContactsType } from "./types";
 import { getIndex } from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
+
+const { lang } = Astro.params;
 
 let contacts = [];
 let localBusiness = [];
@@ -13,11 +16,31 @@ try {
   localBusiness = await Astro.glob("../../../../content/local-business.md");
 } catch (e) {}
 const indexContacts = getIndex(contacts);
+const indexLocalBusiness = getIndex(localBusiness);
+
+const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
+
+const contactsProps = {
+  ...indexContacts?.frontmatter,
+  bodyHTML: indexContacts?.compiledContent(),
+};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      localBusiness: localBusinessProps,
+      contacts: contactsProps
+    },
+  },
+  Astro.request
+);
 
 const props = {
-  ...indexContacts?.frontmatter,
-  ...(localBusiness || [])[0]?.frontmatter,
-  bodyHTML: indexContacts?.compiledContent(),
+  ...localBusinessProps,
+  ...translation?.localBusiness,
+  ...contactsProps,
+  ...translation?.contacts,
   google_api_key: getEnv(Astro.request).GOOGLE_API_KEY,
 } as ContactsType;
 ---

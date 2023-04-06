@@ -13,24 +13,23 @@ try {
 
 const indexAbout = getIndex(contacts);
 
-const fileProps = {
+const aboutProps = {
   ...indexAbout?.frontmatter,
   bodyHTML: indexAbout?.compiledContent(),
 } as AboutType;
 
-const translation = null;
-// await translateJSON(
-//   {
-//     target: lang,
-//     content: {
-//       about: { ...fileProps },
-//     },
-//   },
-//   Astro.request
-// );
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      about: aboutProps,
+    },
+  },
+  Astro.request
+);
 
 const props = {
-  ...fileProps,
+  ...aboutProps,
   ...translation?.about,
 };
 ---

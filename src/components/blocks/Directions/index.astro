@@ -2,7 +2,9 @@
 import Directions from "./Directions";
 import type { DirectionsType } from "./types";
 import { getIndex, getList, sortComparator, getFileName } from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
 
+const { lang } = Astro.params;
 
 let directions = [];
 try {
@@ -25,11 +27,27 @@ const childrenList = list.sort(sortComparator).map((data) => {
   };
 });
 
-const props = {
+const dirrectionsProps = {
   ...indexDirection?.frontmatter,
   bodyHTML: indexDirection?.compiledContent(),
   list: childrenList,
 } as DirectionsType;
+
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      dirrections: dirrectionsProps,
+    },
+  },
+  Astro.request
+);
+
+const props = {
+  ...dirrectionsProps,
+  ...translation?.dirrections,
+};
 ---
 
 <Directions {...props} client:load />
