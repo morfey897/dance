@@ -24,13 +24,13 @@ function Directions({ headline, subheadline, anchor, list, bodyHTML }: Direction
     </Headline>
     <div className="flex mt-12 flex-col lg:flex-row">
       <div className="grow w-full">
-        <ol className="lg:min-h-[500px]">
+        <ul className="lg:min-h-[500px]">
           {list?.map((item: DirectionType, index: number) => (
             <DirectionItem key={`direction-${item.uid}`} item={item} index={index} activePrev={active.prev} activeCur={active.cur} onClick={() => {
               setActive(({ cur }) => ({ prev: cur, cur: item.uid }));
             }} />
           ))}
-        </ol>
+        </ul>
       </div>
       <div className="grow w-full mt-4 lg:mt-0 relative min-h-[217px] md:min-h-[350px] lg:min-h-auto overflow-hidden">
         {list?.map((item) => (
