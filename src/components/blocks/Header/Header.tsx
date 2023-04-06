@@ -3,6 +3,7 @@ import { useScrollDirection } from "../../../hooks/useScrollDetect";
 import Link from "./Link";
 import type { HeaderType, NavigationType } from "./types";
 import { changeLang, concatPaths } from "../../../utils/url";
+import { useMemo } from "react";
 
 const TRANSLATE: { [lang: string]: { short: string; long: string; } } = {
   uk: {
@@ -48,12 +49,13 @@ const LangTranslate = ({ lang, short }: { lang: string; short?: boolean }) => {
 }
 
 function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationType) {
+
   return <ul className={mobile ?
     "absolute invisible opacity-0 -translate-y-2 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 bg-black bg-opacity-60 p-2.5 right-0 top-8 space-y-4 rounded-sm" :
     "space-x-4"
   }>
     {
-      navigation?.map((link) => (
+      (Array.isArray(navigation) ? navigation : Object.values(navigation)).map((link) => (
         <li key={`${link.href}`} className='inline-block'>
           <Link {...link} className={mobile ?
             'text-sm text-center py-2 px-4' :
@@ -98,7 +100,7 @@ function Header({ navigation, url, lang, langs }: HeaderType) {
         </a>
         <div className="flex items-center gap-x-1 flex-row-reverse md:flex-row">
           <div className="block md:hidden">
-            <button aria-label={'menu'}className="bg-pnk-200 rounded-full h-[30px] w-[30px] text-center group relative">
+            <button aria-label={'menu'} className="bg-pnk-200 rounded-full h-[30px] w-[30px] text-center group relative">
               <svg className="m-auto" width="20" height="11" viewBox="0 0 20 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <line y1="0.5" x2="15" y2="0.5" stroke="white" />
                 <line y1="5.5" x2="10" y2="5.5" stroke="white" />

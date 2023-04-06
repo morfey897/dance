@@ -10,7 +10,7 @@ function Footer({ socials, address, navigation }: FooterType) {
         <p className="text-xs">© {new Date().getFullYear()} {address?.place || ''}</p>
         <ul className="gap-4 flex flex-wrap">
           {
-            navigation?.map((link) => (<li key={link.href}><Link {...link} /></li>))
+            (Array.isArray(navigation) ? navigation : Object.values(navigation)).map((link) => (<li key={link.href}><Link {...link} /></li>))
           }
         </ul>
         <ul className="gap-4 flex flex-wrap">

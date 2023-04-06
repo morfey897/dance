@@ -2,7 +2,7 @@
 
 import { getEnv, getKV } from "./cloudflare";
 import { getAccessToken } from "./auth";
-import flatten from "flat";
+import { flatten, unflatten } from "flat";
 import { base64url } from 'rfc4648';
 function encode(s) {
   return base64url.stringify(new TextEncoder().encode(s), { pad: false });
@@ -75,68 +75,82 @@ export async function translate({ target, source = 'uk', content }: { target: st
   }
 }
 
-export async function translateJSON({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } | string | number } }, request: Request): Promise<any | null> {
+export async function translateJSON({ target, source = 'uk', content }: { target: string; source?: string; content: { [key: string]: { [key: string]: any } } }, request: Request): Promise<any | null> {
   if (!source || !target || source === target) return content;
 
-  const KEY = `TRANSLATE_${target}`;
   const KV = await getKV(request);
 
-  const data = Object.entries(flatten(content));
-  const keys = data.map(([key]) => key);
-  const values: Array<string | number> = data.map(([_, value]) => value);
+  const list = Object.entries(content);
+  const len = list.length;
+  const result = {};
+  for (let i = 0; i < len; i++) {
+    const [file, content] = list[i];
 
-  const toTranslate = new TranslationList();
-  const translated = new TranslationList();
+    let storedData: Object;
+    try {
+      let d = await KV.get(`TRANSLATE_${target}_${file}`);
+      storedData = typeof d === 'string' ? JSON.parse(d) : {};
+    } catch (error) {
+      storedData = {};
+    }
 
-  const startAt = new Date().getTime();
-  for (let index = 0; index < values.length; index++) {
-    const str = values[index];
-    if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str)) {
-      const token = str.replace(/[\s\d\-\+\*\\\=_\.,;:\!\?@]/g, "");
-      if (token.length) {
-        const base64 = encode(token);
-        const trans = await KV.get(`${KEY}${base64}`);
-        if (!trans) {
-          toTranslate.add(index, str, base64);
-        } else {
-          translated.add(index, trans);
+    const data = Object.entries(flatten(content));
+    const keys = data.map(([key]) => key);
+    const values: Array<string | number> = data.map(([_, value]) => value);
+
+    const toTranslate = new TranslationList();
+    const translated = new TranslationList();
+
+    for (let index = 0; index < values.length; index++) {
+      const str = values[index];
+      if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str)) {
+        const token = str.replace(/[\s\d\-\+\*\\\=_\.,;:\!\?@]/g, "");
+        if (token.length) {
+          const base64 = encode(token).slice(0, 128);
+          const trans = storedData[base64];
+          if (!trans) {
+            toTranslate.add(index, str, base64);
+          } else {
+            translated.add(index, trans);
+          }
         }
       }
     }
-  }
 
-  await KV.put(`TRANSLATE_${target}BASE64_${toTranslate.values.length}`, `Time: ${new Date().getTime() - startAt}`);
-  return content;
-  const toTranslateValues = toTranslate.values;
-  const toTranslateBase64s = toTranslate.base64s;
-  const translation = await translate({ target, source, content: toTranslateValues }, request);
+    const toTranslateValues = toTranslate.values;
+    const toTranslateBase64s = toTranslate.base64s;
+    const translation = await translate({ target, source, content: toTranslateValues }, request);
 
-  if (!translation) return null;
-
-  for (let index = 0; index < translation.length; index++) {
-    const trans = translation[index];
-    if (trans) {
-      const base64 = toTranslateBase64s[index];
-      await KV.put(`${KEY}${base64}`, trans);
-    }
-  }
-
-  const result: { [key: string]: any } = flatten.unflatten(keys.reduce((obj, key, index) => {
-    let value = values[index];
-
-    const toTranslateIndex = toTranslate.getIndex(index);
-    if (typeof toTranslateIndex === 'number') {
-      value = translation[toTranslateIndex];
-    } else {
-      const translatedValue = translated.getValue(index);
-      if (typeof translatedValue === 'string') {
-        value = translatedValue;
+    if (translation) {
+      for (let index = 0; index < translation.length; index++) {
+        const trans = translation[index];
+        if (trans) {
+          const base64 = toTranslateBase64s[index];
+          storedData[base64] = trans;
+        }
       }
+      try {
+        await KV.put(`TRANSLATE_${target}_${file}`, JSON.stringify(storedData));
+      } catch (error) { }
     }
-    obj[key] = value;
-    return obj;
-  }, {}));
 
+    result[file] = unflatten(keys.reduce((obj, key, index) => {
+      let value = values[index];
+
+      const toTranslateIndex = toTranslate.getIndex(index);
+      if (typeof toTranslateIndex === 'number') {
+        value = translation[toTranslateIndex];
+      } else {
+        const translatedValue = translated.getValue(index);
+        if (typeof translatedValue === 'string') {
+          value = translatedValue;
+        }
+      }
+      obj[key] = value;
+      return obj;
+    }, {}));
+
+  }
 
   return result;
 }

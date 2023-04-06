@@ -1,6 +1,6 @@
 
 export type HeaderType = {
-  navigation: Array<{ href: string; label: string; }>;
+  navigation: { [key: number]: { href: string; label: string; } } | Array<{ href: string; label: string; }>;
   url: string;
   lang: string;
   langs: Array<string>;
