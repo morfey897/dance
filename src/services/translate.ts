@@ -5,36 +5,45 @@ import { getAccessToken } from "./auth";
 import flatten from "flat";
 import { encode } from '@cfworker/base64url';
 
-
-const IMG_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-]+\.(:?png|jpe?g|avif|webp|svg)$/;
+const URL_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-\#\?=&]+$/i;
+const NUMBER_REG = /^[+-]?\d*\.?\d*$/i;
 
 const SCOPES = ["https://www.googleapis.com/auth/cloud-platform"];
 
 class TranslationList {
-  #list:Array<string> = [];
+  #list: Array<string> = [];
   #indexes = new Map<number, number>();
-  
-  add(index: number, str: string) {
+  #base64: Array<string> = [];
+
+  add(index: number, str: string, base64?: string) {
     let newIndex = this.#list.push(str) - 1;
     this.#indexes.set(index, newIndex);
+    if (base64) {
+      this.#base64[newIndex] = base64;
+    }
   };
 
-  getValue(index: number):string | undefined {
+  getValue(index: number): string | undefined {
     let innerIndex = this.#indexes.get(index);
     return this.#list[innerIndex];
   }
 
-  getIndex(index: number):number | undefined {
+  getIndex(index: number): number | undefined {
     return this.#indexes.get(index);
   }
 
-  get values(){ 
+  get values() {
     return [...this.#list];
+  }
+
+
+  get base64s() {
+    return [...this.#base64];
   }
 
 }
 
-const keyToBase64 = (str:string) => encode(str.replace(/[\s\-_\.,;\d]/g, "")); 
+const keyToBase64 = (str: string) => encode(str.replace(/[\s\-_\.,;\d]/g, ""));
 
 export async function translate({ target, source = 'uk', content }: { target: string; source?: string; content: Array<string> }, request: Request): Promise<Array<string> | null> {
   if (!source || !target || source === target || !content || content.length == 0) return content;
@@ -81,7 +90,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
 
   for (let index = 0; index < values.length; index++) {
     const str = values[index];
-    if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
+    if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str) && !NUMBER_REG.test(str)) {
       const base64 = keyToBase64(str);
       const trans = await KV.get(`${KEY}${base64}`);
       if (!trans) {
@@ -92,6 +101,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
     }
   }
   const toTranslateValues = toTranslate.values;
+  const toTranslateBase64s = toTranslate.base64s;
   const translation = await translate({ target, source, content: toTranslateValues }, request);
 
   if (!translation) return null;
@@ -99,8 +109,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   for (let index = 0; index < translation.length; index++) {
     const trans = translation[index];
     if (trans) {
-      const str = toTranslateValues[index];
-      const base64 = keyToBase64(str);
+      const base64 = toTranslateBase64s[index];
       await KV.put(`${KEY}${base64}`, trans);
     }
   }

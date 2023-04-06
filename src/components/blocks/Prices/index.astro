@@ -2,6 +2,9 @@
 import type { MarkdownInstance } from "astro";
 import Prices from "./Prices";
 import type { PricesType } from "./types";
+import { translateJSON } from "../../../services/translate";
+
+const { lang } = Astro.params;
 
 const sortComparator = (a, b) => {
   const aOrder = parseInt(a.frontmatter["priority"]);
@@ -77,10 +80,25 @@ prices = prices
 const indexPrice = prices.find(({ group }) => group[0] === "index");
 const items = prepareGroups(prices.filter(({ group }) => group[0] !== "index"));
 
-const props = {
+const pricesProps = {
   ...indexPrice?.frontmatter,
   list: items,
   bodyHTML: indexPrice?.compiledContent(),
+};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      prices: pricesProps,
+    },
+  },
+  Astro.request
+);
+
+const props = {
+  ...pricesProps,
+  ...translation?.prices,
 } as PricesType;
 ---
 

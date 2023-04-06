@@ -1,15 +1,40 @@
 ---
 import { getEnv } from "../../../services/cloudflare";
-import { getLang } from "../../../utils/url";
 import Header from "./Header";
 import type { HeaderType } from "./types";
+import { getIndex } from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
+
+const { lang } = Astro.params;
+
 let navigation = [];
 try {
   navigation = await Astro.glob("../../../../content/navigation.md");
 } catch (e) {}
 
-const { header } = (navigation || [])[0]?.frontmatter || {};
-const props: HeaderType = { navigation: header, url: Astro.url.href, lang: getLang(Astro.url), langs: getEnv(Astro.request).LANGS };
+const navigationIndex = getIndex(navigation);
+
+const { header } = navigationIndex?.frontmatter || {};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      header: header,
+    },
+  },
+  Astro.request
+);
+
+const props: HeaderType = {
+  navigation: {
+    ...header,
+    ...translation?.header,
+  },
+  url: Astro.url.href,
+  lang,
+  langs: getEnv(Astro.request).LANGS,
+};
 ---
 
 <Header {...props} client:load />

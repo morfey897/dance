@@ -1,6 +1,9 @@
 ---
 import Footer from "./Footer";
 import type { FooterType } from "./types";
+import { getIndex } from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
+const { lang } = Astro.params;
 
 let localBusiness = [];
 let navigation = [];
@@ -12,9 +15,31 @@ try {
   navigation = await Astro.glob("../../../../content/navigation.md");
 } catch (e) {}
 
-const localBusinessProps = (localBusiness || [])[0]?.frontmatter || {};
-const { footer } = (navigation || [])[0]?.frontmatter || {};
-const props: FooterType = { navigation: footer, ...localBusinessProps };
+const navigationIndex = getIndex(navigation);
+const indexLocalBusiness = getIndex(localBusiness);
+
+const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
+const { footer } = navigationIndex?.frontmatter || {};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      localBusiness: localBusinessProps,
+      footer: footer,
+    },
+  },
+  Astro.request
+);
+
+const props: FooterType = {
+  navigation: {
+    ...footer,
+    ...translation?.footer,
+  },
+  ...localBusinessProps,
+  ...translation?.localBusiness,
+};
 ---
 
 <Footer {...props} />

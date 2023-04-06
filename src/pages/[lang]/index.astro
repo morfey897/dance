@@ -30,25 +30,20 @@ try {
 } catch (e) {}
 
 const indexLocalBusiness = getIndex(localBusiness);
-const props = { ...indexLocalBusiness?.frontmatter };
+const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
 const translation = await translateJSON(
   {
     target: lang,
     content: {
-      localBusiness: {
-        title: props.title,
-        description: props.description,
-        address: props.address,
-        payment: props.payment,
-      },
+      localBusiness: localBusinessProps,
     },
   },
   Astro.request
 );
 
 const { title, description, image, address, phones, openingHours, payment } = {
-  ...props,
+  ...localBusinessProps,
   ...translation?.localBusiness,
 } as any;
 

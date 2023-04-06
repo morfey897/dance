@@ -1,7 +1,15 @@
 ---
 import Gallary from "./Gallary";
 import type { GallaryType } from "./types";
-import { getIndex, getList, sortComparator, getFileName } from "../../../utils/md";
+import {
+  getIndex,
+  getList,
+  sortComparator,
+  getFileName,
+} from "../../../utils/md";
+import { translateJSON } from "../../../services/translate";
+
+const { lang } = Astro.params;
 
 let directions = [];
 try {
@@ -16,19 +24,33 @@ const childrenList = list.sort(sortComparator).map((data) => {
   const frontmatter = data.frontmatter;
   return {
     uid,
-    headline: '',
-    subheadline: '',
+    headline: "",
+    subheadline: "",
     bodyHTML: data.compiledContent(),
     ...frontmatter,
   };
 });
 
-const props = {
+const gallaryProps = {
   ...indexDirection?.frontmatter,
   list: childrenList,
   bodyHTML: indexDirection?.compiledContent(),
-} as GallaryType;
+};
 
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      gallary: gallaryProps,
+    },
+  },
+  Astro.request
+);
+
+const props = {
+  ...gallaryProps,
+  ...translation?.gallaryProps,
+} as GallaryType;
 ---
 
 <Gallary {...props} client:load />

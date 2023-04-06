@@ -2,10 +2,9 @@
 import Schedule from "./Schedule";
 import type { ScheduleType } from "./types";
 import { getIndex } from "../../../utils/md";
-import { getLang } from "../../../utils/url";
+import { translateJSON } from "../../../services/translate";
 
-// const { lang } = Astro.params;
-// console.log("LANG", getLang(Astro.url));
+const { lang } = Astro.params;
 
 let schedule = [];
 try {
@@ -14,10 +13,25 @@ try {
 
 const indexDirection = getIndex(schedule);
 
-const props = {
-  lang: getLang(Astro.url),
+const scheduleProps = {
   ...indexDirection?.frontmatter,
   bodyHTML: indexDirection?.compiledContent(),
+};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      schedule: scheduleProps,
+    },
+  },
+  Astro.request
+);
+
+const props = {
+  ...scheduleProps,
+  ...translation?.schedule,
+  lang,
 } as ScheduleType;
 ---
 
