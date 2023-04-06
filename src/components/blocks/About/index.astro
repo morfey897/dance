@@ -18,15 +18,16 @@ const fileProps = {
   bodyHTML: indexAbout?.compiledContent(),
 } as AboutType;
 
-const translation = await translateJSON(
-  {
-    target: lang,
-    content: {
-      about: { ...fileProps },
-    },
-  },
-  Astro.request
-);
+const translation = null;
+// await translateJSON(
+//   {
+//     target: lang,
+//     content: {
+//       about: { ...fileProps },
+//     },
+//   },
+//   Astro.request
+// );
 
 const props = {
   ...fileProps,

@@ -70,7 +70,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   if (!source || !target || source === target) return content;
 
   const KEY = `TRANSLATE_${target}`;
-  const KV = await getKV(request);
+  // const KV = await getKV(request);
 
   const data = Object.entries(flatten(content));
   const keys = data.map(([key]) => key);
@@ -83,12 +83,12 @@ export async function translateJSON({ target, source = 'uk', content }: { target
     const str = values[index];
     if (typeof str === 'string' && str.length > 0 && !IMG_REG.test(str)) {
       const base64 = keyToBase64(str);
-      const trans = await KV.get(`${KEY}${base64}`);
-      if (!trans) {
+      // const trans = await KV.get(`${KEY}${base64}`);
+      // if (!trans) {
         toTranslate.add(index, str);
-      } else {
-        translated.add(index, trans);
-      }
+      // } else {
+      //   translated.add(index, trans);
+      // }
     }
   }
   const toTranslateValues = toTranslate.values;
@@ -96,14 +96,14 @@ export async function translateJSON({ target, source = 'uk', content }: { target
 
   if (!translation) return null;
 
-  for (let index = 0; index < translation.length; index++) {
-    const trans = translation[index];
-    if (trans) {
-      const str = toTranslateValues[index];
-      const base64 = keyToBase64(str);
-      await KV.put(`${KEY}${base64}`, trans);
-    }
-  }
+  // for (let index = 0; index < translation.length; index++) {
+  //   const trans = translation[index];
+  //   if (trans) {
+  //     const str = toTranslateValues[index];
+  //     const base64 = keyToBase64(str);
+  //     await KV.put(`${KEY}${base64}`, trans);
+  //   }
+  // }
 
   const result: { [key: string]: any } = flatten.unflatten(keys.reduce((obj, key, index) => {
     let value = values[index];
