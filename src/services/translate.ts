@@ -95,8 +95,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
       const token = str.replace(/[\s\d\-\+\*\\\=_\.,;:\!\?@]/g, "");
       if (token.length) {
         const base64 = encode(token);
-        const trans = null;
-        // const trans = await KV.get(`${KEY}${base64}`);
+        const trans = await KV.get(`${KEY}${base64}`);
         if (!trans) {
           toTranslate.add(index, str, base64);
         } else {
