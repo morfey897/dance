@@ -1,12 +1,29 @@
 ---
-import { concatPaths, getLang, getPreferableLangs } from "../utils/url";
+import { concatPaths, getPreferableLangs } from "../utils/url";
 import { getEnv } from "../services/cloudflare";
+import { getIndex } from "../utils/md";
+import { LANG } from "../constants/cookie";
+import { translateJSON } from "../services/translate";
 
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/blocks/Header/Header";
 import Footer from "../components/blocks/Footer/Footer";
 import Section from "../components/elements/Section";
-import RenderHTML from "../components/elements/RenderHTML";
+
+const cookieLang = Astro.cookies.get(LANG)?.value;
+const { LANGS } = getEnv(Astro.request);
+
+let lang = LANGS[0];
+if (cookieLang && LANGS.includes(cookieLang)) {
+	lang = cookieLang;
+} else {
+	const prefLangs = getPreferableLangs(Astro.request).find((code) =>
+		LANGS.includes(code)
+	);
+	if (prefLangs) {
+		lang = prefLangs;
+	}
+}
 
 let notFound = [];
 try {
@@ -18,11 +35,31 @@ try {
   localBusiness = await Astro.glob("../../content/local-business.md");
 } catch (e) {}
 
-const indexNotFound = notFound[0];
+const indexNotFound = getIndex(notFound);
+const indexLocalBusiness = getIndex(localBusiness);
 
-const { headline, cta, title, description, image } = {
+const indexProps = {
   ...indexNotFound?.frontmatter,
+  bodyHTML: indexNotFound?.compiledContent()
+};
+const localBusinessProps = {...indexLocalBusiness?.frontmatter};
+
+const translation = await translateJSON(
+  {
+    target: lang,
+    content: {
+      notFound: indexProps,
+      localBusiness: localBusinessProps,
+    },
+  },
+  Astro.request
+);
+
+const { headline, cta, title, description, image, bodyHTML } = {
+  ...indexProps,
+  ...translation?.notFound,
 } as {
+  bodyHTML: string;
   headline: string;
   title: string;
   description: string;
@@ -30,15 +67,9 @@ const { headline, cta, title, description, image } = {
   cta: { href: string; label: string };
 };
 
-const bodyHtml = indexNotFound?.compiledContent();
-const localBusinessProps = (localBusiness || [])[0]?.frontmatter || {};
-
-let lang: string = getLang(Astro.url);
-const { LANGS } = getEnv(Astro.request);
-if (!LANGS.includes(lang)) {
-  lang =
-    getPreferableLangs(Astro.request).find((code) => LANGS.includes(code)) ||
-    LANGS[0];
+const localBuiseness = {
+  ...localBusinessProps,
+  ...translation?.localBusiness
 }
 ---
 
@@ -57,7 +88,7 @@ if (!LANGS.includes(lang)) {
       <div class="text-center">
         <h1 class="uppercase text-4xl md:text-6xl mt-14">{headline}</h1>
         <div class={"text-sm md:text-lg mt-7 max-w-screen-lg m-auto"}>
-          <RenderHTML>{bodyHtml}</RenderHTML>
+          <Fragment set:html={bodyHTML} />
         </div>
         <a
           href={concatPaths(cta.href || "/", lang)}
@@ -96,5 +127,5 @@ if (!LANGS.includes(lang)) {
       </div>
     </Section>
   </main>
-  <Footer {...localBusinessProps} />
+  <Footer {...localBuiseness} />
 </Layout>
