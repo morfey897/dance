@@ -88,6 +88,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
   const toTranslate = new TranslationList();
   const translated = new TranslationList();
 
+  const startAt = new Date().getTime();
   for (let index = 0; index < values.length; index++) {
     const str = values[index];
     if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str)) {
@@ -103,6 +104,8 @@ export async function translateJSON({ target, source = 'uk', content }: { target
       }
     }
   }
+
+  await KV.put(`TRANSLATE_${target}_AMOUNT_${translated.values.length}`, `Time: ${new Date().getTime() - startAt}`);
   const toTranslateValues = toTranslate.values;
   const toTranslateBase64s = toTranslate.base64s;
   const translation = await translate({ target, source, content: toTranslateValues }, request);
