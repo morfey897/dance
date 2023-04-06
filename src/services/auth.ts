@@ -1,5 +1,3 @@
-import { toBase64URL } from '../utils/url';
-
 type PayloadType = {
   iss: string;
   scope: string;
@@ -15,6 +13,11 @@ type JSON_FILE = {
   token_uri: string
 };
 
+function toBase64URL(json: any) {
+  const jsonString = JSON.stringify(json);
+  const btyeArray = Buffer.from(jsonString);
+  return btyeArray.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
 
 async function _generateJWT_WebCrypto(payload: PayloadType, secret: string) {
   let token: string | null = null;

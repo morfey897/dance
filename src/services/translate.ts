@@ -3,7 +3,7 @@
 import { getEnv, getKV } from "./cloudflare";
 import { getAccessToken } from "./auth";
 import flatten from "flat";
-import { toBase64URL } from "../utils/url";
+import { encode } from '@cfworker/base64url';
 
 
 const IMG_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-]+\.(:?png|jpe?g|avif|webp|svg)$/;
@@ -34,7 +34,7 @@ class TranslationList {
 
 }
 
-const keyToBase64 = (str:string) => toBase64URL(str.replace(/[\s\-_\.,;\d]/g, "")); 
+const keyToBase64 = (str:string) => encode(str.replace(/[\s\-_\.,;\d]/g, "")); 
 
 export async function translate({ target, source = 'uk', content }: { target: string; source?: string; content: Array<string> }, request: Request): Promise<Array<string> | null> {
   if (!source || !target || source === target || !content || content.length == 0) return content;
