@@ -29,11 +29,11 @@ export function GroupItem({ item, className }: { item: GroupType } & React.HTMLP
     <h3 className="font-medium text-xl md:text-4xl">{item.headline}</h3>
     <RenderHTML className="font-light text-sm md:text-lg mt-5">{item.bodyHTML}</RenderHTML>
     <p className="">{item.subheadline}</p>
-    <ul className="divide-y divide-pnk-100 mt-7 md:mt-8">
+    <div className="divide-y divide-pnk-100 mt-7 md:mt-8">
       {item.items.map((itm) => {
         const hasOldPrice = itm.oldPrice > 0 && itm.oldPrice != itm.price;
         return (
-          <li className={clsx("flex justify-between text-sm md:text-lg font-light py-2", hasOldPrice && 'pt-5')} key={itm.uid}>
+          <div className={clsx("flex justify-between text-sm md:text-lg font-light py-2", hasOldPrice && 'pt-5')} key={itm.uid}>
             <p className="text-left">{itm.headline}</p>
             <div className="flex gap-x-2">
               <p className={clsx(hasOldPrice && 'text-pnk-200')}>{itm.price}<span className="ml-1">{itm.currency}</span></p>
@@ -42,10 +42,10 @@ export function GroupItem({ item, className }: { item: GroupType } & React.HTMLP
                 <span className="ml-0.5">{itm.currency}</span>
               </span>}
             </div>
-          </li>
+          </div>
         )
       })}
-    </ul>
+    </div>
   </BaseItem>;
 }
 

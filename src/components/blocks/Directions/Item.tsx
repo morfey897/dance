@@ -4,7 +4,7 @@ import React from "react";
 import RenderHTML from "../../elements/RenderHTML";
 
 function DirectionItem({ item, index, activePrev, activeCur, children, ...props }: { item: DirectionType; index: number; activePrev: string, activeCur: string; } & React.HTMLProps<HTMLLIElement>) {
-  return (<li role={'button'} className={clsx("border-b border-opacity-40 border-pnk-200 py-4", activeCur === item.uid && 'pointer-events-none')} {...props}>
+  return (<div role={'button'} className={clsx("border-b border-opacity-40 border-pnk-200 py-4", activeCur === item.uid && 'pointer-events-none')} {...props}>
     <div className={clsx("flex justify-between items-start cursor-pointer")}>
       <div className="flex">
         <p className="hidden md:block mr-5 text-lg text-pnk-200 font-light opacity-40">{String('0' + (index + 1)).slice(-2)}</p>
@@ -27,7 +27,7 @@ function DirectionItem({ item, index, activePrev, activeCur, children, ...props 
       'max-h-0 duration-300': activePrev === item.uid,
       'mt-4 max-h-[500px] duration-500': activeCur === item.uid,
     })}>{item.bodyHTML}</RenderHTML>
-  </li >);
+  </div >);
 }
 
 export default DirectionItem;
