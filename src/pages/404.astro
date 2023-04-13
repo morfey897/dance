@@ -6,8 +6,8 @@ import { LANG } from "../constants/cookie";
 import { translateJSON } from "../services/translate";
 
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/blocks/Header/Header";
-import Footer from "../components/blocks/Footer/Footer";
+import Header from "../components/blocks/Header/index";
+import Footer from "../components/blocks/Footer/index";
 import Section from "../components/elements/Section";
 
 const cookieLang = Astro.cookies.get(LANG)?.value;
