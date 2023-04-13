@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { compareAsc, isWeekend, format } from "date-fns";
-import type { GridState } from "./types";
+import type { GridState } from "../../../types/ui";
 import { Fragment } from "react";
 import { capitalize } from "../../../utils/str";
 

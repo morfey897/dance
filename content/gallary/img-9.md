@@ -1,5 +1,5 @@
 ---
 headline: "Малий зал на два пілони"
-image: '/IMG_4683.jpg'
+image: 'gallary_4683'
 priority: 0
 ---

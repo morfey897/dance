@@ -1,5 +1,5 @@
 ---
 headline: "Рожевий зал на шість пілонів"
-image: '/IMG_5411.jpg'
+image: 'gallary_5411'
 priority: 0
 ---

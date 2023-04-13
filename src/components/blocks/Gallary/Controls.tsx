@@ -3,7 +3,7 @@ import type { SyntheticEvent } from "react";
 import { useCallback, memo } from "react";
 import ArrowButton from "./ArrowButton";
 import DotButton from "./DotButton";
-import type { ControlsType } from "./types";
+import type { ControlsType } from "../../../types/ui";
 
 const NextPageButton = memo(({ className, name, ...props }: { name: 'prev' | 'next' } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
   <ArrowButton

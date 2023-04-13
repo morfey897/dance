@@ -1,5 +1,5 @@
 ---
 headline: "Малий зал"
-image: '/IMG_2373.jpg'
+image: 'gallary_2373'
 priority: 0
 ---

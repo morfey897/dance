@@ -1,5 +1,5 @@
 ---
 headline: "Сірий зал зі станком"
-image: '/IMG_5401.jpg'
+image: 'gallary_5401'
 priority: 0
 ---

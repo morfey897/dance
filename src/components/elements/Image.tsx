@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { concatPaths } from "../../utils/url";
 
-export function Image({ image, block, alt: alternative, src: resource, ...props }: { image?: string | { src: string; alt?: string }; block?: string; } & React.ImgHTMLAttributes<HTMLImageElement>) {
+export function Image({ image, section, alt: alternative, src: resource, ...props }: { image?: string | { src: string; alt?: string }; section?: string; } & React.ImgHTMLAttributes<HTMLImageElement>) {
 
   const rest = useMemo<{ src: string; alt: string; }>(() => {
     const isObject = typeof image === 'object';
@@ -17,11 +17,11 @@ export function Image({ image, block, alt: alternative, src: resource, ...props 
     }
 
     return {
-      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : concatPaths(block && !(new RegExp(`^\/?${block}\/`).test(src)) ? `/${block}` : "/", src),
+      src: !src || /^(:?https?:)?\/{2}/.test(src) ? src : concatPaths(section && !(new RegExp(`^\/?${section}\/`).test(src)) ? `/${section}` : "/", src),
       alt: alt || ''
     }
 
-  }, [image, block, alternative, resource]);
+  }, [image, section, alternative, resource]);
 
   return <img {...rest} loading='lazy' {...props} />
 }

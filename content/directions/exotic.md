@@ -1,6 +1,6 @@
 ---
 headline: 'Exotic Pole Dance'
-image: '/idet_nabor_v_gruppy.jpg'
+image: 'exotic'
 groups: ['dance', 'exot']
 priority: 9
 ---

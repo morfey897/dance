@@ -1,5 +1,5 @@
 ---
 headline: "Білий зал"
-image: '/IMG_2270.jpg'
+image: 'gallary_2270'
 priority: 0
 ---

@@ -3,7 +3,7 @@ import { useRef, useMemo, useState, useCallback, useEffect, FC } from "react";
 import { throttle } from "throttle-debounce";
 import clsx from "clsx";
 import SwiperItem from "./SwiperItem";
-import type { ControlsType } from "./types";
+import type { ControlsType } from "../../../types/ui";
 import { useInView } from 'react-intersection-observer';
 
 const SCROLL_EPS = 0.1;

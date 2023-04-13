@@ -2,10 +2,10 @@
 headline: 'Контакти'
 anchor: 'contacts'
 images: [{
-  src: '/parking.jpeg',
+  src: 'parking',
   alt: 'Парковка біля входу',
 },{
-  src: '/facade.jpeg',
+  src: 'facade',
   alt: 'Вхід до будівлі',
 }]
 ---

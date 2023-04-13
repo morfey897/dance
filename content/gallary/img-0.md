@@ -1,5 +1,5 @@
 ---
 headline: ""
-image: '/IMG_4356.jpg'
+image: 'gallary_4356'
 priority: 100
 ---

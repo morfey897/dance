@@ -1,6 +1,6 @@
 ---
 headline: 'Heels Dance'
-image: '/heels.jpeg'
+image: 'heels'
 groups: ['dance', 'exot']
 priority: 7
 ---

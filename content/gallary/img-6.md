@@ -1,5 +1,5 @@
 ---
 headline: "Білий зал на десять пілонів"
-image: '/IMG_2271.jpg'
+image: 'gallary_2271'
 priority: 0
 ---

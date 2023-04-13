@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useMemo } from "react";
-import type { GridState, EventsType, EventType, DateType } from "./types";
+import type { GridState, EventsType, EventType, DateType } from "../../../types/ui";
 import Indicator from "../../elements/IngIndicator";
 import Tooltip from "../../elements/Tooltip";
 import { toDate } from "../../../utils/data";

@@ -1,5 +1,5 @@
 ---
 headline: "Сірий зал"
-image: '/IMG_5400.jpg'
+image: 'gallary_5400'
 priority: 0
 ---

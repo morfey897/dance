@@ -1,35 +1,43 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/blocks/Header/index.astro";
-import About from "../../components/blocks/About/index.astro";
-import Schedule from "../../components/blocks/Schedule/index.astro";
-import Prices from "../../components/blocks/Prices/index.astro";
-import Contacts from "../../components/blocks/Contacts/index.astro";
-import Directions from "../../components/blocks/Directions/index.astro";
-import Gallery from "../../components/blocks/Gallary/index.astro";
-import Footer from "../../components/blocks/Footer/index.astro";
-import ClearAnchor from "../../components/elements/ClearAnchor";
+import { getProps as getHeaderProps } from "../../components/blocks/Header/index";
+import { getProps as getFooterProps } from "../../components/blocks/Footer/index";
+import { getProps as getAboutProps } from "../../components/blocks/About/index";
+import { getProps as getDirectionsProps } from "../../components/blocks/Directions/index";
+import { getProps as getScheduleProps } from "../../components/blocks/Schedule/index";
+import { getProps as getPricesProps } from "../../components/blocks/Prices/index";
+import { getProps as getGallaryProps } from "../../components/blocks/Gallary/index";
+import { getProps as getContactsProps } from "../../components/blocks/Contacts/index";
 import { isAbsolutePath, concatPaths, normalizeURL } from "../../utils/url";
-import { getIndex } from "../../utils/md";
-import { getEnv } from "../../services/cloudflare";
+import { filterContent } from "../../utils/md";
+import { getEnv, getKV } from "../../services/cloudflare";
 import { translateJSON } from "../../services/translate";
 import { LANG } from "../../constants/cookie";
+import Root from "../../components/blocks/root";
+import { PropsType } from "../../types/ui";
 
+const url = Astro.url;
+const request = Astro.request;
 const { lang } = Astro.params;
-const { LANGS } = getEnv(Astro.request);
-if (!LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
+const env = getEnv(request);
 
-const newUrl = normalizeURL(Astro.url);
-if (newUrl != Astro.url.toString()) return Astro.redirect(newUrl, 301);
+if (!env.LANGS.includes(lang)) return Astro.redirect(`/404`, 301);
+const newUrl = normalizeURL(url);
+if (newUrl != url.toString()) return Astro.redirect(newUrl, 301);
 
 Astro.cookies.set(LANG, lang);
 
-let localBusiness = [];
+let content = [];
 try {
-  localBusiness = await Astro.glob("../../../content/local-business.md");
-} catch (e) {}
+  content = await Astro.glob("../../../content/**/*.md");
+} catch (e) {
+  console.log("ERROR", e, lang);
+}
 
-const indexLocalBusiness = getIndex(localBusiness);
+const indexLocalBusiness = filterContent(
+  content,
+  /\/content\/local-business\.md$/
+)[0];
 const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
 const translation = await translateJSON(
@@ -39,7 +47,7 @@ const translation = await translateJSON(
       localBusiness: localBusinessProps,
     },
   },
-  Astro.request
+  request
 );
 
 const { title, description, image, address, phones, openingHours, payment } = {
@@ -66,10 +74,64 @@ const schema = {
   openingHoursSpecification: openingHours || [],
   paymentAccepted: payment || [],
 };
-const origin = new URL(Astro.url).origin;
+const origin = url.origin;
 const imageAbsolute = isAbsolutePath(image)
   ? image
   : concatPaths(origin, image);
+
+const KV = await getKV(request);
+const imagesList = await KV.get("IMAGES");
+const imageValues = (imagesList
+  ?.split("\n")
+  .map((a) => a.split(/\s+/g).slice(0, 2))
+  .map(([key, value]) => [
+    concatPaths("/", (key || "").trim()),
+    (value || "").trim(),
+  ])
+  .filter(([key, value]) => !!key && !!value) || []) as Array<
+  ["string", "string"]
+>;
+
+const clientEnv = {
+  LANG: lang,
+  URL: url.href,
+  LANGS: env.LANGS,
+  SITE: env.SITE,
+  CDN_PROVIDER: env.CDN_PROVIDER,
+  GOOGLE_API_KEY: env.GOOGLE_API_KEY,
+  IMAGES: new Map(imageValues),
+};
+
+const PROPS_TYPE: PropsType = {
+  lang,
+  request,
+  content,
+};
+
+const [header, footer, about, directions, schedule, prices, gallary, contacts] =
+  (
+    await Promise.allSettled([
+      getHeaderProps(PROPS_TYPE),
+      getFooterProps(PROPS_TYPE),
+      getAboutProps(PROPS_TYPE),
+      getDirectionsProps(PROPS_TYPE),
+      getScheduleProps(PROPS_TYPE),
+      getPricesProps(PROPS_TYPE),
+      getGallaryProps(PROPS_TYPE),
+      getContactsProps(PROPS_TYPE),
+    ])
+  ).map((pr) => (pr.status === "fulfilled" ? pr.value : {}));
+
+const root = {
+  header,
+  footer,
+  about,
+  directions,
+  schedule,
+  prices,
+  gallary,
+  contacts,
+} as any;
 ---
 
 <Layout
@@ -78,15 +140,5 @@ const imageAbsolute = isAbsolutePath(image)
   image={imageAbsolute}
   schema={schema}
 >
-  <Header />
-  <main>
-    <About />
-    <Directions />
-    <Schedule />
-    <Prices />
-    <Gallery />
-    <Contacts />
-    <ClearAnchor client:idle />
-  </main>
-  <Footer />
+  <Root env={clientEnv} root={root} client:idle />
 </Layout>

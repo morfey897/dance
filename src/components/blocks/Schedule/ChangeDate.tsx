@@ -1,7 +1,7 @@
 import { compareAsc, format } from "date-fns";
 import { useMemo } from "react";
 import clsx from "clsx";
-import type { GridState } from './types';
+import type { GridState } from "../../../types/ui";
 
 function ChangeDate({ onNext, onPrev, onNow, state, todayLabel, className }: { onNext: React.MouseEventHandler; onPrev: React.MouseEventHandler; onNow: React.MouseEventHandler; todayLabel: string; state: GridState; } & React.HTMLProps<HTMLDivElement>) {
 

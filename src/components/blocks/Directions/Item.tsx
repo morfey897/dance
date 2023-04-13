@@ -1,8 +1,7 @@
 import clsx from "clsx";
-import type { DirectionType } from "./types";
+import type { DirectionType } from "../../../types/ui";
 import React from "react";
 import RenderHTML from "../../elements/RenderHTML";
-
 
 function DirectionItem({ item, index, activePrev, activeCur, children, ...props }: { item: DirectionType; index: number; activePrev: string, activeCur: string; } & React.HTMLProps<HTMLLIElement>) {
   return (<li role={'button'} className={clsx("border-b border-opacity-40 border-pnk-200 py-4", activeCur === item.uid && 'pointer-events-none')} {...props}>

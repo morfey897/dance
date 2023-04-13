@@ -1,6 +1,6 @@
 ---
 headline: 'Stretching'
-image: '/img_3225.jpg'
+image: 'stretching'
 groups: ['sport']
 priority: 8
 ---

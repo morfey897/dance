@@ -1,7 +1,7 @@
 ---
 headline: 'Pole Dance'
 subheadline: ''
-image: '/trenirovka_na_pilone.jpg'
+image: 'trenirovka_na_pilone'
 groups: ['sport', 'dance']
 priority: 10
 ---

@@ -1,5 +1,5 @@
 ---
 headline: "Сірий зал з підсвіткою"
-image: '/IMG_5399.jpg'
+image: 'gallary_5399'
 priority: 101
 ---

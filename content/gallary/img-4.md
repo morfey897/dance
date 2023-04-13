@@ -1,5 +1,5 @@
 ---
 headline: "Рожевий зал"
-image: '/IMG_5409.jpg'
+image: 'gallary_5409'
 priority: 0
 ---
