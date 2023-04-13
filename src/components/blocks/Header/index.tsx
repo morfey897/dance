@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useScrollDirection } from "../../../hooks/useScrollDetect";
 import Link from "./Link";
-import type { HeaderType, PropsType } from "../../../types/ui";
+import type { HeaderType, NavigationType, PropsType } from "../../../types/ui";
 import { changeLang, concatPaths } from "../../../utils/url";
 import Picture from "../../elements/Picture";
 import { useEnv } from "../../providers/EnvProvider";
@@ -46,6 +46,7 @@ const ICONS = {
 export async function getProps({ content, lang, request }: PropsType): Promise<HeaderType> {
 
   const navigationIndex = filterContent(content, /\/content\/navigation\.md$/)[0];
+  const indexLocalBusiness = filterContent(content, /\/content\/local-business\.md$/)[0];
 
   const { header } = navigationIndex?.frontmatter || {};
 
@@ -60,6 +61,7 @@ export async function getProps({ content, lang, request }: PropsType): Promise<H
   );
 
   const props: HeaderType = {
+    title: indexLocalBusiness?.frontmatter?.title || "",
     navigation: translation?.header || header,
   };
   return props;
@@ -74,7 +76,7 @@ const LangTranslate = ({ lang, short }: { lang: string; short?: boolean }) => {
   return <span>{(lang || '').toUpperCase()}</span>;
 }
 
-function Navigation({ navigation, mobile }: { mobile?: boolean; } & HeaderType) {
+function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationType) {
 
   return <ul className={mobile ?
     "absolute invisible opacity-0 -translate-y-2 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 bg-black bg-opacity-60 p-2.5 right-0 top-8 space-y-4 rounded-sm" :
@@ -114,7 +116,7 @@ function Languages() {
   </div>
 }
 
-function Header({ navigation }: HeaderType) {
+function Header({ navigation, title }: HeaderType) {
 
   const scrlDetect = useScrollDirection();
   const env = useEnv();
@@ -125,7 +127,7 @@ function Header({ navigation }: HeaderType) {
     <div className="max-w-screen-xl mx-auto py-2.5 px-4">
       <nav className="flex items-center justify-between">
         <a aria-label={'home page'} href={concatPaths("/", env.LANG)}>
-          <Picture src='logo' alt='' className={clsx("h-[40px]")} />
+          <Picture src='logo' alt={title} />
         </a>
         <div className="flex items-center gap-x-1 flex-row-reverse md:flex-row">
           <div className="block md:hidden">

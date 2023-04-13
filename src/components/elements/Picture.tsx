@@ -10,7 +10,7 @@ export function Picture({ image, alt: alternative, src: resource, section, ...pr
     const isObject = typeof image === 'object';
     const isString = typeof image === 'string';
     let src = resource;
-    let alt = '';
+    let alt = alternative;
     if (isObject) {
       src = image.src;
       alt = image.alt ?? alternative;

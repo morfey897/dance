@@ -16,14 +16,18 @@ export interface BlockType {
   anchor?: string;
 };
 
-export type HeaderType = {
+export interface NavigationType {
   navigation: { [key: number]: { href: string; label: string; } } | Array<{ href: string; label: string; }>;
 }
 
-export type FooterType = {
+export interface HeaderType extends NavigationType {
+  title: string;
+
+}
+
+export interface FooterType extends NavigationType{
   address: { country: string; city: string; district: string; address: string; place: string; lat: number; lng: number; };
   socials: Array<{ type: string; href: string; title: string; }>;
-  navigation: { [key: number]: { href: string; label: string; } } | Array<{ href: string; label: string; }>;
 }
 
 export interface AboutType extends BlockType {
@@ -43,7 +47,7 @@ export type DirectionType = {
 };
 
 export interface DirectionsType extends BlockType {
- list: Array<DirectionType>;
+  list: Array<DirectionType>;
 }
 
 export interface ScheduleType extends BlockType {
