@@ -45,7 +45,7 @@ export function Picture({ image, alt: alternative, src: resource, section, ...pr
   return <picture  {...props}>
     <source media="(max-width: 425px)" srcSet={rest.mobileSrc} />
     <source media="(min-width: 426px)" srcSet={rest.src} />
-    <img src={rest.src} alt={rest.alt} loading='lazy' />
+    <img src={rest.src} alt={rest.alt} loading='lazy' decoding="async" />
   </picture>;
 }
 
