@@ -3,10 +3,7 @@
 import { getEnv, getKV } from "./cloudflare";
 import { getAccessToken } from "./auth";
 import { flatten, unflatten } from "flat";
-import { base64url } from 'rfc4648';
-function encode(s) {
-  return base64url.stringify(new TextEncoder().encode(s), { pad: false });
-}
+import { encodeB64 } from '../utils/base64';
 
 const URL_REG = /^(:?https?:)?(:?\/{2})?[\/\.\d\w\-\#\?=&]+$/i;
 
@@ -106,7 +103,7 @@ export async function translateJSON({ target, source = 'uk', content }: { target
       if (typeof str === 'string' && str.length > 0 && !URL_REG.test(str)) {
         const token = str.replace(/[\s\d\-\+\*\\\=_\.,;:\!\?@]/g, "");
         if (token.length) {
-          const base64 = encode(token).slice(0, 128);
+          const base64 = encodeB64(token).slice(0, 128);
           const trans = storedData[base64];
           if (!trans) {
             toTranslate.add(index, str, base64);

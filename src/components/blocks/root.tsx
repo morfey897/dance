@@ -8,21 +8,42 @@ import Gallery from "./Gallary";
 import Contacts from "./Contacts";
 import ClearAnchor from "../elements/ClearAnchor";
 import type { HeaderType, FooterType, AboutType, DirectionsType, ScheduleType, PricesType, GallaryType, ContactsType } from "../../types/ui";
-import { withEnv } from "../providers/EnvProvider";
+import { Provider } from "../providers/EnvProvider";
+import { useMemo } from "react";
+import { decodeB64 } from "../../utils/base64";
 
-type RootType = { 
-  header: HeaderType; 
-  footer: FooterType; 
-  about: AboutType, 
-  directions: DirectionsType; 
+type RootType = {
+  header: HeaderType;
+  footer: FooterType;
+  about: AboutType,
+  directions: DirectionsType;
   schedule: ScheduleType;
   prices: PricesType;
   gallary: GallaryType;
   contacts: ContactsType;
 };
 
-function Root({ root }: { root: RootType }) {
-  return <>
+function Root({ value }: { value: string }) {
+  // const data
+
+  const root = useMemo(() => {
+    const str: string = decodeB64(value);
+    const data = JSON.parse(str);
+    return {
+      env: {...data.env, IMAGES: new Map(data.env.IMAGES)},
+      header: data.header,
+      footer: data.footer,
+      about: data.about,
+      directions: data.directions,
+      schedule: data.schedule,
+      prices: data.prices,
+      gallary: data.gallary,
+      contacts: data.contacts,
+    }
+  }, [value]);
+
+
+  return <Provider value={{ env: root.env }}>
     <Header {...root.header} />
     <main>
       <About {...root.about} />
@@ -34,7 +55,7 @@ function Root({ root }: { root: RootType }) {
       <ClearAnchor />
     </main>
     <Footer {...root.footer} />
-  </>
+  </Provider>
 }
 
-export default withEnv<{ root: RootType }>(Root);
+export default Root;

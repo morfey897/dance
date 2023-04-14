@@ -15,6 +15,7 @@ import { translateJSON } from "../../services/translate";
 import { LANG } from "../../constants/cookie";
 import Root from "../../components/blocks/root";
 import { PropsType } from "../../types/ui";
+import { encodeB64 } from "../../utils/base64";
 
 const url = Astro.url;
 const request = Astro.request;
@@ -99,7 +100,7 @@ const clientEnv = {
   SITE: env.SITE,
   CDN_PROVIDER: env.CDN_PROVIDER,
   GOOGLE_API_KEY: env.GOOGLE_API_KEY,
-  IMAGES: new Map(imageValues),
+  IMAGES: imageValues,
 };
 
 const PROPS_TYPE: PropsType = {
@@ -131,7 +132,10 @@ const root = {
   prices,
   gallary,
   contacts,
+  env: clientEnv,
 } as any;
+
+const value:string = encodeB64(JSON.stringify(root));
 ---
 
 <Layout
@@ -140,5 +144,5 @@ const root = {
   image={imageAbsolute}
   schema={schema}
 >
-  <Root env={clientEnv} root={root} client:idle />
+  <Root value={value} client:idle />
 </Layout>

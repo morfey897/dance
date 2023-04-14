@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { concatPaths } from "../../utils/url";
-import { useValue } from "../providers/EnvProvider";
+import { useEnv } from "../providers/EnvProvider";
 
 export function Picture({ image, alt: alternative, src: resource, section, ...props }: { image?: string | { src: string; alt?: string }; section?: string; } & React.ImgHTMLAttributes<HTMLPictureElement>) {
 
-  const { env: { CDN_PROVIDER, IMAGES } } = useValue();
+  const { CDN_PROVIDER, IMAGES } = useEnv();
 
   const rest = useMemo<{ src: string; alt: string; mobileSrc: string; }>(() => {
     const isObject = typeof image === 'object';
