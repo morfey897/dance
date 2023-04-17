@@ -78,7 +78,7 @@ const LangTranslate = ({ lang, short }: { lang: string; short?: boolean }) => {
 
 function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationType) {
 
-  return <ul className={mobile ?
+  return navigation ? <ul className={mobile ?
     "absolute invisible opacity-0 -translate-y-2 transition-all group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 bg-black bg-opacity-60 p-2.5 right-0 top-8 space-y-4 rounded-sm" :
     "space-x-4"
   }>
@@ -91,7 +91,7 @@ function Navigation({ navigation, mobile }: { mobile?: boolean; } & NavigationTy
         </li>
       ))
     }
-  </ul>
+  </ul> : null;
 }
 
 function Languages() {
@@ -100,13 +100,13 @@ function Languages() {
 
   return <div className="relative group">
     <button aria-label={'language'} className="flex items-baseline gap-x-1">
-      <LangTranslate lang={env.LANG} short />
+      <LangTranslate lang={env?.LANG} short />
     </button>
     <ul className="absolute top-full right-0 -translate-y-2 transition-all invisible opacity-0 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 bg-black bg-opacity-60 p-2.5 space-y-4 rounded-sm">
       {
-        env.LANGS?.map((lang) => (
+        env?.LANGS?.map((lang) => (
           lang != 'ru' ? <li key={lang} className="text-center">
-            <a aria-label={lang} href={changeLang(env.URL, lang)} className="flex items-baseline justify-center gap-x-1">
+            <a aria-label={lang} href={changeLang(env?.URL, lang)} className="flex items-baseline justify-center gap-x-1">
               <LangTranslate lang={lang} />
             </a>
           </li> : null
@@ -126,7 +126,7 @@ function Header({ navigation, title }: HeaderType) {
   })}>
     <div className="max-w-screen-xl mx-auto py-2.5 px-4">
       <nav className="flex items-center justify-between">
-        <a aria-label={'home page'} href={concatPaths("/", env.LANG)}>
+        <a aria-label={'home page'} href={concatPaths("/", env?.LANG)}>
           <Picture src='logo' alt={title} />
         </a>
         <div className="flex items-center gap-x-1 flex-row-reverse md:flex-row">

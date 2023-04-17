@@ -7,24 +7,11 @@ import Prices from "./Prices";
 import Gallery from "./Gallary";
 import Contacts from "./Contacts";
 import ClearAnchor from "../elements/ClearAnchor";
-import type { HeaderType, FooterType, AboutType, DirectionsType, ScheduleType, PricesType, GallaryType, ContactsType } from "../../types/ui";
 import { Provider } from "../providers/EnvProvider";
 import { useMemo } from "react";
 import { decodeB64 } from "../../utils/base64";
 
-type RootType = {
-  header: HeaderType;
-  footer: FooterType;
-  about: AboutType,
-  directions: DirectionsType;
-  schedule: ScheduleType;
-  prices: PricesType;
-  gallary: GallaryType;
-  contacts: ContactsType;
-};
-
 function Root({ value }: { value: string }) {
-  // const data
 
   const root = useMemo(() => {
     const str: string = decodeB64(value);

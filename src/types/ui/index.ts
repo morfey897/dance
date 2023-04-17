@@ -22,7 +22,6 @@ export interface NavigationType {
 
 export interface HeaderType extends NavigationType {
   title: string;
-
 }
 
 export interface FooterType extends NavigationType{
@@ -135,4 +134,12 @@ export interface ContactsType extends BlockType {
   phones: Array<string>;
   socials: Array<{ type: string; href: string; title: string; }>;
   images?: Array<string | { src: string, alt: string; }>;
+}
+
+
+export interface NotFoundType extends BlockType {
+  cta?: {
+    label: string;
+    href: string;
+  }
 }

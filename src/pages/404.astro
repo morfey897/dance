@@ -1,132 +1,171 @@
 ---
-import { concatPaths, getPreferableLangs } from "../utils/url";
-import { getEnv } from "../services/cloudflare";
-import { getIndex } from "../utils/md";
+import { getPreferableLangs } from "../utils/url";
 import { LANG } from "../constants/cookie";
-import { translateJSON } from "../services/translate";
+
+import { getProps as getNotFoundProps } from "../components/blocks/NotFound/index";
+import { getProps as getFooterProps } from "../components/blocks/Footer/index";
+import { getProps as getHeaderProps } from "../components/blocks/Header/index";
 
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/blocks/Header/index";
-import Footer from "../components/blocks/Footer/index";
-import Section from "../components/elements/Section";
+import Root from "../components/blocks/root404";
+import { encodeB64 } from "../utils/base64";
+import { PropsType, NavigationType, HeaderType, FooterType } from "../types/ui";
+import { filterContent } from "../utils/md";
+import { concatPaths, isAbsolutePath } from "../utils/url";
+import { getEnv, getKV } from "../services/cloudflare";
+import { translateJSON } from "../services/translate";
 
 const cookieLang = Astro.cookies.get(LANG)?.value;
-const { LANGS } = getEnv(Astro.request);
+const request = Astro.request;
+const env = getEnv(request);
 
-let lang = LANGS[0];
-if (cookieLang && LANGS.includes(cookieLang)) {
+let lang = env.LANGS[0];
+if (cookieLang && env.LANGS.includes(cookieLang)) {
   lang = cookieLang;
 } else {
-  const prefLangs = getPreferableLangs(Astro.request).find((code) =>
-    LANGS.includes(code)
+  const prefLangs = getPreferableLangs(request).find((code) =>
+    env.LANGS.includes(code)
   );
   if (prefLangs) {
     lang = prefLangs;
   }
 }
 
-let notFound = [];
+// let notFound = [];
+// try {
+//   notFound = await Astro.glob("../../content/404.md");
+// } catch (e) {}
+
+// let localBusiness = [];
+// try {
+//   localBusiness = await Astro.glob("../../content/local-business.md");
+// } catch (e) {}
+
+// const indexNotFound = getIndex(notFound);
+// const indexLocalBusiness = getIndex(localBusiness);
+
+// const indexProps = {
+//   ...indexNotFound?.frontmatter,
+//   bodyHTML: indexNotFound?.compiledContent(),
+// };
+// const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
+
+// const translation = await translateJSON(
+//   {
+//     target: lang,
+//     content: {
+//       notFound: indexProps,
+//       localBusiness: localBusinessProps,
+//     },
+//   },
+//   Astro.request
+// );
+
+// const { headline, cta, title, description, image, bodyHTML } = {
+//   ...indexProps,
+//   ...translation?.notFound,
+// } as {
+//   bodyHTML: string;
+//   headline: string;
+//   title: string;
+//   description: string;
+//   image: string;
+//   cta: { href: string; label: string };
+// };
+
+// const localBuiseness = {
+//   ...localBusinessProps,
+//   ...translation?.localBusiness,
+// };
+
+let content = [];
 try {
-  notFound = await Astro.glob("../../content/404.md");
-} catch (e) {}
+  content = await Astro.glob("../../content/*.md");
+} catch (e) {
+  console.log("ERROR", e, lang);
+}
 
-let localBusiness = [];
-try {
-  localBusiness = await Astro.glob("../../content/local-business.md");
-} catch (e) {}
-
-const indexNotFound = getIndex(notFound);
-const indexLocalBusiness = getIndex(localBusiness);
-
-const indexProps = {
-  ...indexNotFound?.frontmatter,
-  bodyHTML: indexNotFound?.compiledContent(),
+const PROPS_TYPE: PropsType = {
+  lang,
+  request,
+  content,
 };
+
+const indexLocalBusiness = filterContent(
+  content,
+  /\/content\/local-business\.md$/
+)[0];
 const localBusinessProps = { ...indexLocalBusiness?.frontmatter };
 
 const translation = await translateJSON(
   {
     target: lang,
     content: {
-      notFound: indexProps,
       localBusiness: localBusinessProps,
     },
   },
-  Astro.request
+  request
 );
 
-const { headline, cta, title, description, image, bodyHTML } = {
-  ...indexProps,
-  ...translation?.notFound,
-} as {
-  bodyHTML: string;
-  headline: string;
-  title: string;
-  description: string;
-  image: string;
-  cta: { href: string; label: string };
-};
-
-const localBuiseness = {
+const { title, description, image } = {
   ...localBusinessProps,
   ...translation?.localBusiness,
+} as any;
+
+const [header, footer, notFound] = (
+  await Promise.allSettled([
+    getHeaderProps(PROPS_TYPE),
+    getFooterProps(PROPS_TYPE),
+    getNotFoundProps(PROPS_TYPE),
+  ])
+).map((pr) => (pr.status === "fulfilled" ? pr.value : {}));
+
+const origin = Astro.url.origin;
+const imageAbsolute = isAbsolutePath(image)
+  ? image
+  : concatPaths(origin, image);
+
+const KV = await getKV(request);
+const imagesList = await KV.get("IMAGES");
+const imageValues = (imagesList
+  ?.split("\n")
+  .map((a) => a.split(/\s+/g).slice(0, 2))
+  .map(([key, value]) => [
+    concatPaths("/", (key || "").trim()),
+    (value || "").trim(),
+  ])
+  .filter(([key, value]) => !!key && !!value) || []) as Array<
+  ["string", "string"]
+>;
+
+const clientEnv = {
+  LANG: lang,
+  URL: Astro.url.href,
+  LANGS: [],
+  SITE: env.SITE,
+  CDN_PROVIDER: env.CDN_PROVIDER,
+  GOOGLE_API_KEY: env.GOOGLE_API_KEY,
+  IMAGES: imageValues,
 };
+
+(header as HeaderType).navigation = {};
+(footer as FooterType).navigation = {};
+
+const root = {
+  header,
+  footer,
+  notFound,
+  env: clientEnv,
+} as any;
+
+const value: string = encodeB64(JSON.stringify(root));
 ---
 
 <Layout
   lang={lang}
   title={title || ""}
   description={description || ""}
-  image={image || ""}
+  image={imageAbsolute || ""}
 >
-  <Header navigation={[]} langs={[]} url={""} lang={lang} />
-  <main>
-    <Section
-      className="text-center pt-[74px] pb-[124px] md:pt-[274px] md:pb-[270px]"
-      effect={{ x: "left" }}
-    >
-      <div class="text-center">
-        <h1 class="uppercase text-4xl md:text-6xl mt-14">{headline}</h1>
-        <div class={"text-sm md:text-lg mt-7 max-w-screen-lg m-auto"}>
-          <Fragment set:html={bodyHTML} />
-        </div>
-        <a
-          aria-label={"home page"}
-          href={concatPaths(cta.href || "/", lang)}
-          class="group space-x-2 block w-fit m-auto mt-7 text-sm md:text-lg text-center border-2 border-pnk-200 rounded-3xl py-2 px-4 hover:bg-pnk-200 hover:border-pnk-200 hover:shadow hover:shadow-pnk-200 active:border-pnk-100 active:shadow active:shadow-pnk-100"
-        >
-          <span class="inline-block">{cta.label}</span>
-          <svg
-            class="animate-bounce inline-block fill-pnk-100 group-hover:animate-none"
-            height="24px"
-            width="24px"
-            version="1.1"
-            id="Layer_1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 0 512 512"
-            xml:space="preserve"
-          >
-            <g>
-              <g>
-                <g>
-                  <path
-                    d="M256,0C114.618,0,0,114.618,0,256s114.618,256,256,256s256-114.618,256-256S397.382,0,256,0z M256,469.333
-          c-117.818,0-213.333-95.515-213.333-213.333S138.182,42.667,256,42.667S469.333,138.182,469.333,256S373.818,469.333,256,469.333
-          z"
-                  ></path>
-                  <path
-                    d="M347.582,198.248L256,289.83l-91.582-91.582c-8.331-8.331-21.839-8.331-30.17,0c-8.331,8.331-8.331,21.839,0,30.17
-          l106.667,106.667c8.331,8.331,21.839,8.331,30.17,0l106.667-106.667c8.331-8.331,8.331-21.839,0-30.17
-          C369.42,189.917,355.913,189.917,347.582,198.248z"
-                  ></path>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </a>
-      </div>
-    </Section>
-  </main>
-  <Footer {...localBuiseness} />
+  <Root value={value} client:idle />
 </Layout>
